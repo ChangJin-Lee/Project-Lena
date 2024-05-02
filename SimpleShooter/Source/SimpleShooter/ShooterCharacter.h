@@ -33,6 +33,7 @@ private:
 	void MoveRight(float AxisValue);
 	void LookUpRate(float AxisValue);
 	void LookRightRate(float AxisValue);
+	void Shoot();
 
 	// 회전과 관련된 변수
 	UPROPERTY(EditAnywhere)
