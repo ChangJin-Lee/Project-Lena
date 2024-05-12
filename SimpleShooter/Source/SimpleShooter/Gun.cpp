@@ -7,6 +7,7 @@
 #include "DrawDebugHelpers.h"
 #include "ShooterCharacter.h"
 #include "GenericPlatform/GenericPlatformCrashContext.h"
+#include "Engine/DamageEvents.h"
 
 // Sets default values
 AGun::AGun()
@@ -54,6 +55,13 @@ void AGun::PullTrigger()
 
 		FVector ShotDirection = -Rotation.Vector();
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, HitResult.Location, ShotDirection.Rotation());
+		
+		AActor* DamagedActor = HitResult.GetActor();
+		if(DamagedActor)
+		{
+			FPointDamageEvent DamageEvent(Damage, HitResult, ShotDirection, nullptr);
+			DamagedActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
+		}
 	}
 
 	// DrawDebugCamera(GetWorld(), GetActorLocation(), GetActorRotation(), 90, 2, FColor::Red, true);
