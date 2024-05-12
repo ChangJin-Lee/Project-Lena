@@ -51,6 +51,9 @@ void AGun::PullTrigger()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Detect Bullet Hit!"));
 		DrawDebugPoint(GetWorld(), HitResult.Location, 20, FColor::Red, true);
+
+		FVector ShotDirection = -Rotation.Vector();
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, HitResult.Location, ShotDirection.Rotation());
 	}
 
 	// DrawDebugCamera(GetWorld(), GetActorLocation(), GetActorRotation(), 90, 2, FColor::Red, true);
