@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "ShooterCharacter.h"
+#include "GenericPlatform/GenericPlatformCrashContext.h"
 
 // Sets default values
 AGun::AGun()
@@ -36,7 +37,21 @@ void AGun::PullTrigger()
 	FRotator Rotation;
 	OwnerController->GetPlayerViewPoint(Location,Rotation);
 	
-	DrawDebugCamera(GetWorld(),  Location, Rotation, 90, 2, FColor::Red, true);
+	// DrawDebugCamera(GetWorld(), Location, Rotation, 90, 2, FColor::Red, true);
+
+	// 끝점을 위한 FVector
+	FVector End = Location + Rotation.Vector() * MaxRange;
+
+	// DrawDebugPoint(GetWorld(), End, 20, FColor::Green, true);
+
+	// TODO: LineTrace
+	FHitResult HitResult;
+	bool bSuccess = GetWorld()->LineTraceSingleByChannel(HitResult, Location, End, ECollisionChannel::ECC_GameTraceChannel1);
+	if(bSuccess)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Detect Bullet Hit!"));
+		DrawDebugPoint(GetWorld(), HitResult.Location, 20, FColor::Red, true);
+	}
 
 	// DrawDebugCamera(GetWorld(), GetActorLocation(), GetActorRotation(), 90, 2, FColor::Red, true);
 	UE_LOG(LogTemp, Warning, TEXT("You Pull the Trigger!"));
