@@ -22,6 +22,10 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	// BlueprintCallable보다 할 수 있는게 더 많다!
+	UFUNCTION(BlueprintPure)
+	bool IsDead() const; // 이 함수를 호출했다고 캐릭터의 어떠한 상태도 바뀌면 안되기 때문. 안전하게 const로 선엄
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -52,4 +56,7 @@ private:
 
 	UPROPERTY()
 	AGun* Gun;
+	
+	// UPROPERTY(VisibleAnywhere)
+	// class AShooterAIController* AIController;
 };

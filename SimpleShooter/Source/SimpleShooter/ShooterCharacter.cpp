@@ -4,6 +4,7 @@
 #include "ShooterCharacter.h"
 
 #include "Gun.h"
+// #include "ShooterAIController.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -23,6 +24,14 @@ void AShooterCharacter::BeginPlay()
 	GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
 	Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
 	Gun->SetOwner(this);
+	
+	// AIController = CreateDefaultSubobject<AShooterAIController>(TEXT("AIController"));
+}
+
+bool AShooterCharacter::IsDead() const
+{
+	// 체력이 0보다 작으면 true를 반환.
+	return Health <= 0;
 }
 
 // Called every frame
