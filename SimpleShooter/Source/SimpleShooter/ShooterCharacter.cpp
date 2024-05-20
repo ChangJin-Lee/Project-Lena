@@ -4,6 +4,7 @@
 #include "ShooterCharacter.h"
 
 #include "Gun.h"
+#include "SimpleShooterGameMode.h"
 #include "Components/CapsuleComponent.h"
 // #include "ShooterAIController.h"
 
@@ -68,6 +69,11 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
 
 	if(IsDead())
 	{
+		ASimpleShooterGameMode *GameMode = GetWorld()->GetAuthGameMode<ASimpleShooterGameMode>();
+		if(GameMode != nullptr)
+		{
+			GameMode->PawnKilled(this);
+		}
 		DetachFromControllerPendingDestroy();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
