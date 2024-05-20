@@ -46,10 +46,12 @@ void AGun::PullTrigger()
 
 	// TODO: LineTrace
 	FHitResult HitResult;
-	bool bSuccess = GetWorld()->LineTraceSingleByChannel(HitResult, Location, End, ECollisionChannel::ECC_GameTraceChannel1);
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	Params.AddIgnoredActor(GetOwner());
+	bool bSuccess = GetWorld()->LineTraceSingleByChannel(HitResult, Location, End, ECollisionChannel::ECC_GameTraceChannel1,Params);
 	if(bSuccess)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Detect Bullet Hit!"));
 		DrawDebugPoint(GetWorld(), HitResult.Location, 20, FColor::Red, true);
 
 		FVector ShotDirection = -Rotation.Vector();
