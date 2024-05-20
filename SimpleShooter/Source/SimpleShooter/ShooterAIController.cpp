@@ -21,28 +21,11 @@ void AShooterAIController::BeginPlay()
 
 		GetBlackboardComponent()->SetValueAsVector(TEXT("StartLocation"), GetPawn()->GetActorLocation() );
 		
-		UE_LOG(LogTemp, Warning, TEXT("Health Left : %s"), *GetBlackboardComponent()->GetValueAsVector(TEXT("PlayerLocation")).ToString());
+		// UE_LOG(LogTemp, Warning, TEXT("Health Left : %s"), *GetBlackboardComponent()->GetValueAsVector(TEXT("PlayerLocation")).ToString());
 	}
 }
 
 void AShooterAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	// PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-
-	if (LineOfSightTo(PlayerPawn))
-	{
-		// Setting PlayerLocation
-		GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), PlayerPawn->GetActorLocation());
-		// Setting LastKnown
-		GetBlackboardComponent()->SetValueAsVector(TEXT("LastKnownPlayerLocation"), PlayerPawn->GetActorLocation());
-
-	}
-	else
-	{
-		// Clear PlayerLocation
-		GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
-		UE_LOG(LogTemp, Warning, TEXT("Chase LastKnownLocation : %s"), *GetBlackboardComponent()->GetValueAsVector(TEXT("LastKnownLocation")).ToString());
-	}
 }
