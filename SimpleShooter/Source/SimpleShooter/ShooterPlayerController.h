@@ -19,6 +19,10 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> LoseScreenClass;
+
+	
+	UPROPERTY(EditAnywhere)
 	float RestartDelay = 5.f;
 
 	FTimerHandle RestartTimer;
