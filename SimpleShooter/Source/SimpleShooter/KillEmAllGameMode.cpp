@@ -3,6 +3,7 @@
 
 #include "KillEmAllGameMode.h"
 #include "EngineUtils.h"
+#include "ShooterAIController.h"
 #include "GameFramework/Controller.h"
 class ALoseController;
 
@@ -17,6 +18,16 @@ void AKillEmAllGameMode::PawnKilled(APawn* PawnKilled)
 	{
 		EndGame(false);
 	}
+
+	for ( AShooterAIController* Controller : TActorRange<AShooterAIController>(GetWorld()))
+	{
+		if(!Controller->IsDead())
+		{
+			return;
+		}
+	}
+	// 플레이어가 승리
+	EndGame(true);
 }
 
 void AKillEmAllGameMode::EndGame(bool bIsPlayerWinner)
