@@ -19,14 +19,22 @@ AShooterCharacter::AShooterCharacter()
 void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	Health = MaxHealth;
 
-	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
-	GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
-	Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
-	Gun->SetOwner(this);
+	if(!ensure(!GunClassArray.IsEmpty())) return;
 	
+	for(TSubclassOf<AGun> GunClass : GunClassArray)
+	{
+		Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+		GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
+		Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+		Gun->SetOwner(this);
+		Gun->SetActorHiddenInGame(true);
+		GunArray.Add(Gun);
+	}
+	
+	GunArray[WeaponActiveIndex]->SetActorHiddenInGame(false);
 	// AIController = CreateDefaultSubobject<AShooterAIController>(TEXT("AIController"));
 }
 
@@ -61,6 +69,8 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Shoot"), EInputEvent::IE_Pressed, this, &AShooterCharacter::Shoot);
+	PlayerInputComponent->BindAction(TEXT("DrawWeapon1"), EInputEvent::IE_Pressed, this, &AShooterCharacter::ChangeWeapon1);
+	PlayerInputComponent->BindAction(TEXT("DrawWeapon2"), EInputEvent::IE_Pressed, this, &AShooterCharacter::ChangeWeapon2);
 }
 
 float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
@@ -111,6 +121,33 @@ void AShooterCharacter::LookRightRate(float AxisValue)
 
 void AShooterCharacter::Shoot()
 {
-	Gun->PullTrigger();
-	// UE_LOG(LogTemp, Warning, TEXT("You Pull the Trigger!"));
+	GunArray[WeaponActiveIndex]->PullTrigger();
+	UE_LOG(LogTemp, Warning, TEXT("You use the Weapon : %s!"), *GunArray[WeaponActiveIndex]->GetName());
+}
+
+void AShooterCharacter::ChangeWeapon1()
+{
+	WeaponActiveIndex = 0;
+	ChangeWeapon();
+}
+
+void AShooterCharacter::ChangeWeapon2()
+{
+	WeaponActiveIndex = 1;
+	ChangeWeapon();
+}
+
+void AShooterCharacter::ChangeWeapon()
+{
+	for(int32 WeaponIndex = 0 ; WeaponIndex < GunArray.Num(); WeaponIndex++)
+	{
+		if(WeaponIndex == WeaponActiveIndex)
+		{
+			GunArray[WeaponIndex]->SetActorHiddenInGame(false);
+		}
+		else
+		{
+			GunArray[WeaponIndex]->SetActorHiddenInGame(true);
+		}
+	}
 }

@@ -38,6 +38,9 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	void Shoot();
+	void ChangeWeapon1();
+	void ChangeWeapon2();
+	void ChangeWeapon();
 	
 private:
 	void MoveForward(float AxisValue);
@@ -55,11 +58,19 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	float Health;
 	
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AGun> GunClass;
+	// UPROPERTY(EditDefaultsOnly, Category="Weapon")
+	// TSubclassOf<AGun> GunClass;
 
 	UPROPERTY()
 	AGun* Gun;
+
+	UPROPERTY(EditDefaultsOnly, Category="Weapon")
+	TArray<TSubclassOf<AGun>> GunClassArray;
+
+	UPROPERTY()
+	TArray<AGun*> GunArray;
+
+	int WeaponActiveIndex = 0;
 	
 	// UPROPERTY(VisibleAnywhere)
 	// class AShooterAIController* AIController;
