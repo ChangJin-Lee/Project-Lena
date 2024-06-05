@@ -15,7 +15,8 @@ ABase_Character::ABase_Character()
 void ABase_Character::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	UE_LOG(LogTemp, Display, TEXT("잘 연결되었다"));
+	UE_LOG(LogTemp, Warning, TEXT("You Pull the Trigger!"));
 }
 
 // Called every frame
