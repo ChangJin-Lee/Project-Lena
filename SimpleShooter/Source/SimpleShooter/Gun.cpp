@@ -34,7 +34,7 @@ void AGun::PullTrigger()
 	bool bSuccess = GunTrace(HitResult, ShotDirection);
 	if(bSuccess)
 	{
-		DrawDebugPoint(GetWorld(), HitResult.Location, 20, FColor::Red, true);
+		DrawDebugPoint(GetWorld(), HitResult.Location, 15, FColor::Red, false, 5);
 		
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, HitResult.Location, ShotDirection.Rotation());
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ImpactSound, HitResult.Location);
