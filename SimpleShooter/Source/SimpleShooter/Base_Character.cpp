@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "SimpleShooterGameMode.h"
 #include "Base_Character.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 ABase_Character::ABase_Character()
@@ -69,16 +70,16 @@ float ABase_Character::TakeDamage(float DamageAmount, struct FDamageEvent const&
 	
 	UE_LOG(LogTemp, Warning, TEXT("Health Left : %f"), Health);
 
-	// if(IsDead())
-	// {
-	// 	ASimpleShooterGameMode *GameMode = GetWorld()->GetAuthGameMode<ASimpleShooterGameMode>();
-	// 	if(GameMode != nullptr)
-	// 	{
-	// 		GameMode->PawnKilled(this);
-	// 	}
-	// 	DetachFromControllerPendingDestroy();
-	// 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	// }
+	if(IsDead())
+	{
+		ASimpleShooterGameMode *GameMode = GetWorld()->GetAuthGameMode<ASimpleShooterGameMode>();
+		if(GameMode != nullptr)
+		{
+			GameMode->PawnKilled(this);
+		}
+		DetachFromControllerPendingDestroy();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 	
 	return DamageToApplied;
 }
@@ -112,15 +113,49 @@ void ABase_Character::ChangeWeapon()
 	{
 		if(WeaponIndex == WeaponActiveIndex)
 		{
-			if(IsArmed)
-			{
-				GunArray[WeaponIndex]->SetActorHiddenInGame(false);
-			}
+			GunArray[WeaponIndex]->SetActorHiddenInGame(false);
 		}
 		else
 		{
 			GunArray[WeaponIndex]->SetActorHiddenInGame(true);
-			
 		}
 	}
+}
+
+void ABase_Character::HideAllWeapons()
+{
+	for(int32 WeaponIndex = 0 ; WeaponIndex < GunArray.Num(); WeaponIndex++)
+	{
+		GunArray[WeaponIndex]->SetActorHiddenInGame(true);
+	}
+}
+
+void ABase_Character::SetOverLayString(FString st)
+{
+	OverLayString = st;
+	UE_LOG(LogTemp, Warning, TEXT("You Select Overlay : %s"), *OverLayString);
+}
+
+void ABase_Character::AdjustOverLay()
+{
+	if(OverLayString == "Rifle")
+	{
+		ToggleIsArmed();
+		ChangeWeapon();
+	}
+	else
+	{
+		ToggleIsArmed();
+		HideAllWeapons();
+	}
+}
+
+bool ABase_Character::GetIsAICharacter()
+{
+	return IsAICharacter;
+}
+
+void ABase_Character::ToggleIsArmed()
+{
+	IsArmed = !IsArmed;
 }

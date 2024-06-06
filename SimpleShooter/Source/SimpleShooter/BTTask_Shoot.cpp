@@ -4,7 +4,7 @@
 #include "BTTask_Shoot.h"
 
 #include "AIController.h"
-#include "ShooterCharacter.h"
+#include "Base_Character.h"
 
 
 UBTTask_Shoot::UBTTask_Shoot()
@@ -25,13 +25,14 @@ EBTNodeResult::Type UBTTask_Shoot::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 
 	APawn *AIPawn = AIController->GetPawn();
 
-	AShooterCharacter *ShooterCharacter = Cast<AShooterCharacter>(AIPawn);
+	ABase_Character *ShooterCharacter = Cast<ABase_Character>(AIPawn);
 
 	if(ShooterCharacter == nullptr)
 	{
 		return EBTNodeResult::Failed;
 	}
 
+	ShooterCharacter->ToggleIsArmed();
 	ShooterCharacter->Shoot();
 	
 	return EBTNodeResult::Succeeded;

@@ -7,7 +7,6 @@
 #include "GameFramework/Character.h"
 #include "Base_Character.generated.h"
 
-
 UCLASS()
 class SIMPLESHOOTER_API ABase_Character : public ACharacter
 {
@@ -28,9 +27,11 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void ToggleIsArmed();
 	void Shoot();
 	void ChangeWeapon1();
 	void ChangeWeapon2();
+	void HideAllWeapons();
 	UFUNCTION(BlueprintCallable)
 	void ChangeWeapon();
 
@@ -42,9 +43,17 @@ public:
 	UFUNCTION(BlueprintPure)
 	float GetHealthPercent() const;
 
-	UPROPERTY(BlueprintReadWrite)
-	bool IsArmed = false;
-	
+	FString OverLayString;
+
+	UFUNCTION(BlueprintCallable)
+	void SetOverLayString(FString st);
+
+	UFUNCTION(BlueprintCallable)
+	void AdjustOverLay();
+
+	UFUNCTION(BlueprintCallable)
+	bool GetIsAICharacter();
+
 private:
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth = 100;
@@ -62,4 +71,8 @@ private:
 	TArray<AGun*> GunArray;
 
 	int WeaponActiveIndex = 0;
+	
+	bool IsAICharacter = false;
+
+	bool IsArmed = false;
 };

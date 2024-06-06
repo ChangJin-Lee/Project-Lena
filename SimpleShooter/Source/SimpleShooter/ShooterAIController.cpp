@@ -3,7 +3,7 @@
 
 #include "ShooterAIController.h"
 
-#include "ShooterCharacter.h"
+#include "Base_Character.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
@@ -33,7 +33,7 @@ void AShooterAIController::Tick(float DeltaTime)
 
 bool AShooterAIController::IsDead() const
 {
-	 AShooterCharacter* ControlledCharactor = Cast<AShooterCharacter>(GetPawn());
+	 ABase_Character* ControlledCharactor = Cast<ABase_Character>(GetPawn());
 	if(ControlledCharactor != nullptr)
 	{
 		return ControlledCharactor->IsDead();
