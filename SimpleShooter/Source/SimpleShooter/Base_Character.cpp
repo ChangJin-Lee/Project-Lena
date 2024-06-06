@@ -138,6 +138,7 @@ void ABase_Character::SetOverLayString(FString st)
 
 void ABase_Character::AdjustOverLay()
 {
+	// UE_LOG(LogTemp, Warning, TEXT("AdjustOverLay : %d"), WeaponActiveIndex);
 	if(OverLayString == "Rifle")
 	{
 		ToggleIsArmed();

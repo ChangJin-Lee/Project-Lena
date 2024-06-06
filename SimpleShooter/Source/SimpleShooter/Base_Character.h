@@ -45,14 +45,20 @@ public:
 
 	FString OverLayString;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "OverLay Slot")
 	void SetOverLayString(FString st);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "OverLay Slot")
 	void AdjustOverLay();
 
 	UFUNCTION(BlueprintCallable)
 	bool GetIsAICharacter();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "OverLay Slot")
+	void DrawAIWeapon();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "OverLay Slot")
+	void PutDownAIWeapon();
 
 private:
 	UPROPERTY(EditDefaultsOnly)

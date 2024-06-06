@@ -13,7 +13,6 @@ UBTService_PlayerLocationIfSeen::UBTService_PlayerLocationIfSeen()
 	NodeName = TEXT("Update Player Location If Seen");
 }
 
-
 void UBTService_PlayerLocationIfSeen::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
@@ -37,11 +36,13 @@ void UBTService_PlayerLocationIfSeen::TickNode(UBehaviorTreeComponent& OwnerComp
 	if(AIController->LineOfSightTo(PlayerPawn))
 	{
 		ShooterCharacter->ToggleIsArmed();
+		ShooterCharacter->DrawAIWeapon();
 		AIController->GetBlackboardComponent()->SetValueAsObject(GetSelectedBlackboardKey(), PlayerPawn);
 	}
 	else
 	{
 		ShooterCharacter->ToggleIsArmed();
+		ShooterCharacter->PutDownAIWeapon();
 		AIController->GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
 	}
 
