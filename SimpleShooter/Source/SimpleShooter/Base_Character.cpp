@@ -79,6 +79,7 @@ float ABase_Character::TakeDamage(float DamageAmount, struct FDamageEvent const&
 		}
 		DetachFromControllerPendingDestroy();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		OnDead();
 	}
 	
 	return DamageToApplied;

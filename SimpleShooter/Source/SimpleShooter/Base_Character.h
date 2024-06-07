@@ -60,6 +60,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "OverLay Slot")
 	void PutDownAIWeapon();
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Animation Slot")
+	void OnDead();
+	
 private:
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth = 100;
