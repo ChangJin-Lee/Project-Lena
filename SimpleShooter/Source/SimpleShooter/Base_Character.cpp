@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "SimpleShooterGameMode.h"
 #include "Base_Character.h"
+#include "SimpleShooterGameMode.h"
 #include "Components/CapsuleComponent.h"
 
 // Sets default values
