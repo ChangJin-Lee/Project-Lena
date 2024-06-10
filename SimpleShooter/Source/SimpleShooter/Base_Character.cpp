@@ -29,6 +29,7 @@ void ABase_Character::BeginPlay()
 		Gun->SetOwner(this);
 		Gun->SetActorHiddenInGame(true);
 		GunArray.Add(Gun);
+		UE_LOG(LogTemp, Warning, TEXT("Spawn Guns  %s"), *Gun->GetName());
 	}
 	
 	// GunArray[WeaponActiveIndex]->SetActorHiddenInGame(false);
@@ -54,10 +55,9 @@ void ABase_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 void ABase_Character::Shoot()
 {
 	if(IsArmed)
-	{
+	{ 
 		GunArray[WeaponActiveIndex]->PullTrigger();
 	}
-	UE_LOG(LogTemp, Warning, TEXT("You Pull the Trigger!"));
 }
 
 
@@ -134,12 +134,10 @@ void ABase_Character::HideAllWeapons()
 void ABase_Character::SetOverLayString(FString st)
 {
 	OverLayString = st;
-	UE_LOG(LogTemp, Warning, TEXT("You Select Overlay : %s"), *OverLayString);
 }
 
 void ABase_Character::AdjustOverLay()
 {
-	// UE_LOG(LogTemp, Warning, TEXT("AdjustOverLay : %d"), WeaponActiveIndex);
 	if(OverLayString == "Rifle")
 	{
 		ToggleIsArmed();
