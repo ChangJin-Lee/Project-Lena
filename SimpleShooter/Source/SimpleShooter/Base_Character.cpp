@@ -20,19 +20,30 @@ void ABase_Character::BeginPlay()
 	Health = MaxHealth;
 
 	if(!ensure(!GunClassArray.IsEmpty())) return;
-	
-	for(TSubclassOf<AGun> GunClass : GunClassArray)
+
+	USkeletalMeshComponent* SpecificMesh = FindMeshByName(TEXT("BodyMesh"));
+	if (SpecificMesh)
 	{
-		Gun = GetWorld()->SpawnActor<AGun>(GunClass);
-		GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
-		Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
-		Gun->SetOwner(this);
-		Gun->SetActorHiddenInGame(true);
-		GunArray.Add(Gun);
-		UE_LOG(LogTemp, Warning, TEXT("Spawn Guns  %s"), *Gun->GetName());
+		UE_LOG(LogTemp, Warning, TEXT("Find  VRoidCharacter  %s"), *SpecificMesh->GetName());
+		
+		// 총 부착
+		for(TSubclassOf<AGun> GunClass : GunClassArray)
+		{
+			Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+			SpecificMesh->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
+			Gun->AttachToComponent(SpecificMesh, FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+			Gun->SetOwner(this);
+			Gun->SetActorHiddenInGame(true);
+			GunArray.Add(Gun);
+			UE_LOG(LogTemp, Warning, TEXT("Spawn Guns  %s"), *Gun->GetName());
+		}
 	}
 	
+	
+	
 	// GunArray[WeaponActiveIndex]->SetActorHiddenInGame(false);
+
+	
 }
 
 // Called every frame
@@ -49,6 +60,26 @@ void ABase_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAction(TEXT("Shoot"), EInputEvent::IE_Pressed, this, &ABase_Character::Shoot);
 	PlayerInputComponent->BindAction(TEXT("DrawWeapon1"), EInputEvent::IE_Pressed, this, &ABase_Character::ChangeWeapon1);
 	PlayerInputComponent->BindAction(TEXT("DrawWeapon2"), EInputEvent::IE_Pressed, this, &ABase_Character::ChangeWeapon2);
+}
+
+// 특정 이름을 가진 자식 메쉬를 찾는 함수
+USkeletalMeshComponent* ABase_Character::FindMeshByName(FName MeshName)
+{
+	// 모든 SkeletalMeshComponent를 찾습니다.
+	TArray<USkeletalMeshComponent*> MeshComponents;
+	GetComponents<USkeletalMeshComponent>(MeshComponents);
+
+	// 각 컴포넌트를 순회하며 이름이 일치하는 메쉬를 찾습니다.
+	for (USkeletalMeshComponent* MeshComp : MeshComponents)
+	{
+		if (MeshComp->GetName() == MeshName.ToString())
+		{
+			return MeshComp;
+		}
+	}
+
+	// 찾지 못하면 nullptr 반환
+	return nullptr;
 }
 
 
