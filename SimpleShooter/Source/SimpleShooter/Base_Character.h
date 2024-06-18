@@ -37,6 +37,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ChangeWeapon();
 
+	UFUNCTION(BlueprintCallable)
+	int GetAmmo();
+
+	UFUNCTION(BlueprintCallable)
+	void AddAmmo(int mount);
+
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	UFUNCTION(BlueprintPure)

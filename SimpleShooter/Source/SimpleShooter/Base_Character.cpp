@@ -112,7 +112,6 @@ float ABase_Character::TakeDamage(float DamageAmount, struct FDamageEvent const&
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		OnDead();
 	}
-	
 	return DamageToApplied;
 }
 
@@ -189,4 +188,14 @@ bool ABase_Character::GetIsAICharacter()
 void ABase_Character::ToggleIsArmed()
 {
 	IsArmed = !IsArmed;
+}
+
+int ABase_Character::GetAmmo()
+{
+	return GunArray[WeaponActiveIndex]->GetAmmo();
+}
+
+void ABase_Character::AddAmmo(int mount)
+{
+	return GunArray[WeaponActiveIndex]->AddAmmo(mount);
 }
