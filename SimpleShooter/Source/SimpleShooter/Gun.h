@@ -16,6 +16,12 @@ public:
 	AGun();
 	void PullTrigger();
 
+	UFUNCTION(BlueprintCallable)
+	void AddAmmo(int AmmoCount);
+
+	UFUNCTION(BlueprintCallable)
+	int GetAmmo();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -41,6 +47,9 @@ private:
 	USoundBase* ImpactSound;
 
 	UPROPERTY(EditAnywhere)
+	USoundBase* AmmoEmptySound;
+
+	UPROPERTY(EditAnywhere)
 	UParticleSystem* ImpactEffect;
 
 	UPROPERTY(EditAnywhere)
@@ -49,7 +58,12 @@ private:
 	UPROPERTY(EditAnywhere)
 	float Damage = 15;
 
+	UPROPERTY(EditAnywhere)
+	int Ammo = 30;
+
 	bool GunTrace(FHitResult &Hit, FVector &ShotDirection);
 
 	AController* GetOwnerController() const;
+
+	bool IsEmpty();
 };

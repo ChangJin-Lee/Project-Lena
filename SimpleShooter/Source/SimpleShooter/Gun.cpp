@@ -25,6 +25,11 @@ AGun::AGun()
 
 void AGun::PullTrigger()
 {
+	if(IsEmpty())
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), AmmoEmptySound, GetActorLocation());
+		return;
+	}
 	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
 	UGameplayStatics::SpawnSoundAttached(MuzzleSound, Mesh, TEXT("MuzzleFlashSocket"));
 	
@@ -34,22 +39,21 @@ void AGun::PullTrigger()
 	bool bSuccess = GunTrace(HitResult, ShotDirection);
 	if(bSuccess)
 	{
-		DrawDebugPoint(GetWorld(), HitResult.Location, 15, FColor::Red, false, 5);
+		// DrawDebugPoint(GetWorld(), HitResult.Location, 15, FColor::Red, false, 5);
 		
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, HitResult.Location, ShotDirection.Rotation());
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ImpactSound, HitResult.Location);
-		
+
 		AActor* DamagedActor = HitResult.GetActor();
 		if(DamagedActor)
 		{
 			FPointDamageEvent DamageEvent(Damage, HitResult, ShotDirection, nullptr);
 			AController *OwnerController = GetOwnerController(); // 두번 계산하더라도, 코드의 가독성이 좋아지고 동기화가 어긋날 수 있는 변수나 상태를 저장하지 않아도 된다
 			DamagedActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
+			Ammo--;
 		}
 	}
-
-	// DrawDebugCamera(GetWorld(), GetActorLocation(), GetActorRotation(), 90, 2, FColor::Red, true);
-	UE_LOG(LogTemp, Warning, TEXT("You Pull the Trigger!"));
+	// UE_LOG(LogTemp, Warning, TEXT("You Pull the Trigger!"));
 }
 
 // Called when the game starts or when spawned
@@ -87,6 +91,22 @@ bool AGun::GunTrace(FHitResult& HitResult, FVector& ShotDirection)
 AController* AGun::GetOwnerController() const
 {
 	APawn* OwnerPawn = Cast<APawn>(GetOwner());
-	if(OwnerPawn == nullptr) nullptr;
+	if(OwnerPawn == nullptr) nullptr; 
 	return OwnerPawn->GetController();
+}
+
+void AGun::AddAmmo(int AmmoCount)
+{
+	Ammo+=AmmoCount;
+	UE_LOG(LogTemp, Warning, TEXT("Add Ammo! %d"), Ammo);
+}
+
+int AGun::GetAmmo()
+{
+	return Ammo;
+}
+
+bool AGun::IsEmpty()
+{
+	return Ammo <= 0;
 }
