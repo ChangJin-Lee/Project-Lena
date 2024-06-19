@@ -38,6 +38,9 @@ public:
 	void ChangeWeapon();
 
 	UFUNCTION(BlueprintCallable)
+	AGun* GetWeapon();
+
+	UFUNCTION(BlueprintCallable)
 	int GetAmmo();
 
 	UFUNCTION(BlueprintCallable)

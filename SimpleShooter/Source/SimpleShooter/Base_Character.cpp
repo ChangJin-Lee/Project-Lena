@@ -199,3 +199,8 @@ void ABase_Character::AddAmmo(int mount)
 {
 	return GunArray[WeaponActiveIndex]->AddAmmo(mount);
 }
+
+AGun* ABase_Character::GetWeapon()
+{
+	return GunArray[WeaponActiveIndex];
+}
