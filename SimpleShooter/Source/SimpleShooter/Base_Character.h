@@ -44,12 +44,15 @@ public:
 	int GetAmmo();
 
 	UFUNCTION(BlueprintCallable)
-	void AddAmmo(int mount);
+	void AddAmmo_5mm();
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const; // 이 함수를 호출했다고 캐릭터의 어떠한 상태도 바뀌면 안되기 때문. 안전하게 const로 선언
+	
+	UFUNCTION(BlueprintCallable)
+	bool ReloadGun();
 
 	UFUNCTION(BlueprintPure)
 	float GetHealthPercent() const;
@@ -87,12 +90,17 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category="Weapon")
 	TArray<TSubclassOf<AGun>> GunClassArray;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite, Category="Weapon", meta=(AllowPrivateAccess="true"))
 	TArray<AGun*> GunArray;
 
+	UPROPERTY(BlueprintReadWrite, Category="Weapon", meta=(AllowPrivateAccess="true"))
 	int WeaponActiveIndex = 0;
 	
 	bool IsAICharacter = false;
-
+	
+	UPROPERTY(BlueprintReadWrite, Category="Weapon", meta=(AllowPrivateAccess="true"))
 	bool IsArmed = false;
+
+	UPROPERTY(BlueprintReadWrite, Category="Ammo", meta=(AllowPrivateAccess="true"))
+	int Ammo_5mm = 60;
 };

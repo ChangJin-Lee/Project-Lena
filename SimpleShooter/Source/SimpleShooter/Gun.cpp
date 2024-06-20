@@ -95,10 +95,9 @@ AController* AGun::GetOwnerController() const
 	return OwnerPawn->GetController();
 }
 
-void AGun::AddAmmo(int AmmoCount)
+void AGun::SetAmmo(int AmmoCount)
 {
-	Ammo+=AmmoCount;
-	UE_LOG(LogTemp, Warning, TEXT("Add Ammo! %d"), Ammo);
+	Ammo=AmmoCount;
 }
 
 int AGun::GetAmmo()
@@ -109,4 +108,9 @@ int AGun::GetAmmo()
 bool AGun::IsEmpty()
 {
 	return Ammo <= 0;
+}
+
+int AGun::GetMaxAmmo()
+{
+	return MaxAmmo;
 }

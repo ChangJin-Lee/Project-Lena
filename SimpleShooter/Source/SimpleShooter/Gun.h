@@ -17,10 +17,12 @@ public:
 	void PullTrigger();
 
 	UFUNCTION(BlueprintCallable)
-	void AddAmmo(int AmmoCount);
+	void SetAmmo(int AmmoCount);
 
 	UFUNCTION(BlueprintCallable)
 	int GetAmmo();
+
+	int GetMaxAmmo();
 
 protected:
 	// Called when the game starts or when spawned
@@ -59,7 +61,10 @@ private:
 	float Damage = 15;
 
 	UPROPERTY(EditAnywhere)
-	int Ammo = 30;
+	int MaxAmmo = 30;
+	
+	UPROPERTY(EditAnywhere)
+	int Ammo = 0;
 
 	bool GunTrace(FHitResult &Hit, FVector &ShotDirection);
 

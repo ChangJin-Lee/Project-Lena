@@ -31,7 +31,7 @@ void ABase_Character::BeginPlay()
 		{
 			Gun = GetWorld()->SpawnActor<AGun>(GunClass);
 			SpecificMesh->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
-			Gun->AttachToComponent(SpecificMesh, FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+			Gun->AttachToComponent(SpecificMesh, FAttachmentTransformRules::KeepRelativeTransform, TEXT("LHS_ik_hand_r"));
 			Gun->SetOwner(this);
 			Gun->SetActorHiddenInGame(true);
 			GunArray.Add(Gun);
@@ -195,12 +195,30 @@ int ABase_Character::GetAmmo()
 	return GunArray[WeaponActiveIndex]->GetAmmo();
 }
 
-void ABase_Character::AddAmmo(int mount)
+void ABase_Character::AddAmmo_5mm()
 {
-	return GunArray[WeaponActiveIndex]->AddAmmo(mount);
+	int MaxAmmo = GunArray[WeaponActiveIndex]->GetMaxAmmo();
+	Ammo_5mm+=MaxAmmo;
 }
 
 AGun* ABase_Character::GetWeapon()
 {
 	return GunArray[WeaponActiveIndex];
+}
+
+bool ABase_Character::ReloadGun()
+{
+	int MaxAmmo = GunArray[WeaponActiveIndex]->GetMaxAmmo();
+	int CurrentAmmo = GunArray[WeaponActiveIndex]->GetAmmo();
+
+	if(!GunArray[WeaponActiveIndex])
+		return false;
+
+	if(CurrentAmmo < MaxAmmo)
+	{
+		GunArray[WeaponActiveIndex]->SetAmmo(FMath::Min(MaxAmmo, CurrentAmmo+Ammo_5mm));
+		Ammo_5mm = FMath::Max( 0 , Ammo_5mm-(MaxAmmo - CurrentAmmo));
+	}
+	
+	return true;
 }
