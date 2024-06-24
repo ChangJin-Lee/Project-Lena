@@ -7,6 +7,8 @@
 #include "ShooterCharacter.h"
 #include "GenericPlatform/GenericPlatformCrashContext.h"
 #include "Engine/DamageEvents.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 
 // Sets default values
 AGun::AGun()
@@ -30,7 +32,19 @@ void AGun::PullTrigger()
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), AmmoEmptySound, GetActorLocation());
 		return;
 	}
-	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
+	
+	if (MuzzleFlashNS)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAttached(
+			MuzzleFlashNS,
+			Mesh,
+			TEXT("MuzzleFlashSocket"),
+			FVector::ZeroVector,
+			FRotator::ZeroRotator,
+			EAttachLocation::SnapToTargetIncludingScale,
+			true
+		);
+	}
 	UGameplayStatics::SpawnSoundAttached(MuzzleSound, Mesh, TEXT("MuzzleFlashSocket"));
 	
 	FHitResult HitResult;

@@ -40,7 +40,7 @@ private:
 	USkeletalMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere)
-	UParticleSystem* MuzzleFlash;
+	class UNiagaraSystem* MuzzleFlashNS;  // Niagara 시스템 변수 추가
 
 	UPROPERTY(EditAnywhere)
 	USoundBase* MuzzleSound;
