@@ -31,9 +31,12 @@ public:
 
 	void ToggleIsArmed();
 	void Shoot();
+	void ReloadAction();
+	void ReloadAIAction();
 	void ChangeWeapon1();
 	void ChangeWeapon2();
 	void HideAllWeapons();
+	
 	UFUNCTION(BlueprintCallable)
 	void ChangeWeapon();
 
@@ -53,6 +56,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	bool ReloadGun();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Reload")
+	void ReloadAIEvent();
 
 	UFUNCTION(BlueprintPure)
 	float GetHealthPercent() const;

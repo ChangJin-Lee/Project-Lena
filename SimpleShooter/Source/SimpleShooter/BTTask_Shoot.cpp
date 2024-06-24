@@ -33,6 +33,16 @@ EBTNodeResult::Type UBTTask_Shoot::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 	}
 
 	ShooterCharacter->ToggleIsArmed();
+
+	UE_LOG(LogTemp, Warning, TEXT("Health Left : %d"), ShooterCharacter->GetAmmo());
+
+	if(!ShooterCharacter->GetAmmo())
+	{
+		ShooterCharacter->ReloadAIAction();
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Health Left : %d"), ShooterCharacter->GetAmmo());
+	
 	ShooterCharacter->Shoot();
 	
 	return EBTNodeResult::Succeeded;

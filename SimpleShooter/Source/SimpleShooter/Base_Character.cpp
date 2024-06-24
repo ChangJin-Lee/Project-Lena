@@ -58,6 +58,7 @@ void ABase_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAction(TEXT("Shoot"), EInputEvent::IE_Pressed, this, &ABase_Character::Shoot);
+	PlayerInputComponent->BindAction(TEXT("Reload"), EInputEvent::IE_Pressed, this, &ABase_Character::ReloadAction);
 	PlayerInputComponent->BindAction(TEXT("DrawWeapon1"), EInputEvent::IE_Pressed, this, &ABase_Character::ChangeWeapon1);
 	PlayerInputComponent->BindAction(TEXT("DrawWeapon2"), EInputEvent::IE_Pressed, this, &ABase_Character::ChangeWeapon2);
 }
@@ -91,6 +92,17 @@ void ABase_Character::Shoot()
 	}
 }
 
+void ABase_Character::ReloadAction()
+{
+	ReloadGun();
+}
+
+void ABase_Character::ReloadAIAction()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Reload Action Event!"));
+	ReloadAIEvent();
+	ReloadGun();
+}
 
 float ABase_Character::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
