@@ -35,4 +35,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
 	FName RequiredItem;
+	
+	UPROPERTY(EditAnywhere, Category="Door")
+	TSubclassOf<class UCameraShakeBase> WrongAnswerCameraShakeClass;
 };

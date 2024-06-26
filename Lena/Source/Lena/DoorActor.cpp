@@ -33,5 +33,10 @@ bool ADoorActor::CheckRequiredItem()
 		return true;
 	}
 	
+	if(WrongAnswerCameraShakeClass)
+	{
+		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(WrongAnswerCameraShakeClass);
+	}
+	
 	return false;
 }
