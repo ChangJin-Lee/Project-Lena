@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Base_Item.h"
-#include "Lena/Public/InteractableThings/Door/InteractableActor.h"
+#include "Lena/Public/InteractableThings/InteractableActor.h"
 #include "GameFramework/Actor.h"
 #include "PickupItem.generated.h"
 
