@@ -3,10 +3,11 @@
 
 #include "ShooterAIController.h"
 
-#include "Base_Character.h"
+#include "Lena/Characters/Base_Character.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
+
 
 void AShooterAIController::BeginPlay()
 {

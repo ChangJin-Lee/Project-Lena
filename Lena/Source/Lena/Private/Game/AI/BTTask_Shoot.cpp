@@ -4,7 +4,7 @@
 #include "BTTask_Shoot.h"
 
 #include "AIController.h"
-#include "Base_Character.h"
+#include "Lena/Characters/Base_Character.h"
 
 
 UBTTask_Shoot::UBTTask_Shoot()

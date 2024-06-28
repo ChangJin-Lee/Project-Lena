@@ -1,8 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Base_Character.h"
-#include "LenaGameMode.h"
+#include "Lena/Game/GameMode/LenaGameMode.h"
 #include "Components/CapsuleComponent.h"
+
 
 // Sets default values
 ABase_Character::ABase_Character()

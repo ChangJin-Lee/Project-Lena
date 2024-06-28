@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Base_Item.h"
-#include "Gun.h"
+#include "Lena/Items//Base_Item.h"
+#include "Lena/Items/Gun.h"
 #include "GameFramework/Character.h"
 #include "Base_Character.generated.h"
 

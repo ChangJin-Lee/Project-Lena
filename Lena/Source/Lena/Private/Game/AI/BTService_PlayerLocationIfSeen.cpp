@@ -6,7 +6,8 @@
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Base_Character.h"
+#include "Lena/Characters/Base_Character.h"
+
 
 UBTService_PlayerLocationIfSeen::UBTService_PlayerLocationIfSeen()
 {

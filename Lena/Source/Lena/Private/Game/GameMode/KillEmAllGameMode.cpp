@@ -3,8 +3,9 @@
 
 #include "KillEmAllGameMode.h"
 #include "EngineUtils.h"
-#include "ShooterAIController.h"
+#include "Lena/Game/Controller/ShooterAIController.h"
 #include "GameFramework/Controller.h"
+
 class ALoseController;
 
 void AKillEmAllGameMode::PawnKilled(APawn* PawnKilled)

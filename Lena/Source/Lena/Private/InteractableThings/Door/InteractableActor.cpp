@@ -19,22 +19,24 @@ AInteractableActor::AInteractableActor()
 	
 	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
 	HitBox->SetupAttachment(Root);
-
-	TextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("AlertText"));
-	TextRenderComponent->SetupAttachment(Root);
-	TextRenderComponent->SetText(FText::FromString("Press E"));
 	
 	HitBox->OnComponentBeginOverlap.AddDynamic(this, &AInteractableActor::OnOverlapBegin);
 	HitBox->OnComponentEndOverlap.AddDynamic(this, &AInteractableActor::OnOverlapEnd);
+
+	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("WidgetComponent"));
+	WidgetComponent->SetupAttachment(Root);
 }
 
 // Called when the game starts or when spawned
 void AInteractableActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	WidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
+	Widget = WidgetComponent->GetWidget();
 	
 	PlayerController = UGameplayStatics::GetPlayerController(GetWorld(),0);
-	HideTextRenderComponent();
+	HideWidgetComponent();
 }
 
 // Called every frame
@@ -48,46 +50,50 @@ void AInteractableActor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AAc
 	EnableInput(PlayerController);
 	if(!IsDone)
 	{
-		ShowTextRenderComponent();
+		ShowWidgetComponent();
 	}
 }
 
 void AInteractableActor::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	DisableInput(PlayerController);
-	HideTextRenderComponent();
+	HideWidgetComponent();
 	OutSideEvent();
 }
 
-void AInteractableActor::AddWidget()
+void AInteractableActor::AddWidget(UUserWidget* Widget_)
 {
-	Widget = CreateWidget(GetWorld(), PasswordWidget);
-	if (Widget)
+	if (Widget_)
 	{
-		Widget->AddToViewport();
+		Widget_->AddToViewport();
 		PlayerController->SetInputMode(FInputModeGameAndUI());
 		PlayerController->bShowMouseCursor = true;
 	}
 }
 
-void AInteractableActor::RemoveWidget()
+void AInteractableActor::RemoveWidget(UUserWidget* Widget_)
 {
-	if(Widget && Widget->IsInViewport())
+	if(Widget_ && Widget_->IsInViewport())
 	{
-		Widget->RemoveFromParent();
+		Widget_->RemoveFromParent();
 		PlayerController->SetInputMode(FInputModeGameOnly());
 		PlayerController->bShowMouseCursor = false;
 	}
 }
 
-
-void AInteractableActor::ShowTextRenderComponent()
+void AInteractableActor::ShowWidgetComponent()
 {
-	TextRenderComponent->SetVisibility(true);
+	if(WidgetComponent)
+	{
+		WidgetComponent->SetVisibility(true);
+	}
 }
 
-void AInteractableActor::HideTextRenderComponent()
+void AInteractableActor::HideWidgetComponent()
 {
-	TextRenderComponent->SetVisibility(false);
+	if(WidgetComponent)
+	{
+		WidgetComponent->SetVisibility(false);
+	}
 }
 

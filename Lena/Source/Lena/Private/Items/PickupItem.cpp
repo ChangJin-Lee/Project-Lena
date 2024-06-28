@@ -3,9 +3,10 @@
 
 #include "PickupItem.h"
 
-#include "Base_Character.h"
+#include "Lena/Characters/Base_Character.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
+
 
 // Sets default values
 APickupItem::APickupItem()
@@ -55,6 +56,11 @@ void APickupItem::PickUp()
 		SetActorHiddenInGame(true);
 		SetActorEnableCollision(false);
 		SetActorTickEnabled(false);
+		
+		if(PickupSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), PickupSound, GetActorLocation());
+		}
 	}
 }
 

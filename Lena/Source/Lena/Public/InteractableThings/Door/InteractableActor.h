@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/WidgetComponent.h"
 #include "GameFramework/Actor.h"
 #include "InteractableActor.generated.h"
 
@@ -18,9 +19,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UUserWidget> PasswordWidget;
 
 public:	
 	// Called every frame
@@ -35,19 +33,19 @@ public:
 	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	UFUNCTION(BlueprintCallable)
-	void AddWidget();
+	void AddWidget(UUserWidget* Widget_);
 
 	UFUNCTION(BlueprintCallable)
-	void RemoveWidget();
+	void RemoveWidget(UUserWidget* Widget_);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OutSideEvent();
 
 	UFUNCTION(BlueprintCallable)
-	void HideTextRenderComponent();
+	void HideWidgetComponent();
 
 	UFUNCTION(BlueprintCallable)
-	void ShowTextRenderComponent();
+	void ShowWidgetComponent();
 
 	UPROPERTY(BlueprintReadWrite)
 	bool IsDone = false;
@@ -59,11 +57,11 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* HitBox;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	class UTextRenderComponent* TextRenderComponent;
-
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	APlayerController *PlayerController;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	UWidgetComponent* WidgetComponent;
 
 	UUserWidget* Widget;
 };
