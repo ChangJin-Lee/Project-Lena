@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTTask_ClearBlackboardBase.h"
+#include "Lena/Public/Game/AI/BTTask_ClearBlackboardBase.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
 

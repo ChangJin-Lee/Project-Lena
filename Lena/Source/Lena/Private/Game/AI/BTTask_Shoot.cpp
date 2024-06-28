@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTTask_Shoot.h"
+#include "Lena/Public/Game/AI/BTTask_Shoot.h"
 
 #include "AIController.h"
-#include "Lena/Characters/Base_Character.h"
+#include "Lena/Public/Characters/Base_Character.h"
 
 
 UBTTask_Shoot::UBTTask_Shoot()

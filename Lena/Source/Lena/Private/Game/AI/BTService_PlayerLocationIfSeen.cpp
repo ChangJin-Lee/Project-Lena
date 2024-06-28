@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTService_PlayerLocationIfSeen.h"
+#include "Lena/Public/Game/AI/BTService_PlayerLocationIfSeen.h"
 
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Lena/Characters/Base_Character.h"
+#include "Lena/Public/Characters/Base_Character.h"
 
 
 UBTService_PlayerLocationIfSeen::UBTService_PlayerLocationIfSeen()

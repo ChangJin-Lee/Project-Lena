@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PickupItem.h"
+#include "Lena/Public/Items/PickupItem.h"
 
-#include "Lena/Characters/Base_Character.h"
+#include "Lena/Public/Characters/Base_Character.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 

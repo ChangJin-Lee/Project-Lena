@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Base_Character.h"
-#include "Lena/Game/GameMode/LenaGameMode.h"
+#include "Lena/Public/Characters/Base_Character.h"
+#include "Lena/Public/Game/GameMode/LenaGameMode.h"
 #include "Components/CapsuleComponent.h"
 
 

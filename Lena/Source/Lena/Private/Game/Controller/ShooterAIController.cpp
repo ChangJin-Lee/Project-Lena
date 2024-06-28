@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ShooterAIController.h"
+#include "Lena/Public/Game/Controller/ShooterAIController.h"
 
-#include "Lena/Characters/Base_Character.h"
+#include "Lena/Public/Characters/Base_Character.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "BehaviorTree/BlackboardComponent.h"

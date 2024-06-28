@@ -1,9 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "KillEmAllGameMode.h"
+#include "Lena/Public/Game/GameMode/KillEmAllGameMode.h"
+
 #include "EngineUtils.h"
-#include "Lena/Game/Controller/ShooterAIController.h"
+#include "Lena/Public/Game/Controller/ShooterAIController.h"
 #include "GameFramework/Controller.h"
 
 class ALoseController;

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Base_Item.h"
+#include "Lena/Public/Items/Base_Item.h"
 
 // Sets default values
 ABase_Item::ABase_Item()

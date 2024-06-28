@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "DoorActor.h"
+#include "Lena/Public/InteractableThings/Door/DoorActor.h"
 
-#include "Lena/Characters/Base_Character.h"
+#include "Lena/Public/Characters/Base_Character.h"
 #include "AssetTypeActions/AssetDefinition_SoundBase.h"
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
