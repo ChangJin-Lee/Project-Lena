@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Lena/Public/InteractableThings/Door/InteractableActor.h"
+#include "Lena/Public/InteractableThings/InteractableActor.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/BoxComponent.h"
 #include "Components/TextRenderComponent.h"
@@ -33,7 +33,6 @@ void AInteractableActor::BeginPlay()
 	Super::BeginPlay();
 
 	WidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
-	Widget = WidgetComponent->GetWidget();
 	
 	PlayerController = UGameplayStatics::GetPlayerController(GetWorld(),0);
 	HideWidgetComponent();

@@ -60,8 +60,7 @@ private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	APlayerController *PlayerController;
 
+protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UWidgetComponent* WidgetComponent;
-
-	UUserWidget* Widget;
 };

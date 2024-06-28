@@ -6,6 +6,7 @@
 #include "Lena/Public/Characters/Base_Character.h"
 #include "AssetTypeActions/AssetDefinition_SoundBase.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/WidgetComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -30,14 +31,6 @@ void ADoorActor::BeginPlay()
 	NumpadWidgetComponent->SetVisibility(false);
 }
 
-void ADoorActor::OpenSlidingDoor(FVector Location)
-{
-	if(MeshComponent)
-	{
-		MeshComponent->SetRelativeLocation(Location);
-	}
-}
-
 bool ADoorActor::CheckRequiredItem()
 {
 	ABase_Character* Character = Cast<ABase_Character>(UGameplayStatics::GetPlayerCharacter(this, 0));
@@ -53,12 +46,4 @@ bool ADoorActor::CheckRequiredItem()
 	}
 	
 	return false;
-}
-
-void ADoorActor::OpenHingedDoor(FRotator Rotation)
-{
-	if(MeshComponent)
-	{
-		MeshComponent->SetRelativeRotation(Rotation);
-	}
 }

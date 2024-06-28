@@ -3,9 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InteractableActor.h"
+#include "InteractableThings/InteractableActor.h"
 #include "DoorActor.generated.h"
 
+class UWidgetComponent;
 /**
  * 
  */
@@ -17,12 +18,6 @@ class LENA_API ADoorActor : public AInteractableActor
 public:
 	ADoorActor();
 
-	UFUNCTION(BlueprintCallable)
-	void OpenSlidingDoor(FVector Location);
-
-	UFUNCTION(BlueprintCallable)
-	void OpenHingedDoor(FRotator Rotation);
-
 	UFUNCTION(BlueprintImplementableEvent, Category="Inventory")
 	void OpenDoorEvent();
 
@@ -32,16 +27,16 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* MeshComponent;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
-    UStaticMeshComponent* FrameMeshComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
 	UWidgetComponent* NumpadWidgetComponent;
 
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
+    UStaticMeshComponent* FrameMeshComponent;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
 	FName RequiredItem;
 	
