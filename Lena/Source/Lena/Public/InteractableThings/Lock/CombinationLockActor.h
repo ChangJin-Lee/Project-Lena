@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "LockActor.h"
 #include "Components/TimelineComponent.h"
-#include "Blueprint/UserWidget.h"
 #include "CombinationLockActor.generated.h"
 
 UCLASS()

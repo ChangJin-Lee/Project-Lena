@@ -51,7 +51,7 @@ void ACombinationLockActor::BeginPlay()
 		UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
 		InteractWidget->SetInstructionAtBeginPlay(FText::FromString("Drag Mouse Wheel"));
 	}
-
+	
 	if (CombinationLockCurve)
 	{
 		CombinationLockTimelineCallback.BindUFunction(this, FName("HandleCombinationLockProgress"));

@@ -5,3 +5,14 @@ ALockActor::ALockActor()
 {
 	
 }
+
+void ALockActor::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void ALockActor::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+

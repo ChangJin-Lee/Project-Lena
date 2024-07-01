@@ -14,7 +14,12 @@ public:
 	ALockActor();
 
 protected:
+	virtual void BeginPlay() override;
 
+public:
+	virtual void Tick(float DeltaTime) override;
+	
+// protected:
 	// UPROPERTY(VisibleAnywhere)
 	// UStaticMeshComponent* BaseStaticMeshComponent;
 	
