@@ -63,4 +63,7 @@ private:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UWidgetComponent* WidgetComponent;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* SoundEffect;
 };

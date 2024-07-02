@@ -59,6 +59,7 @@ void ASlidingDoorActor::WrongAnswer()
 {
     if(WidgetComponent)
     {
+        UGameplayStatics::PlaySoundAtLocation(GetWorld(), SoundEffect, GetActorLocation());
         UUserWidget* Widget = WidgetComponent->GetWidget();
         UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
         InteractWidget->SetInstruction(FText::FromString("Need Key"));

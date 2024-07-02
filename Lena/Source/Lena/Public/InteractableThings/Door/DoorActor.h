@@ -23,6 +23,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool CheckRequiredItem();
+	
+	FString GetPassWord();
 
 protected:
 	virtual void BeginPlay() override;
@@ -32,6 +34,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
 	UWidgetComponent* NumpadWidgetComponent;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
+	FString PassWord = "";
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
@@ -45,4 +50,5 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Sound")
 	USoundBase* DoorOpenSound;
+	
 };

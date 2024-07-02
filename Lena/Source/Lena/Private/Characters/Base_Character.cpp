@@ -39,12 +39,7 @@ void ABase_Character::BeginPlay()
 			UE_LOG(LogTemp, Warning, TEXT("Spawn Guns  %s"), *Gun->GetName());
 		}
 	}
-	
-	
-	
 	// GunArray[WeaponActiveIndex]->SetActorHiddenInGame(false);
-
-	
 }
 
 // Called every frame
