@@ -23,4 +23,10 @@ public:
 	// UPROPERTY(VisibleAnywhere)
 	// UStaticMeshComponent* BaseStaticMeshComponent;
 	
+	UPROPERTY(EditAnywhere)
+	USoundBase* RightAnswerSound;
+	
+	UPROPERTY(EditAnywhere)
+	USoundBase* WrongAnswerSound;
+	
 };

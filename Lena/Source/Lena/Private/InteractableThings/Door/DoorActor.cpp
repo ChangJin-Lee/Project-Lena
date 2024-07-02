@@ -47,3 +47,8 @@ bool ADoorActor::CheckRequiredItem()
 	
 	return false;
 }
+
+FString ADoorActor::GetPassWord()
+{
+	return PassWord;
+}

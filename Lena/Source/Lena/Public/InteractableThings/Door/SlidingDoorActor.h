@@ -20,18 +20,17 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void OpenSlidingDoor(FVector TargetLocation);
+	
+	UFUNCTION(BlueprintCallable)
+	void RightAnswer(FVector TargetLocation);
+	
+	UFUNCTION(BlueprintCallable)
+	void WrongAnswer();
 
 protected:
 	virtual void BeginPlay() override;
 
 private:
-
-	UFUNCTION(BlueprintCallable, meta=(AllowPrivateAccess="true"))
-	void RightAnswer(FVector TargetLocation);
-	
-	UFUNCTION(BlueprintCallable, meta=(AllowPrivateAccess="true"))
-	void WrongAnswer();
-	
 	UFUNCTION()
 	void HandleSlidingDoorProgress(float Value);
 

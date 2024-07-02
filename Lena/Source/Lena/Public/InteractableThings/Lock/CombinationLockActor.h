@@ -5,9 +5,12 @@
 #include "CoreMinimal.h"
 #include "LockActor.h"
 #include "Components/TimelineComponent.h"
+#include "InteractableThings/Door/DoorActor.h"
 #include "CombinationLockActor.generated.h"
 
+
 UCLASS()
+
 class LENA_API ACombinationLockActor : public ALockActor
 {
 	GENERATED_BODY()
@@ -27,6 +30,21 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ScrollCombinationLock(FRotator InTargetRotation);
 
+	UFUNCTION()
+	void OnTimeLineFinished();
+
+	UFUNCTION(BlueprintCallable)
+	void MoveNextWheelMesh();
+
+	UFUNCTION(BlueprintCallable)
+	void MovePrevWheelMesh();
+	
+	UFUNCTION(BlueprintCallable)
+	FString GetCurrentDial();
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool CheckAnim = false;
+	
 private:
 
 	UPROPERTY(VisibleAnywhere)
@@ -44,6 +62,13 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* WheelMesh3;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
+	USkeletalMeshComponent* ShackleMesh;
+
+	// WheelMesh Scale3D
+	float WheelMeshDefaultScaleSize = 5.0f;
+	float WheelMeshSelectedSize = 0;
+
 	UFUNCTION()
 	void HandleCombinationLockProgress(float Value);
 
@@ -52,6 +77,9 @@ private:
 
 	UPROPERTY()
 	FOnTimelineFloat CombinationLockTimelineCallback;
+	
+	UPROPERTY()
+	FOnTimelineEvent TimelineFinishedCallback;
 
 	UPROPERTY()
 	FRotator InitialRotation;
@@ -61,4 +89,24 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Timeline")
 	UCurveFloat* CombinationLockCurve;
+
+	bool bIsTimeLinePlaying = false;
+
+	int SelectedWheelIndex = 0;
+
+	TArray<UStaticMeshComponent*> WheelMeshArray;
+
+	// EWheelMeshEnum SelectedWheelMeshEnum; // Selected Mesh Enum
+
+	UStaticMeshComponent* GetSelectedWheelMesh();
+
+	FString GetCurrentDial(UStaticMeshComponent* WheelMeshDial);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door", meta=(AllowPrivateAccess="true"))
+	TSubclassOf<class ASlidingDoorActor> DoorActorClass;
+	
+	ASlidingDoorActor* DoorActor;
+
+	void CheckRightAnswer();
+
 };
