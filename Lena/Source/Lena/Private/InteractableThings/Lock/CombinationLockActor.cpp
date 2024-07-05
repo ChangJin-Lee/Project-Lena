@@ -113,26 +113,6 @@ void ACombinationLockActor::OnTimeLineFinished()
 
 void ACombinationLockActor::MoveNextWheelMesh()
 {
-	// if(!bIsTimeLinePlaying)
-	// {
-	// 	switch (SelectedWheelMeshEnum)
-	// 	{
-	// 	case EWheelMeshEnum::WheelMesh:
-	// 		SelectedWheelMeshEnum = EWheelMeshEnum::WheelMesh1;
-	// 		break;
-	// 	case EWheelMeshEnum::WheelMesh1:
-	// 		SelectedWheelMeshEnum = EWheelMeshEnum::WheelMesh2;
-	// 		break;
-	// 	case EWheelMeshEnum::WheelMesh2:
-	// 		SelectedWheelMeshEnum = EWheelMeshEnum::WheelMesh3;
-	// 		break;
-	// 	case EWheelMeshEnum::WheelMesh3:
-	// 		SelectedWheelMeshEnum = EWheelMeshEnum::WheelMesh;
-	// 		break;
-	// 	}
-	// }
-
-	// WheelMeshArray[SelectedWheelIndex]->SetVectorParameterValueOnMaterials("BaseColor", FVector(1.0f,1.0f,1.0f));
 	if (!bIsTimeLinePlaying && WheelMeshArray.Num() > 0)
 	{
 		WheelMeshArray[SelectedWheelIndex]->SetRelativeScale3D(FVector::One() * WheelMeshDefaultScaleSize);
@@ -179,50 +159,6 @@ FString ACombinationLockActor::GetCurrentDial(UStaticMeshComponent* WheelMeshDia
 	{
 		RollValue += 360.0f;
 	}
-
-	// // 각도 범위에 따라 문자열을 반환
-	// if (RollValue >= 36 && RollValue < 72)
-	// {
-	// 	return FString("0");
-	// }
-	// else if (RollValue >= 72 && RollValue < 108)
-	// {
-	// 	return FString("1");
-	// }
-	// else if (RollValue >= 108 && RollValue < 144)
-	// {
-	// 	return FString("2");
-	// }
-	// else if (RollValue >= 144 && RollValue < 180)
-	// {
-	// 	return FString("3");
-	// }
-	// else if (RollValue >= 180 && RollValue < 216)
-	// {
-	// 	return FString("4");
-	// }
-	// else if (RollValue >= 216 && RollValue < 252)
-	// {
-	// 	return FString("5");
-	// }
-	// else if (RollValue >= 252 && RollValue < 288)
-	// {
-	// 	return FString("6");
-	// }
-	// else if (RollValue >= 288 && RollValue < 324)
-	// {
-	// 	return FString("7");
-	// }
-	// else if (RollValue >= 324 && RollValue < 360)
-	// {
-	// 	return FString("8");
-	// }
-	// else if (RollValue >= 0 && RollValue < 36)
-	// {
-	// 	return FString("9");
-	// }
-	//
-	// return "Invalid";
 
 	int PositionIndex = FMath::RoundToInt(RollValue / 36.0f) % 10;
 
