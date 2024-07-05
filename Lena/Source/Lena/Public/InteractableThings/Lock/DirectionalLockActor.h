@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "LockActor.h"
+#include "Components/TimelineComponent.h"
 #include "DirectionalLockActor.generated.h"
 
 UCLASS()
@@ -22,4 +23,55 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable)
+	void MoveFromStart(FVector InputVector);
+
+	UFUNCTION(BlueprintCallable)
+	void MoveReverseFromEnd(FVector InputVector);
+
+	UFUNCTION(BlueprintCallable)
+	bool IsMovementProgressing();
+	
+private:
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* DirectionalLockSceneComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* DirectionalLockBodyMeshComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* DirectionalLockshackleMeshComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* DirectionalLockBallMeshComponent;
+
+	UPROPERTY()
+	UTimelineComponent* DirectionalLockTimeLine;
+
+	UPROPERTY()
+	FOnTimelineFloat DirectionalLockTimeLineCallback;
+
+	UPROPERTY()
+	FOnTimelineEvent DirectionalLockTimeLineFinishedCallback;
+
+	UFUNCTION()
+	void HandleDirectionalLockProgress(float value);
+
+	UFUNCTION()
+	void HandleDirectionalLockFinished();
+
+	UPROPERTY(EditAnywhere, Category="TimeLine")
+	UCurveFloat* DirectionalLockCurve;
+
+	bool bIsTimeLinePlaying = false;
+
+	UPROPERTY(BlueprintReadWrite, Category = "TimeLine", meta = (AllowPrivateAccess="true"))
+	bool bIsMovementProgressing = false;
+
+	UPROPERTY()
+	FVector InitialLocation;
+	
+	UPROPERTY()
+	FVector TargetLocation;
 };
