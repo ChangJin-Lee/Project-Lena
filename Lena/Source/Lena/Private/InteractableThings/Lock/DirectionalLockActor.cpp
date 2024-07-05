@@ -2,7 +2,7 @@
 
 
 #include "InteractableThings/Lock/DirectionalLockActor.h"
-
+#include "InteractableThings/Door/SlidingDoorActor.h"
 #include "Components/BoxComponent.h"
 #include "UI/InteractWidget.h"
 #include "Components/TimelineComponent.h"
@@ -74,9 +74,10 @@ void ADirectionalLockActor::HandleDirectionalLockProgress(float value)
 void ADirectionalLockActor::HandleDirectionalLockFinished()
 {
 	bIsTimeLinePlaying = false;
+	CheckRightAnswer();
 }
 
-void ADirectionalLockActor::MoveFromStart(FVector InputVector)
+void ADirectionalLockActor::MoveFromStart(FVector InputVector, FString direction)
 {
 	if(bIsTimeLinePlaying) return;
 	
@@ -87,6 +88,38 @@ void ADirectionalLockActor::MoveFromStart(FVector InputVector)
 	{
 		bIsTimeLinePlaying = true;
 		DirectionalLockTimeLine->PlayFromStart();
+	}
+
+	InputPassWord += direction;
+
+	// WidgetDisplayPassword += FindObject<UEnum>(ANY_PACKAGE, TEXT("DirectionEnum"), true)->GetDisplayNameTextByValue(FCString::Atoi(*direction)).ToString();
+	
+	DirectionEnum DirectionEnumClass = static_cast<DirectionEnum>(FCString::Atoi(*direction));
+	WidgetDisplayPassword += EnumToString(DirectionEnumClass);
+
+	// switch (direction)
+	// {
+	// case 1:
+	// 	WidgetDisplayPassword += "→";
+	// 	break;
+	// case 2:
+	// 	WidgetDisplayPassword += "←";
+	// 	break;
+	// case 3:
+	// 	WidgetDisplayPassword += "↑";
+	// 	break;
+	// case 4:
+	// 	WidgetDisplayPassword += "↓";
+	// 	break;
+	// }
+	
+	if(WidgetComponent)
+	{
+		UUserWidget* Widget = WidgetComponent->GetWidget();
+		UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
+		InteractWidget->SetInstructionColor(FColor::Yellow);
+		InteractWidget->SetInstruction(FText::FromString(WidgetDisplayPassword));
+		InteractWidget->InstructionText = FText::FromString(WidgetDisplayPassword);
 	}
 
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), SoundEffect, GetActorLocation(),1.0f, 2.0f);
@@ -100,4 +133,77 @@ bool ADirectionalLockActor::IsMovementProgressing()
 	}
 	
 	return false;
+}
+
+void ADirectionalLockActor::CheckRightAnswer()
+{
+	if(GetNum(InputPassWord) < 5) return;
+	
+	TArray<AActor*> FindActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), DoorActorClass, FindActors);
+	
+	if(FindActors.Num() >= 1)
+	{
+		for(int i = 0 ; i < FindActors.Num(); ++i)
+		{
+			DoorActor = Cast<ASlidingDoorActor>(FindActors[i]);
+
+			if(DoorActor)
+			{
+				if(InputPassWord == DoorActor->GetPassWord())
+				{
+					UGameplayStatics::PlaySoundAtLocation(GetWorld(), RightAnswerSound, GetActorLocation());
+					DoorActor->RightAnswer(FVector(0,130.0f,0));
+
+					DirectionalLockBodyMeshComponent->SetSimulatePhysics(true);
+					DirectionalLockshackleMeshComponent->SetSimulatePhysics(true);
+					DirectionalLockBallMeshComponent->SetSimulatePhysics(true);
+					
+					if(WidgetComponent)
+					{
+						UUserWidget* Widget = WidgetComponent->GetWidget();
+						UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
+						InteractWidget->SetInstructionColor(FColor::Blue);
+						InteractWidget->SetInstruction(FText::FromString(WidgetDisplayPassword));
+						InteractWidget->InstructionText = FText::FromString("Congratulations! You solved the puzzle!");
+						InteractWidget->SetInstructionColor(FColor::Green);
+					}
+				
+				}
+				else
+				{
+					UGameplayStatics::PlaySoundAtLocation(GetWorld(), WrongAnswerSound, GetActorLocation());
+
+					if(WidgetComponent)
+					{
+						UUserWidget* Widget = WidgetComponent->GetWidget();
+						UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
+						InteractWidget->SetInstructionColor(FColor::Red);
+						InteractWidget->SetInstruction(FText::FromString(WidgetDisplayPassword));
+						InteractWidget->SetInstruction(FText::FromString("Try Again!"));
+						InteractWidget->InstructionText = FText::FromString("Try Again!");
+					}
+					
+					if(WrongAnswerCameraShakeClass)
+					{
+						GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(WrongAnswerCameraShakeClass);
+					}
+					InputPassWord = "";
+					WidgetDisplayPassword = "";
+				}
+			}
+		}
+	}
+	
+}
+
+FString ADirectionalLockActor::EnumToString(DirectionEnum EnumValue)
+{
+	const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("DirectionEnum"), true);
+	if (!EnumPtr)
+	{
+		return FString("Invalid");
+	}
+    
+	return EnumPtr->GetDisplayNameTextByIndex(static_cast<int32>(EnumValue)).ToString();
 }

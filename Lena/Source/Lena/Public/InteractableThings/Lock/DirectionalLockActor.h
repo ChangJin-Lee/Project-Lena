@@ -7,6 +7,16 @@
 #include "Components/TimelineComponent.h"
 #include "DirectionalLockActor.generated.h"
 
+UENUM(BlueprintType)
+enum class DirectionEnum : uint8
+{
+	None UMETA(DisplayName = "None"),
+	Right UMETA(DisplayName = "→"),
+	Left UMETA(DisplayName = "←"),
+	Up UMETA(DisplayName = "↑"),
+	Down UMETA(DisplayName = "↓")
+};
+
 UCLASS()
 class LENA_API ADirectionalLockActor : public ALockActor
 {
@@ -25,10 +35,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	void MoveFromStart(FVector InputVector);
+	void MoveFromStart(FVector InputVector, FString direction);
 
 	UFUNCTION(BlueprintCallable)
 	bool IsMovementProgressing();
+
+	void CheckRightAnswer();
+	
+	FString EnumToString(DirectionEnum EnumValue);
 	
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -43,6 +57,8 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* DirectionalLockBallMeshComponent;
 
+	// TimeLine Movement
+	
 	UPROPERTY()
 	UTimelineComponent* DirectionalLockTimeLine;
 
@@ -71,4 +87,21 @@ private:
 	
 	UPROPERTY()
 	FVector TargetLocation;
+
+
+	// Open Door
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Open Door", meta=(AllowPrivateAccess="true"))
+	TSubclassOf<class ASlidingDoorActor> DoorActorClass;
+
+	ASlidingDoorActor* DoorActor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Open Door", meta=(AllowPrivateAccess="true"))
+	FString InputPassWord;
+
+	UPROPERTY(EditAnywhere, Category="Door")
+	TSubclassOf<class UCameraShakeBase> WrongAnswerCameraShakeClass;
+
+	FString WidgetDisplayPassword = "";
+	
 };
