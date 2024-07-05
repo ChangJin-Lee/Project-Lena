@@ -92,20 +92,6 @@ void ADirectionalLockActor::MoveFromStart(FVector InputVector)
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), SoundEffect, GetActorLocation(),1.0f, 2.0f);
 }
 
-void ADirectionalLockActor::MoveReverseFromEnd(FVector InputVector)
-{
-	if(bIsTimeLinePlaying) return;
-	
-	InitialLocation = DirectionalLockBallMeshComponent->GetRelativeLocation();
-	TargetLocation = InitialLocation + InputVector;
-
-	if(DirectionalLockTimeLine)
-	{
-		bIsTimeLinePlaying = true;
-		DirectionalLockTimeLine->ReverseFromEnd();
-	}
-}
-
 bool ADirectionalLockActor::IsMovementProgressing()
 {
 	if(bIsTimeLinePlaying)
