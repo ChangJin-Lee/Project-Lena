@@ -54,15 +54,15 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
 
-	UPROPERTY(VisibleAnywhere)
-	class UBoxComponent* HitBox;
-
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	APlayerController *PlayerController;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UWidgetComponent* WidgetComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent* HitBox;
 
 	UPROPERTY(EditAnywhere)
 	USoundBase* SoundEffect;
