@@ -28,9 +28,6 @@ public:
 	void MoveFromStart(FVector InputVector);
 
 	UFUNCTION(BlueprintCallable)
-	void MoveReverseFromEnd(FVector InputVector);
-
-	UFUNCTION(BlueprintCallable)
 	bool IsMovementProgressing();
 	
 private:
