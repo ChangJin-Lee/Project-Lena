@@ -96,22 +96,6 @@ void ADirectionalLockActor::MoveFromStart(FVector InputVector, FString direction
 	
 	DirectionEnum DirectionEnumClass = static_cast<DirectionEnum>(FCString::Atoi(*direction));
 	WidgetDisplayPassword += EnumToString(DirectionEnumClass);
-
-	// switch (direction)
-	// {
-	// case 1:
-	// 	WidgetDisplayPassword += "→";
-	// 	break;
-	// case 2:
-	// 	WidgetDisplayPassword += "←";
-	// 	break;
-	// case 3:
-	// 	WidgetDisplayPassword += "↑";
-	// 	break;
-	// case 4:
-	// 	WidgetDisplayPassword += "↓";
-	// 	break;
-	// }
 	
 	if(WidgetComponent)
 	{
