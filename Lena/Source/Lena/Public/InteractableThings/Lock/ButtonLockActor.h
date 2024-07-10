@@ -6,9 +6,11 @@
 #include "LockActor.h"
 #include "Camera/CameraComponent.h"
 #include "Components/TimelineComponent.h"
+#include "InteractableThings/Data/DataStructure.h"
 #include "ButtonLockActor.generated.h"
 
 UCLASS()
+
 class LENA_API AButtonLockActor : public ALockActor
 {
 	GENERATED_BODY()
@@ -16,8 +18,6 @@ class LENA_API AButtonLockActor : public ALockActor
 public:
 	// Sets default values for this actor's properties
 	AButtonLockActor();
-
-	int SelectedButtonIndex = 0;
 	
 	UFUNCTION(BlueprintCallable)
 	void MoveButton(UStaticMeshComponent* TargetMeshComponent);
@@ -27,6 +27,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ZoomOutCamera();
+
+	UFUNCTION(BlueprintCallable)
+	bool ValidPassword(FString input);
+	
+	UFUNCTION(BlueprintCallable)
+	void OpenLock();
 	
 protected:
 	// Called when the game starts or when spawned
@@ -51,22 +57,24 @@ private:
 	UStaticMeshComponent* ButtonLockShackleMeshComponent;
 
 	UPROPERTY(VisibleAnywhere, Category="ButtonLock")
-	TArray<UStaticMeshComponent*> ButtonLockButtonMeshComponents;
+	TArray<UStaticMeshComponent*> ButtonMeshComponents;
 
 	UPROPERTY(VisibleAnywhere, Category="ButtonLock")
-	TArray<bool> ClikedButtons;
-	
-	UPROPERTY(EditAnywhere, Category="TimeLine")
-	UTimelineComponent* ButtonLockTimelineComponent;
+	TArray<UTimelineComponent*> ButtonTimelines;
+
+	UPROPERTY(VisibleAnywhere, Category="ButtonLock")
+	TArray<FButtonLockButtonData> ButtonDataArray;
+
+	int32 ButtonNums = 8;
 
 	UPROPERTY(EditAnywhere, Category="TimeLine")
 	UCurveFloat* ButtonLockCurve;
-
-	UPROPERTY(EditAnywhere, Category="TimeLine")
-	FOnTimelineFloat ButtonLockButtonCallback;
-
+	
 	UFUNCTION()
-	void HandleButtonLockProgress(float value);
+	void HandleButtonLockProgress(float value, int32 ButtonIndex);
+	
+	UFUNCTION()
+	void HandleButtonLockFinished();
 
 	UPROPERTY()
 	FVector InitialLocation;
@@ -74,6 +82,11 @@ private:
 	UPROPERTY()
 	FVector TargetLocation;
 
+	int32 SelectedButtonIndex = 0;
+
+	void ButtonMovePlayFromStart(int32 index, float value);
+	void DestroyButtonLock();
+	
 	// Camera
 	UPROPERTY(EditAnywhere, Category="Camera")
 	UTimelineComponent* CameraMoveTimelineComponent;
@@ -91,8 +104,7 @@ private:
 
 	APlayerController* PlayerController;
 
-	void HandleCameraMoveProgress(float value);
-	void HandleCameraMoveFinished();
+	ACharacter* PlayerCharacter;
 
 	FVector InitialCameraLocation;
 	FRotator InitialCameraRotation;
@@ -102,6 +114,10 @@ private:
 
 	void LockCamera();
 	void UnLockCameara();
+
+	void MoveFinished();
+	void MoveCamera(AActor* TargetActor);
+	void OnMouseClick();
 
 	bool bIsZoomedIn = false;
 	

@@ -3,9 +3,9 @@
 
 #include "InteractableThings/Lock/ButtonLockActor.h"
 
-#include "Camera/CameraComponent.h"
 #include "Characters/Base_Character.h"
 #include "Components/BoxComponent.h"
+#include "Game/Controller/ShooterPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -14,8 +14,9 @@ AButtonLockActor::AButtonLockActor()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	ButtonLockButtonMeshComponents.SetNum(8);
-	ClikedButtons.SetNum(8);
+	ButtonDataArray.SetNum(ButtonNums);
+	ButtonTimelines.SetNum(ButtonNums);
+	ButtonMeshComponents.SetNum(ButtonNums);
 	
 	ButtonLockSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("ButtonLockSceneComponent"));
 	ButtonLockSceneComponent->SetupAttachment(RootComponent);
@@ -29,20 +30,17 @@ AButtonLockActor::AButtonLockActor()
 	ButtonLockKeypadMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ButtonLockKeypadMeshComponent"));
 	ButtonLockKeypadMeshComponent->SetupAttachment(ButtonLockSceneComponent);
 
-	uint8 Counter = 0;
-	for(UStaticMeshComponent* &ButtonLockButtonComponent : ButtonLockButtonMeshComponents)
+	for(int8 i = 0; i < ButtonNums; ++i)
 	{
-		ClikedButtons[Counter] = false;
-		FString ComponentName = FString::Printf(TEXT("ButtonLockButtonComponent_%d"), Counter++);
-		ButtonLockButtonComponent = CreateDefaultSubobject<UStaticMeshComponent>(*ComponentName);
-		ButtonLockButtonComponent->SetupAttachment(ButtonLockBodyMeshComponent);
-		ButtonLockButtonComponent->SetRelativeLocation(FVector(0,4,0));
+		// ButtonData = NewObject<UButtonLockButtonData>(this);
+		ButtonMeshComponents[i] = CreateDefaultSubobject<UStaticMeshComponent>(*FString::Printf(TEXT("ButtonLockButtonComponent_%d"), i));
+		ButtonMeshComponents[i]->SetupAttachment(ButtonLockBodyMeshComponent);
+		ButtonMeshComponents[i]->SetRelativeLocation(FVector(0,4,0));
+		ButtonTimelines[i] = CreateDefaultSubobject<UTimelineComponent>(*FString::Printf(TEXT("ButtonLockButtonTimeline_%d"), i));
 	}
 
-	ButtonLockTimelineComponent = CreateDefaultSubobject<UTimelineComponent>(TEXT("ButtonLockTimelineComponent"));
 	HitBox->SetRelativeLocation(FVector(0,0,20));
 	HitBox->SetRelativeScale3D(FVector::One() * 2.0f);
-
 	CameraMoveTimelineComponent = CreateDefaultSubobject<UTimelineComponent>(TEXT("CameraMoveTimelineComponent"));
 }
 
@@ -51,40 +49,35 @@ void AButtonLockActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if(ButtonLockTimelineComponent)
+	for(int8 i = 0; i < ButtonNums; ++i)
 	{
-		ButtonLockButtonCallback.BindUFunction(this, FName("HandleButtonLockProgress"));
-		ButtonLockTimelineComponent->AddInterpFloat(ButtonLockCurve, ButtonLockButtonCallback);
-	}
-	
-	if(CameraMoveTimelineComponent)
-	{
-		CameraMoveCallback.BindUFunction(this, FName("HandleCameraMoveProgress"));
-		CameraMoveFinishedCallback.BindUFunction(this, FName("HandleCameraMoveFinished"));
-		CameraMoveTimelineComponent->AddInterpFloat(CameraMoveCurve, CameraMoveCallback);
-		CameraMoveTimelineComponent->SetTimelineFinishedFunc(CameraMoveFinishedCallback);
+		if(ButtonTimelines[i])
+		{
+			FOnTimelineFloatStatic ButtonLockButtonMoveStartCallback;
+			ButtonLockButtonMoveStartCallback.BindUFunction(this, FName("HandleButtonLockProgress"), i);
+			ButtonTimelines[i]->AddInterpFloat(ButtonLockCurve, ButtonLockButtonMoveStartCallback);
+			
+			FOnTimelineEvent ButtonLockButtonMoveFinishedCallback;
+			// ButtonLockButtonMoveFinishedCallback.CreateUFunction(this, FName("HandleButtonLockFinished"), i);
+			ButtonLockButtonMoveFinishedCallback.BindUFunction(this, FName("HandleButtonLockFinished"));
+			ButtonTimelines[i]->SetTimelineFinishedFunc(ButtonLockButtonMoveFinishedCallback);
+		}
 	}
 
 	PlayerController = UGameplayStatics::GetPlayerController(this,0);
 	
-	PlayerCameraManager = PlayerController->PlayerCameraManager;
 	if(PlayerController)
 	{
+		PlayerCharacter = Cast<ACharacter>(PlayerController->GetPawn());
+		PlayerCameraManager = PlayerController->PlayerCameraManager;
 		if(PlayerCameraManager)
 		{
-			InitialCameraLocation = PlayerCameraManager->GetCameraLocation();
-			InitialCameraRotation = PlayerCameraManager->GetCameraRotation();
-
-			ZoomedCameraLocation = GetActorLocation() + GetActorRightVector() * 150.0f + FVector(50.f, 0.f, 0);
+			ZoomedCameraLocation = GetActorLocation() + GetActorRightVector() * 100.0f * GetActorScale() + FVector(0, 0.f, 10.0f) *  GetActorScale();
 			ZoomedCameraRotation = GetActorRotation();
 			ZoomedCameraRotation.Yaw += -90.0f;
+			ZoomedCameraRotation.Pitch += -10.0f;
 
-			CameraInitialLocationActor = CreateTargetActor(InitialCameraLocation, InitialCameraRotation);
 			CameraTargetLocationActor = CreateTargetActor(ZoomedCameraLocation, ZoomedCameraRotation);
-			
-			UE_LOG(LogTemp, Warning, TEXT("GetActorLocation() : %s "), *GetActorLocation().ToString());
-			UE_LOG(LogTemp, Warning, TEXT("CameraTargetLocationActor : %s "), *CameraTargetLocationActor->GetActorLocation().ToString());
-			UE_LOG(LogTemp, Warning, TEXT("CameraInitialLocationActor : %s "), *CameraInitialLocationActor->GetActorLocation().ToString());
 		}
 	}
 }
@@ -95,77 +88,86 @@ void AButtonLockActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AButtonLockActor::HandleButtonLockProgress(float value)
+void AButtonLockActor::HandleButtonLockProgress(float value, int32 ButtonIndex)
 {
-	FVector NewLocation = FMath::Lerp(InitialLocation, TargetLocation, value);
-	ButtonLockButtonMeshComponents[SelectedButtonIndex]->SetRelativeLocation(NewLocation);
+	if (ButtonIndex == INDEX_NONE || ButtonIndex >= ButtonDataArray.Num())
+	{
+		return;
+	}
+	
+	FVector NewLocation = FMath::Lerp(ButtonDataArray[ButtonIndex].InitialLocation, ButtonDataArray[ButtonIndex].TargetLocation, value);
+	ButtonMeshComponents[ButtonIndex]->SetRelativeLocation(NewLocation);
 }
 
 void AButtonLockActor::MoveButton(UStaticMeshComponent* TargetMeshComponent)
 {
-	int32 FindIndex = ButtonLockButtonMeshComponents.Find(TargetMeshComponent);
-
-	if(FindIndex != INDEX_NONE)
+	int32 FindIndex = ButtonMeshComponents.IndexOfByKey(TargetMeshComponent);
+	
+	if (FindIndex == INDEX_NONE)
 	{
-		InitialLocation = TargetMeshComponent->GetRelativeLocation();
-		SelectedButtonIndex = FindIndex;
-		ButtonLockTimelineComponent->PlayFromStart();
+		return;
 	}
+
+	for(FButtonLockButtonData otherButtonMove : ButtonDataArray)
+	{
+		if(otherButtonMove.bIsButtonMove == true)
+			return;
+	}
+
+	SelectedButtonIndex = FindIndex;
+	ButtonDataArray[FindIndex].InitialLocation = TargetMeshComponent->GetRelativeLocation();
+	ButtonDataArray[FindIndex].bIsButtonMove = true;
+	
+	ButtonDataArray[FindIndex].IsCliked == true ?  ButtonMovePlayFromStart(FindIndex, 4) : ButtonMovePlayFromStart(FindIndex, -4);
+	ButtonDataArray[FindIndex].IsCliked = !ButtonDataArray[FindIndex].IsCliked;
+
+	ValidPassword("1367");
 }
 
-void AButtonLockActor::HandleCameraMoveProgress(float value)
+void AButtonLockActor::ButtonMovePlayFromStart(int32 index, float value)
 {
-	if(!PlayerCameraManager) return;
-
-	FVector NewLocation = FMath::Lerp(InitialCameraLocation, ZoomedCameraLocation, value);
-	FRotator NewRotation = FMath::Lerp(InitialCameraRotation, ZoomedCameraRotation, value);
-
-	PlayerCameraManager->SetActorLocation(NewLocation);
-	PlayerCameraManager->SetActorRotation(NewRotation);
+	ButtonDataArray[index].TargetLocation = ButtonDataArray[index].InitialLocation + FVector(0,value,0);
+	ButtonTimelines[index]->PlayFromStart();
 }
 
-void AButtonLockActor::HandleCameraMoveFinished()
+void AButtonLockActor::HandleButtonLockFinished()
 {
-	if (!bIsZoomedIn)
+	if (SelectedButtonIndex == INDEX_NONE || SelectedButtonIndex >= ButtonDataArray.Num())
 	{
-		UnLockCameara();
+		return;
 	}
+	
+	UE_LOG(LogTemp, Warning, TEXT("HandleButtonLockFinished :  %d"), SelectedButtonIndex);
+	ButtonDataArray[SelectedButtonIndex].bIsButtonMove = false;
 }
 
 void AButtonLockActor::ZoomInCamera()
 {
-	// if(bIsZoomedIn || !PlayerCameraManager) return;
-
-	UE_LOG(LogTemp, Warning, TEXT("ZoomInCamera() "));
+	if(bIsZoomedIn) return;
 	
-	// bIsZoomedIn = true;
 	LockCamera();
-	// CameraMoveTimelineComponent->PlayFromStart();
+	bIsZoomedIn = true;
 
-	CameraInitialLocationActor->SetActorLocation(PlayerCameraManager->GetCameraLocation());
-	CameraInitialLocationActor->SetActorRotation(PlayerCameraManager->GetCameraRotation());
-	
-	if (PlayerController && CameraTargetLocationActor)
+	if(PlayerCharacter)
 	{
-		FViewTargetTransitionParams TransitionParams;
-		TransitionParams.BlendTime = 1.0f; // Adjust transition time as needed
-		PlayerController->SetViewTargetWithBlend(CameraTargetLocationActor, TransitionParams.BlendTime, VTBlend_Cubic);
+		PlayerCharacter->SetActorHiddenInGame(true);
+	}
+	
+	if (CameraTargetLocationActor)
+	{
+		MoveCamera(CameraTargetLocationActor);
 	}
 }
 
-
 void AButtonLockActor::ZoomOutCamera()
 {
-	if(bIsZoomedIn || !PlayerCameraManager) return;
-
+	if(bIsZoomedIn) return;
 	bIsZoomedIn = true;
-
-	if (PlayerController && CameraInitialLocationActor)
+	if(PlayerCharacter)
 	{
-		FViewTargetTransitionParams TransitionParams;
-		TransitionParams.BlendTime = 1.0f; // Adjust transition time as needed
-		PlayerController->SetViewTargetWithBlend(CameraInitialLocationActor, TransitionParams.BlendTime, VTBlend_Cubic);
+		PlayerCharacter->SetActorHiddenInGame(false);
 	}
+	MoveCamera(PlayerController->GetPawn());
 	UnLockCameara();
 }
 
@@ -176,6 +178,13 @@ void AButtonLockActor::LockCamera()
 		PlayerController->bShowMouseCursor = true;
 		PlayerController->SetIgnoreLookInput(true);
 		PlayerController->SetIgnoreMoveInput(true);
+		// PlayerController->SetInputMode(FInputModeUIOnly());
+
+		AShooterPlayerController* shooter_player_controller = Cast<AShooterPlayerController>(PlayerController);
+		if(shooter_player_controller)
+		{
+			shooter_player_controller->EnableMouseClick();
+		}
 	}
 }
 
@@ -186,11 +195,17 @@ void AButtonLockActor::UnLockCameara()
 		PlayerController->bShowMouseCursor = false;
 		PlayerController->SetIgnoreLookInput(false);
 		PlayerController->SetIgnoreMoveInput(false);
+		PlayerController->SetInputMode(FInputModeGameOnly());
+		
+		AShooterPlayerController* shooter_player_controller = Cast<AShooterPlayerController>(PlayerController);
+		if(shooter_player_controller)
+		{
+			shooter_player_controller->DisableMouseClick();
+		}
 	}
 }
 
-
-
+// Create Target Actor for SetViewTargetWithBlend in Camera Zoomin
 AActor* AButtonLockActor::CreateTargetActor(FVector Location, FRotator Rotation)
 {
 	FActorSpawnParameters SpawnParams;
@@ -206,8 +221,81 @@ AActor* AButtonLockActor::CreateTargetActor(FVector Location, FRotator Rotation)
 			SceneComponent->RegisterComponent();
 			SceneComponent->SetWorldLocation(Location);
 			SceneComponent->SetWorldRotation(Rotation);
-
 		}
 	}
 	return CameraTargetActor;
+}
+
+void AButtonLockActor::MoveCamera(AActor* TargetActor)
+{
+	if (PlayerController)
+	{
+		FViewTargetTransitionParams TransitionParams;
+		TransitionParams.BlendTime = 1.0f; // Adjust transition time as needed
+		PlayerController->SetViewTargetWithBlend(TargetActor, TransitionParams.BlendTime, VTBlend_Cubic);
+
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(
+			TimerHandle,
+			this,
+			&AButtonLockActor::MoveFinished,
+			TransitionParams.BlendTime,
+			false
+			);
+	}
+}
+
+
+void AButtonLockActor::MoveFinished()
+{
+	bIsZoomedIn = false;
+}
+
+bool AButtonLockActor::ValidPassword(FString input)
+{
+	FString string = "";
+	for(int32 i = 0; i < ButtonNums; ++i)
+	{
+		if(ButtonDataArray[i].IsCliked)
+		{
+			string+=FString::FromInt(i+1);
+		}
+	}
+	
+	if(string == input)
+	{
+		OpenLock();
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(
+			TimerHandle,
+			this,
+			&AButtonLockActor::DestroyButtonLock,
+			1.0f,
+			false
+			);
+		return true;
+	}
+
+	return false;
+}
+
+
+void AButtonLockActor::OpenLock()
+{
+	HitBox->SetActive(false);
+	ButtonLockShackleMeshComponent->SetSimulatePhysics(true);
+	ButtonLockBodyMeshComponent->SetSimulatePhysics(true);
+	ButtonLockKeypadMeshComponent->SetSimulatePhysics(true);
+	for(int32 i = 0; i < ButtonNums; ++i)
+	{
+		ButtonMeshComponents[i]->SetSimulatePhysics(true);
+	}
+	WidgetComponent->SetVisibility(false);
+}
+
+
+void AButtonLockActor::DestroyButtonLock()
+{
+	ZoomOutCamera();
+	HitBox->DestroyComponent();
 }

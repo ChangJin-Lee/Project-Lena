@@ -6,6 +6,8 @@
 #include "GameFramework/PlayerController.h"
 #include "ShooterPlayerController.generated.h"
 
+class UInputAction;
+class UInputMappingContext;
 /**
  * 
  */
@@ -16,9 +18,20 @@ class LENA_API AShooterPlayerController : public APlayerController
 
 public:
 	virtual void GameHasEnded(class AActor* EndGameFocus = nullptr, bool bIsWinner = false) override;
+	void EnableMouseClick();
+	void DisableMouseClick();
+	
 
 protected:
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Input")
+	UInputAction* IA_MouseClick;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Input")
+	UInputMappingContext* IMC_Interaction;
+
+	void HandleMouseClick();
 	
 private:
 	UPROPERTY(EditAnywhere)
@@ -35,6 +48,9 @@ private:
 
 	UPROPERTY()
 	UUserWidget* HUD;
-
+	
 	FTimerHandle RestartTimer;
+
+	void OnMouseClick();
+	bool bIsClickEnabled;
 };
