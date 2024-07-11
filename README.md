@@ -1,6 +1,10 @@
-# Project-Lena: Urban Sniper Game in Unreal Engine 5.4
+### Project-Lena
 
-자세한 내용은 블로그를 참고해주세요: [Velog](https://velog.io/)
+#### Urban Sniper Game in Unreal Engine 5.4
+
+![Group 15](https://github.com/ChangJin-Lee/Project-Lena/assets/54494793/e6b355a1-7286-4f7d-adf1-68a313eda79d)
+
+자세한 내용은 블로그를 참고해주세요: [Velog](https://velog.io/@whoamicj/posts)
 
 ## Learning and Skills Development
 
@@ -19,29 +23,11 @@
 - Enemy AI
 - Win and lose conditions
 - Unreal Engine Timeline
+- UCLASS, USTRUCT
+- CameraManager, PlayerController
 - EnumClass, Widget, NativeConstruct, etc.
 
-## Pull Requests
-
-### Merged
-- [Pull Request #2](https://github.com/ChangJin-Lee/Project-Lena/pull/2)
-- [Pull Request #3](https://github.com/ChangJin-Lee/Project-Lena/pull/3)
-- [Pull Request #4](https://github.com/ChangJin-Lee/Project-Lena/pull/4)
-- [Pull Request #5](https://github.com/ChangJin-Lee/Project-Lena/pull/5)
-- [Pull Request #6](https://github.com/ChangJin-Lee/Project-Lena/pull/6)
-- [Pull Request #7](https://github.com/ChangJin-Lee/Project-Lena/pull/7)
-- [Pull Request #8](https://github.com/ChangJin-Lee/Project-Lena/pull/8)
-- [Pull Request #9](https://github.com/ChangJin-Lee/Project-Lena/pull/9)
-- [Pull Request #10](https://github.com/ChangJin-Lee/Project-Lena/pull/10)
-- [Pull Request #11](https://github.com/ChangJin-Lee/Project-Lena/pull/11)
-
-### In Progress
-- [Pull Request #12](https://github.com/ChangJin-Lee/Project-Lena/pull/12)
-
 ## 개발 기간
-
-### SimpleShooter
-- 2024.04.25 ~ 2024.05.21
 
 ### Project-Lena
 - 2024.06.04 ~ 현재
@@ -63,6 +49,24 @@
 - **2024.06.06**: [#0 블루프린트 OnEvent는 어떻게 만들까](https://velog.io/@whoamicj/UE5-Lena-Dev-Diary-1-%EB%B8%94%EB%A3%A8%ED%94%84%EB%A6%B0%ED%8A%B8-OnEvent%EB%8A%94-%EC%96%B4%EB%96%BB%EA%B2%8C-%EB%A7%8C%EB%93%A4%EA%B9%8C)
 - **2024.06.05**: [#0 Bone 리타기팅 HUD SimpleShooter GameMode 변경](https://velog.io/@whoamicj/UE5-Bone-%EB%A6%AC%ED%83%80%EA%B8%B0%ED%8C%85-HUD-SimpleShooter-GameMode-%EB%B3%80%EA%B2%BD)
 - **2024.06.04**: [#0 3D 모델 움직임 효과 총 꺼내기](https://velog.io/@whoamicj/UE5-SimpleShooter-3D-%EB%AA%A8%EB%8D%B8-%EC%9B%80%EC%A7%81%EC%9E%84-%ED%9A%A8%EA%B3%BC-%EC%B4%9D-%EA%BA%BC%EB%82%B4%EA%B8%B0)
+
+## Pull Requests
+
+### In Progress
+- [Pull Request #12](https://github.com/ChangJin-Lee/Project-Lena/pull/12)
+
+### Merged
+- [Pull Request #11](https://github.com/ChangJin-Lee/Project-Lena/pull/11)
+- [Pull Request #10](https://github.com/ChangJin-Lee/Project-Lena/pull/10)
+- [Pull Request #9](https://github.com/ChangJin-Lee/Project-Lena/pull/9)
+- [Pull Request #8](https://github.com/ChangJin-Lee/Project-Lena/pull/8)
+- [Pull Request #7](https://github.com/ChangJin-Lee/Project-Lena/pull/7)
+- [Pull Request #6](https://github.com/ChangJin-Lee/Project-Lena/pull/6)
+- [Pull Request #5](https://github.com/ChangJin-Lee/Project-Lena/pull/5)
+- [Pull Request #4](https://github.com/ChangJin-Lee/Project-Lena/pull/4)
+- [Pull Request #3](https://github.com/ChangJin-Lee/Project-Lena/pull/3)
+- [Pull Request #2](https://github.com/ChangJin-Lee/Project-Lena/pull/2)
+
 
 ## License
 
