@@ -121,6 +121,7 @@ void AButtonLockActor::MoveButton(UStaticMeshComponent* TargetMeshComponent)
 	ButtonDataArray[FindIndex].IsCliked == true ?  ButtonMovePlayFromStart(FindIndex, 4) : ButtonMovePlayFromStart(FindIndex, -4);
 	ButtonDataArray[FindIndex].IsCliked = !ButtonDataArray[FindIndex].IsCliked;
 
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), SoundEffect, GetActorLocation());
 	ValidPassword("1367");
 }
 
@@ -178,7 +179,7 @@ void AButtonLockActor::LockCamera()
 		PlayerController->bShowMouseCursor = true;
 		PlayerController->SetIgnoreLookInput(true);
 		PlayerController->SetIgnoreMoveInput(true);
-		// PlayerController->SetInputMode(FInputModeUIOnly());
+		PlayerController->SetInputMode(FInputModeGameAndUI());
 
 		AShooterPlayerController* shooter_player_controller = Cast<AShooterPlayerController>(PlayerController);
 		if(shooter_player_controller)
@@ -291,6 +292,7 @@ void AButtonLockActor::OpenLock()
 		ButtonMeshComponents[i]->SetSimulatePhysics(true);
 	}
 	WidgetComponent->SetVisibility(false);
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), RightAnswerSound, GetActorLocation());
 }
 
 

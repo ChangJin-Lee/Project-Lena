@@ -20,8 +20,11 @@ public:
 	UInteractWidget(const FObjectInitializer& ObjectInitializer);
 
 	FText InstructionText = FText::FromString("Press E");
+	UFUNCTION(BlueprintCallable)
 	void SetInstruction(FText Input);
+	UFUNCTION(BlueprintCallable)
 	void SetInstructionAtBeginPlay(FText Input);
+	UFUNCTION(BlueprintCallable)
 	void SetInstructionColor(FLinearColor Input);
 	FText GetInstruction();
 
