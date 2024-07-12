@@ -18,6 +18,8 @@ class LENA_API ASlidingDoorActor : public ADoorActor
 public:
 	ASlidingDoorActor();
 
+	virtual void Open() override;
+
 	UFUNCTION(BlueprintCallable)
 	void OpenSlidingDoor(FVector TargetLocation);
 	

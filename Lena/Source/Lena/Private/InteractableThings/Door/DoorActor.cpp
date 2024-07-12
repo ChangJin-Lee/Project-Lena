@@ -52,3 +52,8 @@ FString ADoorActor::GetPassWord()
 {
 	return PassWord;
 }
+
+void ADoorActor::Open()
+{
+	
+}

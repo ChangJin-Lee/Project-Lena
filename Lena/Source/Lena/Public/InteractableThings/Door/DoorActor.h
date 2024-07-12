@@ -26,6 +26,9 @@ public:
 	
 	FString GetPassWord();
 
+	UFUNCTION(BlueprintCallable, Category="Door")
+	virtual void Open();
+
 protected:
 	virtual void BeginPlay() override;
 

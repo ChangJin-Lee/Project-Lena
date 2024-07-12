@@ -22,6 +22,17 @@ void AHingedDoorActor::BeginPlay()
     }
 }
 
+void AHingedDoorActor::Open()
+{
+    InitialRotation = MeshComponent->GetRelativeRotation();
+    TargetRotation = FRotator(0,0,90);
+    if (HingedDoorTimeline)
+    {
+        HingedDoorTimeline->PlayFromStart();
+    }
+}
+
+
 void AHingedDoorActor::OpenHingedDoor(FRotator InTargetRotation)
 {
     InitialRotation = MeshComponent->GetRelativeRotation();
