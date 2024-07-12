@@ -32,7 +32,7 @@ public:
 	void ZoomOutCamera();
 
 	UFUNCTION(BlueprintCallable)
-	bool ValidPassword(FString input);
+	FString GetPressedPassword();
 	
 	UFUNCTION(BlueprintCallable)
 	void OpenLock();
@@ -118,7 +118,7 @@ private:
 	void LockCamera();
 	void UnLockCameara();
 
-	void MoveFinished();
+	void CameraMoveFinished();
 	void MoveCamera(AActor* TargetActor);
 	void OnMouseClick();
 
@@ -127,5 +127,5 @@ private:
 	AActor* CameraTargetLocationActor;
 	AActor* CameraInitialLocationActor;
 
-	AActor* CreateTargetActor(FVector Location, FRotator Rotation);
+	AActor* CreateCameraMoveTargetLocationActor(FVector Location, FRotator Rotation);
 };

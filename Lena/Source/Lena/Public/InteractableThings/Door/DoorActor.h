@@ -34,24 +34,26 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* MeshComponent;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* FrameMeshComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
 	UWidgetComponent* NumpadWidgetComponent;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
 	FString PassWord = "";
-
-private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
-    UStaticMeshComponent* FrameMeshComponent;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
-	FName RequiredItem;
+	UPROPERTY(EditAnywhere, Category="Sound")
+	USoundBase* DoorOpenSound;
+
+	UPROPERTY(EditAnywhere, Category="Sound")
+	USoundBase* DoorCloseSound;
 	
 	UPROPERTY(EditAnywhere, Category="Door")
 	TSubclassOf<class UCameraShakeBase> WrongAnswerCameraShakeClass;
 
-	UPROPERTY(EditAnywhere, Category="Sound")
-	USoundBase* DoorOpenSound;
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
+	FName RequiredItem;
+
 };

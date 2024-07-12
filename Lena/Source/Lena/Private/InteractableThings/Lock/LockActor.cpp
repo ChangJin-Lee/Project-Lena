@@ -1,6 +1,8 @@
 
 #include "Lena/Public/InteractableThings/Lock/LockActor.h"
 
+#include "Kismet/GameplayStatics.h"
+
 ALockActor::ALockActor()
 {
 	
@@ -23,5 +25,5 @@ bool ALockActor::CheckPassword(const FString& InputPassword)
 
 void ALockActor::Unlock(AActor* ActorToUnlock)
 {
-	
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), RightAnswerSound, GetActorLocation());
 }
