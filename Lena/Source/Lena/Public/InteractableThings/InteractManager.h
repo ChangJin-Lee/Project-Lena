@@ -5,19 +5,19 @@
 #include "CoreMinimal.h"
 #include "Data/ConditionMapping.h"
 #include "GameFramework/Actor.h"
-#include "AInteractManager.generated.h"
+#include "InteractManager.generated.h"
 
 UCLASS()
-class LENA_API AAInteractManager : public AActor
+class LENA_API AInteractManager : public AActor
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
-	AAInteractManager();
+	AInteractManager();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="LockManager")
-	UDataTable* MappingTable;
+	UDataTable* LockDoorMappingTable;
 
 protected:
 	// Called when the game starts or when spawned
@@ -28,11 +28,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	void SetupMappings();
+	void SetupLockAndDoor();
 	void SetupConditionWithActor(AActor* Actor, const FConditionEntry& ConditionEntry);
 
-	TMap<FString, AActor*> ActorMap;
-	TMap<FString, bool> ItemMap;
-	TMap<FString, FString> DialogueMap;
-	TMap<FString, bool> LocationMap;
+	TMap<FString, AActor*> LockMap;
+	TMap<FString, AActor*> DoorMap;
+
+	void LoadDataTableForLevel(const FString& LevelName);
 };
