@@ -3,6 +3,7 @@
 #include "Lena/Public/Game/Controller/ShooterPlayerController.h"
 #include "InteractableThings/Portal/PortalActor.h"
 #include "TimerManager.h"
+#include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 #include "UI/InteractWidget.h"
 
@@ -35,4 +36,13 @@ void APortalActor::Tick(float DeltaTime)
 void APortalActor::Restart()
 {
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+}
+
+void APortalActor::MoveCharacterToLocation()
+{
+	ACharacter* PlayerCharacter = UGameplayStatics::GetPlayerCharacter(this, 0);
+	if(PlayerCharacter)
+	{
+		PlayerCharacter->SetActorLocation(TargetLocation);
+	}
 }

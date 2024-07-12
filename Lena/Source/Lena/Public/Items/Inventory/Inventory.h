@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Items/ItemData/InventoryItem.h"
 #include "Inventory.generated.h"
 
 UCLASS()
@@ -16,13 +17,10 @@ public:
 	AInventory();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Inventory")
-	TArray<FItemData> Items;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Inventory")
-	UDataTable* ItemDataTable;
+	TArray<FInventoryItem> Items;
 
 	UFUNCTION(BlueprintCallable, Category="Inventory")
-	void AddItem(const FItemData& ItemData);
+	void AddItem(const FInventoryItem& ItemData);
 
 	UFUNCTION(BlueprintCallable, Category="Inventory")
 	bool RemoveItem(const FString& ItemID);
@@ -32,6 +30,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Inventory")
 	int32 FindItemByID(const FString& ItemID);
+
+	UFUNCTION(BlueprintCallable, Category="Inventory")
+	int32 FindItemByDescription(const FString& ItemDescription);
 
 protected:
 	// Called when the game starts or when spawned

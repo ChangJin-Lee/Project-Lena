@@ -3,7 +3,6 @@
 #include "Lena/Public/Characters/Base_Character.h"
 #include "Lena/Public/Game/GameMode/LenaGameMode.h"
 #include "Components/CapsuleComponent.h"
-#include "Items/ItemData/ItemData.h"
 
 
 // Sets default values
@@ -233,6 +232,10 @@ bool ABase_Character::ReloadGun()
 	return true;
 }
 
+// -----------------------------
+// Inventory
+// -----------------------------
+
 // 예제 인터랙션 함수 - 아이템 줍기
 void ABase_Character::PickupItem(AActor* ItemActor)
 {
@@ -243,7 +246,7 @@ void ABase_Character::PickupItem(AActor* ItemActor)
 
 		if(Item)
 		{
-			FItemData InventoryItem;
+			FInventoryItem InventoryItem;
 			InventoryItem.ItemID = Item->ItemID;
 			InventoryItem.ItemName = Item->ItemName;
 			InventoryItem.Quantity = Item->Quantity;
@@ -258,7 +261,7 @@ void ABase_Character::PickupItem(AActor* ItemActor)
 	}
 }
 
-void ABase_Character::AddItemToInventory(const FItemData& Item)
+void ABase_Character::AddItemToInventory(const FInventoryItem& Item)
 {
 	if (Inventory)
 	{

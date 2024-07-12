@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "InteractableThings/InteractableActor.h"
 #include "Base_Item.generated.h"
 
 UCLASS()
-class LENA_API ABase_Item : public AActor
+class LENA_API ABase_Item : public AInteractableActor
 {
 	GENERATED_BODY()
 	
@@ -22,19 +23,29 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	
+
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	void PickUp();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	FString ItemID;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Item")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	FString ItemName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	FString ItemDescription;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	int32 Quantity;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Item")
-	FString ItemDescription;
-	
 private:
-	void InitializeItemProperties();
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* MeshComponent;
+	
+	UPROPERTY(EditAnywhere)
+	USkeletalMeshComponent* SkeletalMeshComponent;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* PickupSound;
 };

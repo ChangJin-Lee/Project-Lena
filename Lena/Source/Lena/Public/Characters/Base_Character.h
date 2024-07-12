@@ -85,8 +85,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Animation Slot")
 	void OnDead();
 
-
-	// 인벤토리
+	// -----------------------------
+	// Inventory
+	// -----------------------------
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Inventory")
 	AInventory* Inventory;
 
@@ -94,7 +96,7 @@ public:
 	void PickupItem(AActor* ItemActor);
 
 	UFUNCTION(BlueprintCallable, Category="Inventory")
-	void AddItemToInventory(const FItemData& Item);
+	void AddItemToInventory(const FInventoryItem& Item);
 	
 private:
 	UPROPERTY(EditDefaultsOnly)

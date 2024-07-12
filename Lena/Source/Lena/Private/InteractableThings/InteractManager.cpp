@@ -7,6 +7,7 @@
 #include "InteractableThings/Lock/LockActor.h"
 #include "Engine/World.h"
 #include "Interface/InteractActionInterface.h"
+#include "Items/Base_Item.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -14,17 +15,14 @@ AInteractManager::AInteractManager()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
+	LoadDataTableForLevel();
 }
 
 // Called when the game starts or when spawned
 void AInteractManager::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// 특정 레벨에 대한 DataTable을 로드
-	FString LevelName = GetWorld()->GetMapName();
-	LoadDataTableForLevel(LevelName);
-
 
 	// Set a timer to call SetupLocksAndDoors on the next tick
 	GetWorld()->GetTimerManager().SetTimerForNextTick(this, &AInteractManager::SetupLockAndDoor);
@@ -38,9 +36,9 @@ void AInteractManager::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AInteractManager::LoadDataTableForLevel(const FString& LevelName)
+void AInteractManager::LoadDataTableForLevel()
 {
-	FString DataTablePath = FString::Printf(TEXT("DataTable'/Game/Data/DataTables/%s_InteractConditionTable.%s_InteractConditionTable'"), *LevelName, *LevelName);
+	FString DataTablePath = FString::Printf(TEXT("DataTable'/Game/Data/DataTables/InteractConditionTable.InteractConditionTable'"));
 	static ConstructorHelpers::FObjectFinder<UDataTable> LockDoorMappingData(*DataTablePath);
 
 	if (LockDoorMappingData.Succeeded())
@@ -49,7 +47,7 @@ void AInteractManager::LoadDataTableForLevel(const FString& LevelName)
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed to load DataTable for level: %s"), *LevelName);
+		UE_LOG(LogTemp, Warning, TEXT("Failed to load DataTable"));
 	}
 }
 
@@ -68,12 +66,24 @@ void AInteractManager::SetupLockAndDoor()
 		{
 			DoorMap.Add(Actor->GetActorLabel(), Actor);
 		}
+		else if (Actor->IsA<ABase_Item>())
+		{
+			ABase_Item* Item = Cast<ABase_Item>(Actor);
+			ItemMap.Add(Item->ItemDescription, Actor);
+		}
 	}
 	
 	const FString ContextString(TEXT("LockDoorMappingTableContext"));
 	TArray<FActorEntry*> AllRows;
 	LockDoorMappingTable->GetAllRows(ContextString, AllRows);
 
+	for(auto k : ItemMap)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *k.Key);
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *k.Value->GetActorLabel());
+	}
+
+	// Door 기준
 	for(FActorEntry* Row : AllRows)
 	{
 		if(Row)
@@ -111,7 +121,13 @@ void AInteractManager::SetupConditionWithActor(AActor* Actor, const FConditionEn
 	}
 	else if (ConditionEntry.ConditionType == "Item")
 	{
-		
+		ADoorActor* DoorActor = Cast<ADoorActor>(Actor);
+		DoorActor->RequiredItemDescription = ConditionEntry.AdditionalData;
+	}
+	else if (ConditionEntry.ConditionType == "Default")
+	{
+		ADoorActor* DoorActor = Cast<ADoorActor>(Actor);
+		DoorActor->RequiredItemDescription = "Default";
 	}
 	else if (ConditionEntry.ConditionType == "Dialogue")
 	{

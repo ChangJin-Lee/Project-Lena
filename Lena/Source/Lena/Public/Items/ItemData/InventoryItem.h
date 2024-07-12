@@ -1,11 +1,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine/DataTable.h"
-#include "ItemData.generated.h"
+#include "InventoryItem.generated.h"
 
 USTRUCT(BlueprintType)
-struct FItemData : public FTableRowBase
+struct FInventoryItem
 {
 	GENERATED_BODY()
 
@@ -19,11 +18,11 @@ struct FItemData : public FTableRowBase
 	int32 Quantity;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
-	FString ItemDescription; // 특정 문을 열기 위한 열쇠 등의 조건을 나타내는 값
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
-	float AttackPower;
+	FString ItemDescription; // 추가 정보
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
-	float DefensePower;
+	// 추가할 다른 속성들
+
+	FInventoryItem()
+		: ItemID(TEXT("")), ItemName(TEXT("")), Quantity(1), ItemDescription(TEXT(""))
+	{}
 };

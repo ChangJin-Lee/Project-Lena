@@ -17,9 +17,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Lock")
 	FString Password;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Lock")
-	FString RequiredItemID;
-
 	UFUNCTION(BlueprintCallable, Category="Lock")
 	virtual bool CheckPassword(const FString& InputPassword);
 

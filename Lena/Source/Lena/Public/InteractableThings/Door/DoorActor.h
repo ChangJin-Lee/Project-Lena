@@ -23,6 +23,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool CheckRequiredItem();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Lock")
+	FString RequiredItemDescription;
 	
 	FString GetPassWord();
 

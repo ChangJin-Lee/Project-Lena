@@ -3,7 +3,6 @@
 
 #include "Items/Inventory/Inventory.h"
 #include "Engine/DataTable.h"
-#include "Items/ItemData/ItemData.h"
 
 // Sets default values
 AInventory::AInventory()
@@ -12,7 +11,7 @@ AInventory::AInventory()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-void AInventory::AddItem(const FItemData& ItemData)
+void AInventory::AddItem(const FInventoryItem& ItemData)
 {
 	int32 ItemIndex = FindItemByID(ItemData.ItemID);
 	if (ItemIndex != INDEX_NONE)
@@ -40,7 +39,8 @@ bool AInventory::RemoveItem(const FString& ItemID)
 
 bool AInventory::UpdateItemQuantity(const FString& ItemID, int32 NewQuantity)
 {
-	for (FItemData& Item : Items)
+	
+	for (FInventoryItem& Item : Items)
 	{
 		if (Item.ItemID == ItemID)
 		{
@@ -63,6 +63,17 @@ int32 AInventory::FindItemByID(const FString& ItemID)
 	return INDEX_NONE;
 }
 
+int32 AInventory::FindItemByDescription(const FString& ItemDescription)
+{
+	for (int32 Index = 0; Index < Items.Num(); ++Index)
+	{
+		if (Items[Index].ItemDescription == ItemDescription)
+		{
+			return Index;
+		}
+	}
+	return INDEX_NONE;
+}
 
 // Called when the game starts or when spawned
 void AInventory::BeginPlay()

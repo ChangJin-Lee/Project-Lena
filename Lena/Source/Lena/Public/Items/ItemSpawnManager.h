@@ -3,32 +3,29 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InteractableThings/InteractableActor.h"
-#include "PortalActor.generated.h"
+#include "GameFramework/Actor.h"
+#include "ItemSpawnManager.generated.h"
 
 UCLASS()
-class LENA_API APortalActor : public AInteractableActor
+class LENA_API AItemSpawnManager : public AActor
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
-	APortalActor();
+	AItemSpawnManager();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(BlueprintReadWrite)
-	FVector TargetLocation;
-
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable)
-	void Restart();
+private:
+	UPROPERTY(EditAnywhere, Category="Spawning")
+	UDataTable* ItemSpawnTable;
 
-	UFUNCTION(BlueprintCallable)
-	void MoveCharacterToLocation();
+	void SpawnItemsFromTable();
 };

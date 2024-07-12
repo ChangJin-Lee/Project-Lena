@@ -33,10 +33,16 @@ void ADoorActor::BeginPlay()
 
 bool ADoorActor::CheckRequiredItem()
 {
+	if(RequiredItemDescription == "Default")
+	{
+		return true;
+	}
+
 	ABase_Character* Character = Cast<ABase_Character>(UGameplayStatics::GetPlayerCharacter(this, 0));
 	
-	if (Character && Character->HasItemInInventory(RequiredItem))
+	if (Character && Character->Inventory->FindItemByDescription(RequiredItemDescription) != INDEX_NONE)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("if (Character && Character->Inventory->FindItemByDescription(RequiredItemDescription) != INDEX_NONE)"));
 		return true;
 	}
 	
