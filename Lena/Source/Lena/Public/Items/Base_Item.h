@@ -22,7 +22,19 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	FString ItemID;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Item")
+	FString ItemName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
-	FName ItemName;
+	int32 Quantity;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Item")
+	FString ItemDescription;
+	
+private:
+	void InitializeItemProperties();
 };

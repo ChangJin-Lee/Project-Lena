@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Base_Item.h"
+#include "Components/PickupableItemComponent.h"
 #include "Lena/Public/InteractableThings/InteractableActor.h"
 #include "GameFramework/Actor.h"
 #include "PickupItem.generated.h"
@@ -20,6 +21,9 @@ class LENA_API APickupItem : public AInteractableActor
 public:	
 	// Sets default values for this actor's properties
 	APickupItem();
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	UPickupableItemComponent* PickupableItemComponent;
 
 protected:
 	// Called when the game starts or when spawned
@@ -29,14 +33,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
-	ABase_Item* ItemDetails;
-
-	UFUNCTION(BlueprintCallable)
-	void PickUp();
-
-	UFUNCTION(BlueprintCallable)
-	void SetThisItemName(FName NewName);
+	void PickUp(AActor* InteractingActor);
 
 private:
 	UPROPERTY(EditAnywhere)

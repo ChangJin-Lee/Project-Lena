@@ -29,6 +29,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Door")
 	virtual void Open();
 
+	UFUNCTION(BlueprintCallable, Category="Door")
+	virtual void Close();
+
 protected:
 	virtual void BeginPlay() override;
 

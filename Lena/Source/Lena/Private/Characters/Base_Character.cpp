@@ -3,6 +3,7 @@
 #include "Lena/Public/Characters/Base_Character.h"
 #include "Lena/Public/Game/GameMode/LenaGameMode.h"
 #include "Components/CapsuleComponent.h"
+#include "Items/ItemData/ItemData.h"
 
 
 // Sets default values
@@ -11,6 +12,7 @@ ABase_Character::ABase_Character()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Inventory = CreateDefaultSubobject<AInventory>(TEXT("Inventory"));
 }
 
 // Called when the game starts or when spawned
@@ -231,20 +233,35 @@ bool ABase_Character::ReloadGun()
 	return true;
 }
 
-void ABase_Character::AddItemToInventory(ABase_Item* Item)
+// 예제 인터랙션 함수 - 아이템 줍기
+void ABase_Character::PickupItem(AActor* ItemActor)
 {
-	Inventory.Add(Item);
-}
-
-
-bool ABase_Character::HasItemInInventory(FName ItemName) const
-{
-	for (ABase_Item* Item : Inventory)
+	if (ItemActor)
 	{
-		if (Item && Item->ItemName == ItemName)
+		ABase_Item* Item = Cast<ABase_Item>(ItemActor);
+		// ItemActor에서 ItemID를 가져옵니다. ItemActor는 아이템 정보를 제공해야 합니다.
+
+		if(Item)
 		{
-			return true;
+			FItemData InventoryItem;
+			InventoryItem.ItemID = Item->ItemID;
+			InventoryItem.ItemName = Item->ItemName;
+			InventoryItem.Quantity = Item->Quantity;
+			InventoryItem.ItemDescription = Item->ItemDescription;
+
+			// 아이템을 인벤토리에 추가합니다.
+			AddItemToInventory(InventoryItem);
+        
+			// 아이템 액터를 월드에서 제거합니다.
+			ItemActor->Destroy();
 		}
 	}
-	return false;
+}
+
+void ABase_Character::AddItemToInventory(const FItemData& Item)
+{
+	if (Inventory)
+	{
+		Inventory->AddItem(Item);
+	}
 }

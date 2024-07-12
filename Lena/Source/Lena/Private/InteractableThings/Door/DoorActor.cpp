@@ -55,5 +55,10 @@ FString ADoorActor::GetPassWord()
 
 void ADoorActor::Open()
 {
-	
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), DoorOpenSound, GetActorLocation());
+}
+
+void ADoorActor::Close()
+{
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), DoorCloseSound, GetActorLocation());
 }
