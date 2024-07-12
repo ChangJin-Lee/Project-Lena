@@ -62,6 +62,16 @@ void ADirectionalLockActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void ADirectionalLockActor::Unlock(AActor* ActorToUnlock)
+{
+	ADoorActor* Door = Cast<ADoorActor>(ActorToUnlock);
+	if(Door)
+	{
+		Door->Open();
+	}
+}
+
+
 void ADirectionalLockActor::HandleDirectionalLockProgress(float value)
 {
 	if(DirectionalLockBallMeshComponent)

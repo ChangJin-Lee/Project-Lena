@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/TimelineComponent.h"
 #include "Data/DataStructure.h"
+#include "Interface/InteractActionInterface.h"
 #include "ButtonLockActor.generated.h"
 
 UCLASS()
@@ -18,6 +19,8 @@ class LENA_API AButtonLockActor : public ALockActor
 public:
 	// Sets default values for this actor's properties
 	AButtonLockActor();
+
+	virtual void Unlock(AActor* ActorToUnlock) override;
 	
 	UFUNCTION(BlueprintCallable)
 	void MoveButton(UStaticMeshComponent* TargetMeshComponent);

@@ -81,6 +81,16 @@ void ACombinationLockActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void ACombinationLockActor::Unlock(AActor* ActorToUnlock)
+{
+	ADoorActor* Door = Cast<ADoorActor>(ActorToUnlock);
+	if(Door)
+	{
+		Door->Open();
+	}
+}
+
+
 void ACombinationLockActor::ScrollCombinationLock(FRotator InTargetRotation)
 {
 	if(bIsTimeLinePlaying || !WheelMeshArray[SelectedWheelIndex]) return;

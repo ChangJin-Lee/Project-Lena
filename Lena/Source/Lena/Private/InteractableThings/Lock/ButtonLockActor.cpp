@@ -6,8 +6,8 @@
 #include "Characters/Base_Character.h"
 #include "Components/BoxComponent.h"
 #include "Game/Controller/ShooterPlayerController.h"
+#include "InteractableThings/Door/DoorActor.h"
 #include "Kismet/GameplayStatics.h"
-
 
 // Sets default values
 AButtonLockActor::AButtonLockActor()
@@ -42,6 +42,15 @@ AButtonLockActor::AButtonLockActor()
 	HitBox->SetRelativeLocation(FVector(0,0,20));
 	HitBox->SetRelativeScale3D(FVector::One() * 2.0f);
 	CameraMoveTimelineComponent = CreateDefaultSubobject<UTimelineComponent>(TEXT("CameraMoveTimelineComponent"));
+}
+
+void AButtonLockActor::Unlock(AActor* ActorToUnlock)
+{
+	ADoorActor* Door = Cast<ADoorActor>(ActorToUnlock);
+	if(Door)
+	{
+		Door->Open();
+	}
 }
 
 // Called when the game starts or when spawned
@@ -122,7 +131,7 @@ void AButtonLockActor::MoveButton(UStaticMeshComponent* TargetMeshComponent)
 	ButtonDataArray[FindIndex].IsCliked = !ButtonDataArray[FindIndex].IsCliked;
 
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), SoundEffect, GetActorLocation());
-	ValidPassword("1367");
+	ValidPassword(Password);
 }
 
 void AButtonLockActor::ButtonMovePlayFromStart(int32 index, float value)
@@ -265,7 +274,8 @@ bool AButtonLockActor::ValidPassword(FString input)
 	
 	if(string == input)
 	{
-		OpenLock();
+		// OpenLock();
+		TargetDoor->Open();
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(
 			TimerHandle,

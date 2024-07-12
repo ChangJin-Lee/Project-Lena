@@ -26,6 +26,8 @@ public:
 	// Sets default values for this actor's properties
 	ADirectionalLockActor();
 
+	virtual void Unlock(AActor* ActorToUnlock) override;;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

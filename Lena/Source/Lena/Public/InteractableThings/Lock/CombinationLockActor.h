@@ -27,6 +27,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void Unlock(AActor* ActorToUnlock) override;
+
 	UFUNCTION(BlueprintCallable)
 	void ScrollCombinationLock(FRotator InTargetRotation);
 
