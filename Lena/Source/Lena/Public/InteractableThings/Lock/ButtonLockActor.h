@@ -6,7 +6,7 @@
 #include "LockActor.h"
 #include "Camera/CameraComponent.h"
 #include "Components/TimelineComponent.h"
-#include "InteractableThings/Data/DataStructure.h"
+#include "Data/DataStructure.h"
 #include "ButtonLockActor.generated.h"
 
 UCLASS()
