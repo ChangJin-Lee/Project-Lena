@@ -64,13 +64,13 @@ void ADirectionalLockActor::Tick(float DeltaTime)
 
 void ADirectionalLockActor::Unlock(AActor* ActorToUnlock)
 {
+	Super::Unlock(ActorToUnlock);
 	ADoorActor* Door = Cast<ADoorActor>(ActorToUnlock);
 	if(Door)
 	{
 		Door->Open();
 	}
 }
-
 
 void ADirectionalLockActor::HandleDirectionalLockProgress(float value)
 {
@@ -132,63 +132,44 @@ bool ADirectionalLockActor::IsMovementProgressing()
 void ADirectionalLockActor::CheckRightAnswer()
 {
 	if(GetNum(InputPassWord) < 5) return;
-	
-	TArray<AActor*> FindActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), DoorActorClass, FindActors);
-	
-	if(FindActors.Num() >= 1)
+
+	if(CheckPassword(InputPassWord))
 	{
-		for(int i = 0 ; i < FindActors.Num(); ++i)
+		Unlock(TargetDoor);
+		DirectionalLockBodyMeshComponent->SetSimulatePhysics(true);
+		DirectionalLockshackleMeshComponent->SetSimulatePhysics(true);
+		DirectionalLockBallMeshComponent->SetSimulatePhysics(true);
+		
+		if(WidgetComponent)
 		{
-			DoorActor = Cast<ASlidingDoorActor>(FindActors[i]);
-
-			if(DoorActor)
-			{
-				if(InputPassWord == DoorActor->GetPassWord())
-				{
-					UGameplayStatics::PlaySoundAtLocation(GetWorld(), RightAnswerSound, GetActorLocation());
-					DoorActor->RightAnswer(FVector(0,130.0f,0));
-
-					DirectionalLockBodyMeshComponent->SetSimulatePhysics(true);
-					DirectionalLockshackleMeshComponent->SetSimulatePhysics(true);
-					DirectionalLockBallMeshComponent->SetSimulatePhysics(true);
-					
-					if(WidgetComponent)
-					{
-						UUserWidget* Widget = WidgetComponent->GetWidget();
-						UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
-						InteractWidget->SetInstructionColor(FColor::Blue);
-						InteractWidget->SetInstruction(FText::FromString(WidgetDisplayPassword));
-						InteractWidget->InstructionText = FText::FromString("Congratulations! You solved the puzzle!");
-						InteractWidget->SetInstructionColor(FColor::Green);
-					}
-				
-				}
-				else
-				{
-					UGameplayStatics::PlaySoundAtLocation(GetWorld(), WrongAnswerSound, GetActorLocation());
-
-					if(WidgetComponent)
-					{
-						UUserWidget* Widget = WidgetComponent->GetWidget();
-						UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
-						InteractWidget->SetInstructionColor(FColor::Red);
-						InteractWidget->SetInstruction(FText::FromString(WidgetDisplayPassword));
-						InteractWidget->SetInstruction(FText::FromString("Try Again!"));
-						InteractWidget->InstructionText = FText::FromString("Try Again!");
-					}
-					
-					if(WrongAnswerCameraShakeClass)
-					{
-						GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(WrongAnswerCameraShakeClass);
-					}
-					InputPassWord = "";
-					WidgetDisplayPassword = "";
-				}
-			}
+			UUserWidget* Widget = WidgetComponent->GetWidget();
+			UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
+			InteractWidget->SetInstructionColor(FColor::Blue);
+			InteractWidget->SetInstruction(FText::FromString(WidgetDisplayPassword));
+			InteractWidget->InstructionText = FText::FromString("Congratulations! You solved the puzzle!");
+			InteractWidget->SetInstructionColor(FColor::Green);
 		}
 	}
-	
+	else
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), WrongAnswerSound, GetActorLocation());
+		if(WidgetComponent)
+		{
+			UUserWidget* Widget = WidgetComponent->GetWidget();
+			UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
+			InteractWidget->SetInstructionColor(FColor::Red);
+			InteractWidget->SetInstruction(FText::FromString(WidgetDisplayPassword));
+			InteractWidget->SetInstruction(FText::FromString("Try Again!"));
+			InteractWidget->InstructionText = FText::FromString("Try Again!");
+		}
+
+		if(WrongAnswerCameraShakeClass)
+		{
+			GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(WrongAnswerCameraShakeClass);
+		}
+		InputPassWord = "";
+		WidgetDisplayPassword = "";
+	}
 }
 
 FString ADirectionalLockActor::EnumToString(DirectionEnum EnumValue)
