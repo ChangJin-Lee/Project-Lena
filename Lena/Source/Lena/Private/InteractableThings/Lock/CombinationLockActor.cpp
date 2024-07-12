@@ -83,6 +83,7 @@ void ACombinationLockActor::Tick(float DeltaTime)
 
 void ACombinationLockActor::Unlock(AActor* ActorToUnlock)
 {
+	Super::Unlock(ActorToUnlock);
 	ADoorActor* Door = Cast<ADoorActor>(ActorToUnlock);
 	if(Door)
 	{
@@ -178,31 +179,13 @@ FString ACombinationLockActor::GetCurrentDial(UStaticMeshComponent* WheelMeshDia
 
 void ACombinationLockActor::CheckRightAnswer()
 {
-	TArray<AActor*> FindActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), DoorActorClass, FindActors);
-
-	GetCurrentDial();
-	if(FindActors.Num() >= 1)
+	if(CheckPassword(GetCurrentDial()))
 	{
-		DoorActor = Cast<ASlidingDoorActor>(FindActors[0]);
-
-		UE_LOG(LogTemp, Warning, TEXT("DoorActor->GetPassWord() :  %s"), *DoorActor->GetPassWord());
-		
-
-		if(DoorActor)
+		Unlock(TargetDoor);
+		CheckAnim = true;
+		for(UStaticMeshComponent* InMesh : WheelMeshArray)
 		{
-			if(GetCurrentDial() == DoorActor->GetPassWord())
-			{
-				UGameplayStatics::PlaySoundAtLocation(GetWorld(), RightAnswerSound, GetActorLocation());
-				DoorActor->RightAnswer(FVector(0,130.0f,0));
-
-				CheckAnim = true;
-				
-				for(UStaticMeshComponent* InMesh : WheelMeshArray)
-				{
-					InMesh->SetSimulatePhysics(true);
-				}
-			}
+			InMesh->SetSimulatePhysics(true);
 		}
 	}
 	
