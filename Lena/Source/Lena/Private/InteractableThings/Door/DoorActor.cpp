@@ -13,6 +13,35 @@
 
 ADoorActor::ADoorActor()
 {
+	// Class를 찾을때는 오브젝트와 조금 다름
+	static ConstructorHelpers::FClassFinder<UCameraShakeBase> CameraShakeClassFinder(TEXT("/Game/BluePrints/Camera/CameraShake/BP_WrongAnswerCameraShake.BP_WrongAnswerCameraShake_C"));
+	if(CameraShakeClassFinder.Succeeded())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Find WrongAnswerCameraShakeClass : %s"), *CameraShakeClassFinder.GetReferencerName());
+		WrongAnswerCameraShakeClass = CameraShakeClassFinder.Class;
+	}else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to load WrongAnswerCameraShakeClass"));
+	}
+	
+	static ConstructorHelpers::FObjectFinder<USoundBase> OpenSoundFinder(TEXT("/Script/Engine.SoundWave'/Game/SFX/Hinged_Door_Open.Hinged_Door_Open'"));
+	if(OpenSoundFinder.Succeeded())
+	{
+		DoorOpenSound = OpenSoundFinder.Object;
+	}else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to load DoorOpenSound"));
+	}
+	
+	static ConstructorHelpers::FObjectFinder<USoundBase> CloseSoundFinder(TEXT("/Script/Engine.SoundWave'/Game/SFX/Hinged_Door_Close.Hinged_Door_Close'"));
+	if(CloseSoundFinder.Succeeded())
+	{
+		DoorCloseSound = CloseSoundFinder.Object;
+	}else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to load DoorCloseSound"));
+	}
+	
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	MeshComponent->SetupAttachment(RootComponent);
 
@@ -33,6 +62,7 @@ void ADoorActor::BeginPlay()
 
 bool ADoorActor::CheckRequiredItem()
 {
+	// Default door Just Open
 	if(RequiredItemDescription == "Default")
 	{
 		return true;
@@ -42,13 +72,7 @@ bool ADoorActor::CheckRequiredItem()
 	
 	if (Character && Character->Inventory->FindItemByDescription(RequiredItemDescription) != INDEX_NONE)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("if (Character && Character->Inventory->FindItemByDescription(RequiredItemDescription) != INDEX_NONE)"));
 		return true;
-	}
-	
-	if(WrongAnswerCameraShakeClass)
-	{
-		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(WrongAnswerCameraShakeClass);
 	}
 	
 	return false;
@@ -66,5 +90,14 @@ void ADoorActor::Open()
 
 void ADoorActor::Close()
 {
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), DoorCloseSound, GetActorLocation());
+}
+
+void ADoorActor::OpenFail()
+{
+	if(WrongAnswerCameraShakeClass)
+	{
+		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(WrongAnswerCameraShakeClass);
+	}
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), DoorCloseSound, GetActorLocation());
 }
