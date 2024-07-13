@@ -8,13 +8,13 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "UI/InteractWidget.h"
 
 
 ADoorActor::ADoorActor()
 {
 	// Class를 찾을때는 오브젝트와 조금 다름
-	static ConstructorHelpers::FClassFinder<UCameraShakeBase> CameraShakeClassFinder(TEXT("/Game/BluePrints/Camera/CameraShake/BP_WrongAnswerCameraShake.BP_WrongAnswerCameraShake_C"));
+	static ConstructorHelpers::FClassFinder<UCameraShakeBase> CameraShakeClassFinder(TEXT("Blueprint'/Game/BluePrints/Camera/CameraShake/BP_WrongAnswerCameraShake.BP_WrongAnswerCameraShake_C'"));
 	if(CameraShakeClassFinder.Succeeded())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Find WrongAnswerCameraShakeClass : %s"), *CameraShakeClassFinder.GetReferencerName());
@@ -99,5 +99,16 @@ void ADoorActor::OpenFail()
 	{
 		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(WrongAnswerCameraShakeClass);
 	}
+	UUserWidget* SearchWidget = WidgetComponent->GetWidget();
+	if(SearchWidget)
+	{
+		UInteractWidget* InteractWidget = Cast<UInteractWidget>(SearchWidget);
+		if(InteractWidget)
+		{
+			InteractWidget->SetInstruction(FText::FromString("Door Locked!"));
+			InteractWidget->SetInstructionColor(FLinearColor::Red);
+		}
+	}
+	
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), DoorCloseSound, GetActorLocation());
 }
