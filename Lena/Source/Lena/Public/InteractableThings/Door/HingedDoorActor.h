@@ -18,14 +18,9 @@ class LENA_API AHingedDoorActor : public ADoorActor
 
 public:
 	AHingedDoorActor();
-
+	
 	virtual void Open() override;
-
-	UFUNCTION(BlueprintCallable)
-	void OpenHingedDoor(FRotator TargetRotation);
-
-	UFUNCTION(BlueprintCallable)
-	void CloseHingedDoor(FRotator TargetRotation);
+	virtual void Close() override;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -43,7 +38,7 @@ private:
 	UPROPERTY()
 	FRotator InitialRotation;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite, Category="Door Move", meta=(AllowPrivateAccess="true"))
 	FRotator TargetRotation;
 
 	UPROPERTY(EditAnywhere, Category = "Timeline")
