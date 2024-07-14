@@ -24,9 +24,12 @@ void UInteractWidget::SetInstruction(FText Input)
 	Instructions0->SetText(Input);
 }
 
-void UInteractWidget::SetInstructionAtBeginPlay(FText Input)
+void UInteractWidget::SetInstructionAtBeginPlay(FText Text, FLinearColor Color)
 {
-	InstructionText = Input;
+	InstructionText = Text;
+	Instructions0_Color = Color;
+	SetInstructionColor(Color);
+	SetInstruction(Text);
 }
 
 FText UInteractWidget::GetInstruction()
@@ -37,4 +40,19 @@ FText UInteractWidget::GetInstruction()
 void UInteractWidget::SetInstructionColor(FLinearColor Input)
 {
 	Instructions0->SetColorAndOpacity(Input);
+}
+
+void UInteractWidget::DisplayInstructionWithSeconds(FText Text, FLinearColor Color, float DelayTime)
+{
+	SetInstruction(Text);
+	SetInstructionColor(Color);
+
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UInteractWidget::WidgetResetToDefaultSettingDelayFunction,  DelayTime, false);
+}
+
+void UInteractWidget::WidgetResetToDefaultSettingDelayFunction()
+{
+	SetInstruction(InstructionText);
+	SetInstructionColor(Instructions0_Color);
 }

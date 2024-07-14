@@ -65,4 +65,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
 	FName RequiredItem;
 
+private:
+	bool IsDoorOpen = false;
 };

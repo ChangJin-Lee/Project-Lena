@@ -14,7 +14,7 @@
 ADoorActor::ADoorActor()
 {
 	// Class를 찾을때는 오브젝트와 조금 다름
-	static ConstructorHelpers::FClassFinder<UCameraShakeBase> CameraShakeClassFinder(TEXT("Blueprint'/Game/BluePrints/Camera/CameraShake/BP_WrongAnswerCameraShake.BP_WrongAnswerCameraShake_C'"));
+	static ConstructorHelpers::FClassFinder<UCameraShakeBase> CameraShakeClassFinder(TEXT("/Game/BluePrints/Camera/CameraShake/BP_WrongAnswerCameraShake.BP_WrongAnswerCameraShake_C"));
 	if(CameraShakeClassFinder.Succeeded())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Find WrongAnswerCameraShakeClass : %s"), *CameraShakeClassFinder.GetReferencerName());
@@ -65,6 +65,12 @@ bool ADoorActor::CheckRequiredItem()
 	// Default door Just Open
 	if(RequiredItemDescription == "Default")
 	{
+		IsDoorOpen = true;
+		return true;
+	}
+
+	if(IsDoorOpen)
+	{
 		return true;
 	}
 
@@ -72,6 +78,16 @@ bool ADoorActor::CheckRequiredItem()
 	
 	if (Character && Character->Inventory->FindItemByDescription(RequiredItemDescription) != INDEX_NONE)
 	{
+		UUserWidget* Widget = WidgetComponent->GetWidget();
+		if(Widget)
+		{
+			UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
+			if(InteractWidget)
+			{
+				IsDoorOpen = true;
+				InteractWidget->SetInstructionAtBeginPlay(FText::FromString("Already Opened!"), FLinearColor::Green);
+			}
+		}
 		return true;
 	}
 	
@@ -99,14 +115,14 @@ void ADoorActor::OpenFail()
 	{
 		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(WrongAnswerCameraShakeClass);
 	}
-	UUserWidget* SearchWidget = WidgetComponent->GetWidget();
-	if(SearchWidget)
+
+	UUserWidget* Widget = WidgetComponent->GetWidget();
+	if(Widget)
 	{
-		UInteractWidget* InteractWidget = Cast<UInteractWidget>(SearchWidget);
+		UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
 		if(InteractWidget)
 		{
-			InteractWidget->SetInstruction(FText::FromString("Door Locked!"));
-			InteractWidget->SetInstructionColor(FLinearColor::Red);
+			InteractWidget->DisplayInstructionWithSeconds(FText::FromString("Door Locked!"), FLinearColor::Red, 1.0f);
 		}
 	}
 	
