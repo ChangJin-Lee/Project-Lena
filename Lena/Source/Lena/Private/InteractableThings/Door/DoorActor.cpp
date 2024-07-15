@@ -19,27 +19,18 @@ ADoorActor::ADoorActor()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Find WrongAnswerCameraShakeClass : %s"), *CameraShakeClassFinder.GetReferencerName());
 		WrongAnswerCameraShakeClass = CameraShakeClassFinder.Class;
-	}else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed to load WrongAnswerCameraShakeClass"));
 	}
 	
 	static ConstructorHelpers::FObjectFinder<USoundBase> OpenSoundFinder(TEXT("/Script/Engine.SoundWave'/Game/SFX/Hinged_Door_Open.Hinged_Door_Open'"));
 	if(OpenSoundFinder.Succeeded())
 	{
 		DoorOpenSound = OpenSoundFinder.Object;
-	}else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed to load DoorOpenSound"));
 	}
 	
 	static ConstructorHelpers::FObjectFinder<USoundBase> CloseSoundFinder(TEXT("/Script/Engine.SoundWave'/Game/SFX/Hinged_Door_Close.Hinged_Door_Close'"));
 	if(CloseSoundFinder.Succeeded())
 	{
 		DoorCloseSound = CloseSoundFinder.Object;
-	}else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed to load DoorCloseSound"));
 	}
 	
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
@@ -101,11 +92,23 @@ FString ADoorActor::GetPassWord()
 
 void ADoorActor::Open()
 {
+	UInteractWidget* Widget = Cast<UInteractWidget>(WidgetComponent);
+	if(Widget)
+	{
+		Widget->SetInstruction(FText::FromString("Open!"));
+		Widget->SetInstructionColor(FLinearColor::Green);
+	}
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), DoorOpenSound, GetActorLocation());
 }
 
 void ADoorActor::Close()
 {
+	UInteractWidget* Widget = Cast<UInteractWidget>(WidgetComponent);
+	if(Widget)
+	{
+		Widget->SetInstruction(FText::FromString("Close!"));
+		Widget->SetInstructionColor(FLinearColor::Green);
+	}
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), DoorCloseSound, GetActorLocation());
 }
 
