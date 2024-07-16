@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
-#include "InventoryWidget.generated.h"
+
+#include "InventorySlotWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class LENA_API UInventoryWidget : public UUserWidget
+class LENA_API UInventorySlotWidget : public UUserWidget
 {
 	GENERATED_BODY()
 };
