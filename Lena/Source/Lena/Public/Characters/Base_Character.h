@@ -3,10 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputMappingContext.h"
 #include "Lena/Public/Items/Base_Item.h"
 #include "Lena/Public/Items/Gun.h"
 #include "GameFramework/Character.h"
-#include "Items/Inventory/Inventory.h"
+#include "Items/Inventory/InventoryComponent.h"
+#include "UI/InventoryWidget.h"
 #include "Base_Character.generated.h"
 
 UCLASS()
@@ -90,13 +92,17 @@ public:
 	// -----------------------------
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Inventory")
-	AInventory* Inventory;
+	UInventoryComponent* InventoryComponent;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Inventory")
+	UInventoryComponent* GroundItemsComponent;
 
 	UFUNCTION(BlueprintCallable, Category="Inventory")
 	void PickupItem(AActor* ItemActor);
 
 	UFUNCTION(BlueprintCallable, Category="Inventory")
-	void AddItemToInventory(const FInventoryItem& Item);
+	void CheckGroundItem(AActor* ItemActor);
+
 	
 private:
 	UPROPERTY(EditDefaultsOnly)

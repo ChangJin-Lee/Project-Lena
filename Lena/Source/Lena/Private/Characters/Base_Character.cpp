@@ -1,8 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Lena/Public/Characters/Base_Character.h"
+
+#include "EnhancedInputSubsystems.h"
 #include "Lena/Public/Game/GameMode/LenaGameMode.h"
 #include "Components/CapsuleComponent.h"
+#include "Items/Inventory/InventoryComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -11,7 +15,8 @@ ABase_Character::ABase_Character()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Inventory = CreateDefaultSubobject<AInventory>(TEXT("Inventory"));
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
+	GroundItemsComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("GroundItemsComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -236,14 +241,13 @@ bool ABase_Character::ReloadGun()
 // Inventory
 // -----------------------------
 
-// 예제 인터랙션 함수 - 아이템 줍기
+// 아이템 줍기
 void ABase_Character::PickupItem(AActor* ItemActor)
 {
 	if (ItemActor)
 	{
 		ABase_Item* Item = Cast<ABase_Item>(ItemActor);
 		// ItemActor에서 ItemID를 가져옵니다. ItemActor는 아이템 정보를 제공해야 합니다.
-
 		if(Item)
 		{
 			FInventoryItem InventoryItem;
@@ -251,20 +255,38 @@ void ABase_Character::PickupItem(AActor* ItemActor)
 			InventoryItem.ItemName = Item->ItemName;
 			InventoryItem.Quantity = Item->Quantity;
 			InventoryItem.ItemDescription = Item->ItemDescription;
-
-			// 아이템을 인벤토리에 추가합니다.
-			AddItemToInventory(InventoryItem);
-        
+			InventoryItem.ItemActor = Item;
+			
+			if (InventoryComponent)
+			{
+				InventoryComponent->AddItem(InventoryItem);
+			}
+			
 			// 아이템 액터를 월드에서 제거합니다.
 			ItemActor->Destroy();
 		}
 	}
 }
 
-void ABase_Character::AddItemToInventory(const FInventoryItem& Item)
+void ABase_Character::CheckGroundItem(AActor* ItemActor)
 {
-	if (Inventory)
+	if (ItemActor)
 	{
-		Inventory->AddItem(Item);
+		ABase_Item* Item = Cast<ABase_Item>(ItemActor);
+		
+		if(Item)
+		{
+			FInventoryItem InventoryItem;
+			InventoryItem.ItemID = Item->ItemID;
+			InventoryItem.ItemName = Item->ItemName;
+			InventoryItem.Quantity = Item->Quantity;
+			InventoryItem.ItemDescription = Item->ItemDescription;
+			InventoryItem.ItemActor = Item;
+			
+			if (GroundItemsComponent)
+			{
+				GroundItemsComponent->AddItem(InventoryItem);
+			}
+		}
 	}
 }
