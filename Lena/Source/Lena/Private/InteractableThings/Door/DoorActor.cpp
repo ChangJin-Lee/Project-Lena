@@ -67,7 +67,7 @@ bool ADoorActor::CheckRequiredItem()
 
 	ABase_Character* Character = Cast<ABase_Character>(UGameplayStatics::GetPlayerCharacter(this, 0));
 	
-	if (Character && Character->Inventory->FindItemByDescription(RequiredItemDescription) != INDEX_NONE)
+	if (Character && Character->InventoryComponent->FindItemByDescription(RequiredItemDescription) != INDEX_NONE)
 	{
 		UUserWidget* Widget = WidgetComponent->GetWidget();
 		if(Widget)
