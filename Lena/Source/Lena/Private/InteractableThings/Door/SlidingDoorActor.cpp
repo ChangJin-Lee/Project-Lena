@@ -24,6 +24,16 @@ void ASlidingDoorActor::BeginPlay()
     }
 }
 
+void ASlidingDoorActor::Open()
+{
+    InitialLocation = MeshComponent->GetRelativeLocation();
+    TargetLocation = FVector(0,130,0);
+    if (SlidingDoorTimeline)
+    {
+        SlidingDoorTimeline->PlayFromStart();
+    }
+}
+
 void ASlidingDoorActor::OpenSlidingDoor(FVector InTargetLocation)
 {
     InitialLocation = MeshComponent->GetRelativeLocation();

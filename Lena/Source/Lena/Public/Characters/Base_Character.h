@@ -6,6 +6,7 @@
 #include "Lena/Public/Items/Base_Item.h"
 #include "Lena/Public/Items/Gun.h"
 #include "GameFramework/Character.h"
+#include "Items/Inventory/Inventory.h"
 #include "Base_Character.generated.h"
 
 UCLASS()
@@ -84,13 +85,18 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Animation Slot")
 	void OnDead();
 
+	// -----------------------------
+	// Inventory
+	// -----------------------------
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Inventory")
+	AInventory* Inventory;
 
-	// 인벤토리
 	UFUNCTION(BlueprintCallable, Category="Inventory")
-	void AddItemToInventory(ABase_Item* Item);
+	void PickupItem(AActor* ItemActor);
 
 	UFUNCTION(BlueprintCallable, Category="Inventory")
-	bool HasItemInInventory(FName ItemName) const;
+	void AddItemToInventory(const FInventoryItem& Item);
 	
 private:
 	UPROPERTY(EditDefaultsOnly)
@@ -118,8 +124,4 @@ private:
 
 	UPROPERTY(BlueprintReadWrite, Category="Ammo", meta=(AllowPrivateAccess="true"))
 	int Ammo_5mm = 60;
-
-	/// 인벤토리
-	UPROPERTY()
-	TArray<ABase_Item*> Inventory;
 };

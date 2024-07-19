@@ -6,7 +6,8 @@
 #include "LockActor.h"
 #include "Camera/CameraComponent.h"
 #include "Components/TimelineComponent.h"
-#include "InteractableThings/Data/DataStructure.h"
+#include "Data/DataStructure.h"
+#include "Interface/InteractActionInterface.h"
 #include "ButtonLockActor.generated.h"
 
 UCLASS()
@@ -18,6 +19,8 @@ class LENA_API AButtonLockActor : public ALockActor
 public:
 	// Sets default values for this actor's properties
 	AButtonLockActor();
+
+	virtual void Unlock(AActor* ActorToUnlock) override;
 	
 	UFUNCTION(BlueprintCallable)
 	void MoveButton(UStaticMeshComponent* TargetMeshComponent);
@@ -29,7 +32,7 @@ public:
 	void ZoomOutCamera();
 
 	UFUNCTION(BlueprintCallable)
-	bool ValidPassword(FString input);
+	FString GetPressedPassword();
 	
 	UFUNCTION(BlueprintCallable)
 	void OpenLock();
@@ -115,7 +118,7 @@ private:
 	void LockCamera();
 	void UnLockCameara();
 
-	void MoveFinished();
+	void CameraMoveFinished();
 	void MoveCamera(AActor* TargetActor);
 	void OnMouseClick();
 
@@ -124,5 +127,5 @@ private:
 	AActor* CameraTargetLocationActor;
 	AActor* CameraInitialLocationActor;
 
-	AActor* CreateTargetActor(FVector Location, FRotator Rotation);
+	AActor* CreateCameraMoveTargetLocationActor(FVector Location, FRotator Rotation);
 };

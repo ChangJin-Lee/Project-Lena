@@ -19,6 +19,8 @@ class LENA_API AHingedDoorActor : public ADoorActor
 public:
 	AHingedDoorActor();
 
+	virtual void Open() override;
+
 	UFUNCTION(BlueprintCallable)
 	void OpenHingedDoor(FRotator TargetRotation);
 

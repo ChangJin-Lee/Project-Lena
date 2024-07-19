@@ -6,8 +6,8 @@
 #include "Characters/Base_Character.h"
 #include "Components/BoxComponent.h"
 #include "Game/Controller/ShooterPlayerController.h"
+#include "InteractableThings/Door/DoorActor.h"
 #include "Kismet/GameplayStatics.h"
-
 
 // Sets default values
 AButtonLockActor::AButtonLockActor()
@@ -44,6 +44,16 @@ AButtonLockActor::AButtonLockActor()
 	CameraMoveTimelineComponent = CreateDefaultSubobject<UTimelineComponent>(TEXT("CameraMoveTimelineComponent"));
 }
 
+void AButtonLockActor::Unlock(AActor* ActorToUnlock)
+{
+	Super::Unlock(ActorToUnlock);
+	ADoorActor* Door = Cast<ADoorActor>(ActorToUnlock);
+	if(Door)
+	{
+		Door->Open();
+	}
+}
+
 // Called when the game starts or when spawned
 void AButtonLockActor::BeginPlay()
 {
@@ -77,7 +87,7 @@ void AButtonLockActor::BeginPlay()
 			ZoomedCameraRotation.Yaw += -90.0f;
 			ZoomedCameraRotation.Pitch += -10.0f;
 
-			CameraTargetLocationActor = CreateTargetActor(ZoomedCameraLocation, ZoomedCameraRotation);
+			CameraTargetLocationActor = CreateCameraMoveTargetLocationActor(ZoomedCameraLocation, ZoomedCameraRotation);
 		}
 	}
 }
@@ -122,7 +132,11 @@ void AButtonLockActor::MoveButton(UStaticMeshComponent* TargetMeshComponent)
 	ButtonDataArray[FindIndex].IsCliked = !ButtonDataArray[FindIndex].IsCliked;
 
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), SoundEffect, GetActorLocation());
-	ValidPassword("1367");
+
+	if(CheckPassword(GetPressedPassword()))
+	{
+		OpenLock();
+	}
 }
 
 void AButtonLockActor::ButtonMovePlayFromStart(int32 index, float value)
@@ -207,7 +221,7 @@ void AButtonLockActor::UnLockCameara()
 }
 
 // Create Target Actor for SetViewTargetWithBlend in Camera Zoomin
-AActor* AButtonLockActor::CreateTargetActor(FVector Location, FRotator Rotation)
+AActor* AButtonLockActor::CreateCameraMoveTargetLocationActor(FVector Location, FRotator Rotation)
 {
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -239,7 +253,7 @@ void AButtonLockActor::MoveCamera(AActor* TargetActor)
 		GetWorld()->GetTimerManager().SetTimer(
 			TimerHandle,
 			this,
-			&AButtonLockActor::MoveFinished,
+			&AButtonLockActor::CameraMoveFinished,
 			TransitionParams.BlendTime,
 			false
 			);
@@ -247,12 +261,12 @@ void AButtonLockActor::MoveCamera(AActor* TargetActor)
 }
 
 
-void AButtonLockActor::MoveFinished()
+void AButtonLockActor::CameraMoveFinished()
 {
 	bIsZoomedIn = false;
 }
 
-bool AButtonLockActor::ValidPassword(FString input)
+FString AButtonLockActor::GetPressedPassword()
 {
 	FString string = "";
 	for(int32 i = 0; i < ButtonNums; ++i)
@@ -262,28 +276,23 @@ bool AButtonLockActor::ValidPassword(FString input)
 			string+=FString::FromInt(i+1);
 		}
 	}
-	
-	if(string == input)
-	{
-		OpenLock();
-		FTimerHandle TimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(
-			TimerHandle,
-			this,
-			&AButtonLockActor::DestroyButtonLock,
-			1.0f,
-			false
-			);
-		return true;
-	}
 
-	return false;
+	return string;
 }
 
 
 void AButtonLockActor::OpenLock()
 {
-	HitBox->SetActive(false);
+	Unlock(TargetDoor);
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(
+		TimerHandle,
+		this,
+		&AButtonLockActor::DestroyButtonLock,
+		1.0f,
+		false
+		);
+	
 	ButtonLockShackleMeshComponent->SetSimulatePhysics(true);
 	ButtonLockBodyMeshComponent->SetSimulatePhysics(true);
 	ButtonLockKeypadMeshComponent->SetSimulatePhysics(true);
@@ -294,7 +303,6 @@ void AButtonLockActor::OpenLock()
 	WidgetComponent->SetVisibility(false);
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), RightAnswerSound, GetActorLocation());
 }
-
 
 void AButtonLockActor::DestroyButtonLock()
 {
