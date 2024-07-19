@@ -114,6 +114,7 @@ void AInteractManager::SetupConditionWithActor(AActor* Actor, const FConditionEn
 			{
 				// 특정 자물쇠와 문을 연결하는 로직 추가
 				// 예를 들어, 자물쇠가 풀리면 문을 여는 로직
+				DoorActor->RequiredItemDescription = "Locked";
 				LockActor->Password = ConditionEntry.AdditionalData;
 				LockActor->TargetDoor = DoorActor;
 			}
