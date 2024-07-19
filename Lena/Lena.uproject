@@ -29,6 +29,10 @@
 		{
 			"Name": "VRM4U",
 			"Enabled": true
+		},
+		{
+			"Name": "InventoryPlugin",
+			"Enabled": false
 		}
 	]
 }

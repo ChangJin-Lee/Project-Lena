@@ -23,9 +23,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetInstruction(FText Input);
 	UFUNCTION(BlueprintCallable)
-	void SetInstructionAtBeginPlay(FText Input);
+	void SetInstructionAtBeginPlay(FText Text, FLinearColor Color);
 	UFUNCTION(BlueprintCallable)
 	void SetInstructionColor(FLinearColor Input);
+
+	UFUNCTION(BlueprintCallable)
+	void DisplayInstructionWithSeconds(FText Text, FLinearColor Color, float DelayTime);
 	FText GetInstruction();
 
 protected:
@@ -37,4 +40,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* Instructions0;
+	
+	UPROPERTY(meta = (BindWidget))
+	FLinearColor Instructions0_Color = FLinearColor::White;
+
+	void WidgetResetToDefaultSettingDelayFunction();
 };

@@ -20,9 +20,12 @@ struct FInventoryItem
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	FString ItemDescription; // 추가 정보
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Item")
+	AActor* ItemActor;
+
 	// 추가할 다른 속성들
 
 	FInventoryItem()
-		: ItemID(TEXT("")), ItemName(TEXT("")), Quantity(1), ItemDescription(TEXT(""))
+		: ItemID(TEXT("")), ItemName(TEXT("")), Quantity(1), ItemDescription(TEXT("")), ItemActor(nullptr)
 	{}
 };

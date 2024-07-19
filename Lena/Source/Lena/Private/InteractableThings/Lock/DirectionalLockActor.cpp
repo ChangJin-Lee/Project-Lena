@@ -43,7 +43,7 @@ void ADirectionalLockActor::BeginPlay()
 	{
 		UUserWidget* Widget = WidgetComponent->GetWidget();
 		UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
-		InteractWidget->SetInstructionAtBeginPlay(FText::FromString("Press Arrow Keys"));
+		InteractWidget->SetInstructionAtBeginPlay(FText::FromString("Press Arrow Keys"), FLinearColor::White);
 	}
 
 	if(DirectionalLockCurve)

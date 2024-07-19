@@ -23,7 +23,7 @@ void APortalActor::BeginPlay()
 	{
 		UUserWidget* Widget = WidgetComponent->GetWidget();
 		UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
-		InteractWidget->SetInstructionAtBeginPlay(FText::FromString("Press E To Restart!"));
+		InteractWidget->SetInstructionAtBeginPlay(FText::FromString("Press E To Restart!"), FLinearColor::Blue);
 	}
 }
 

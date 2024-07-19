@@ -3,19 +3,25 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Components/ActorComponent.h"
 #include "Items/ItemData/InventoryItem.h"
-#include "Inventory.generated.h"
+#include "InventoryComponent.generated.h"
 
-UCLASS()
-class LENA_API AInventory : public AActor
+
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+class LENA_API UInventoryComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
-	AInventory();
+	UInventoryComponent();
 
+protected:
+	virtual void BeginPlay() override;
+	virtual void InitializeComponent() override;
+
+public:
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Inventory")
 	TArray<FInventoryItem> Items;
 
@@ -34,11 +40,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Inventory")
 	int32 FindItemByDescription(const FString& ItemDescription);
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	UFUNCTION(BlueprintCallable, Category="Inventory")
+	void ClearItems(); // 추가된 함수
 
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 };

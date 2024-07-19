@@ -50,6 +50,7 @@ void AButtonLockActor::Unlock(AActor* ActorToUnlock)
 	ADoorActor* Door = Cast<ADoorActor>(ActorToUnlock);
 	if(Door)
 	{
+		Door->RequiredItemDescription = "Default";
 		Door->Open();
 	}
 }
@@ -73,7 +74,7 @@ void AButtonLockActor::BeginPlay()
 			ButtonTimelines[i]->SetTimelineFinishedFunc(ButtonLockButtonMoveFinishedCallback);
 		}
 	}
-
+ 
 	PlayerController = UGameplayStatics::GetPlayerController(this,0);
 	
 	if(PlayerController)

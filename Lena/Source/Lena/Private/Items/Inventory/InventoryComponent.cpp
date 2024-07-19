@@ -1,17 +1,29 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Items/Inventory/Inventory.h"
+#include "Items/Inventory/InventoryComponent.h"
 #include "Engine/DataTable.h"
 
-// Sets default values
-AInventory::AInventory()
+UInventoryComponent::UInventoryComponent()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
+	bWantsInitializeComponent = true;
 }
 
-void AInventory::AddItem(const FInventoryItem& ItemData)
+void UInventoryComponent::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void UInventoryComponent::InitializeComponent()
+{
+	Super::InitializeComponent();
+
+	Items.Empty();
+}
+
+
+void UInventoryComponent::AddItem(const FInventoryItem& ItemData)
 {
 	int32 ItemIndex = FindItemByID(ItemData.ItemID);
 	if (ItemIndex != INDEX_NONE)
@@ -24,7 +36,7 @@ void AInventory::AddItem(const FInventoryItem& ItemData)
 	}
 }
 
-bool AInventory::RemoveItem(const FString& ItemID)
+bool UInventoryComponent::RemoveItem(const FString& ItemID)
 {
 	for (int32 i = 0; i < Items.Num(); ++i)
 	{
@@ -37,7 +49,7 @@ bool AInventory::RemoveItem(const FString& ItemID)
 	return false;
 }
 
-bool AInventory::UpdateItemQuantity(const FString& ItemID, int32 NewQuantity)
+bool UInventoryComponent::UpdateItemQuantity(const FString& ItemID, int32 NewQuantity)
 {
 	
 	for (FInventoryItem& Item : Items)
@@ -51,7 +63,7 @@ bool AInventory::UpdateItemQuantity(const FString& ItemID, int32 NewQuantity)
 	return false;
 }
 
-int32 AInventory::FindItemByID(const FString& ItemID)
+int32 UInventoryComponent::FindItemByID(const FString& ItemID)
 {
 	for (int32 Index = 0; Index < Items.Num(); ++Index)
 	{
@@ -63,7 +75,7 @@ int32 AInventory::FindItemByID(const FString& ItemID)
 	return INDEX_NONE;
 }
 
-int32 AInventory::FindItemByDescription(const FString& ItemDescription)
+int32 UInventoryComponent::FindItemByDescription(const FString& ItemDescription)
 {
 	for (int32 Index = 0; Index < Items.Num(); ++Index)
 	{
@@ -75,16 +87,14 @@ int32 AInventory::FindItemByDescription(const FString& ItemDescription)
 	return INDEX_NONE;
 }
 
-// Called when the game starts or when spawned
-void AInventory::BeginPlay()
+void UInventoryComponent::ClearItems() 
 {
-	Super::BeginPlay();
-	
+	for (FInventoryItem& Item : Items)
+	{
+		if (Item.ItemActor)
+		{
+			Item.ItemActor = nullptr;
+		}
+	}
+	Items.Empty();
 }
-
-// Called every frame
-void AInventory::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-

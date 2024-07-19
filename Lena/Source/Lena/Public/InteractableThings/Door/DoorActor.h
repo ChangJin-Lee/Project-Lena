@@ -35,6 +35,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Door")
 	virtual void Close();
 
+	UFUNCTION(BlueprintCallable, Category="Door")
+	virtual void OpenFail();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -62,4 +65,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
 	FName RequiredItem;
 
+private:
+	bool IsDoorOpen = false;
 };
