@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Characters/Base_Character.h"
 #include "GameFramework/PlayerController.h"
+#include "UI/InteractWidget.h"
 #include "UI/InventoryWidget.h"
 #include "ShooterPlayerController.generated.h"
 
@@ -42,6 +43,12 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"), Category="Inventory")
 	UInventoryWidget* InventoryWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"), Category="Inventory")
+	UInteractWidget* ItemInfoWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"), Category="Inventory")
+	AActor* LineTraceItem;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"), Category="Inventory")
 	bool IsInWidget = false;
@@ -55,6 +62,7 @@ public:
 	void InputModeGame();
 	
 	void HandlePickUpItem();
+	void CheckPickUpItemLine();
 	UFUNCTION(BlueprintCallable)
 	void CheckPickUpItemSweep();
 	
@@ -78,4 +86,6 @@ private:
 
 	void OnMouseClick();
 	bool bIsClickEnabled;
+
+	FTimerHandle TimerHandle_CheckPickUpItem;
 };

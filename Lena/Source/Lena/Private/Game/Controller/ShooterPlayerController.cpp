@@ -16,11 +16,11 @@
 
 AShooterPlayerController::AShooterPlayerController()
 {
-	static ConstructorHelpers::FObjectFinder<UInventoryWidget> InventoryWidgetFinder(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UI/HUD/WBP_InventoryMain.WBP_InventoryMain'"));
-	if(InventoryWidgetFinder.Succeeded())
-	{
-		InventoryWidget = InventoryWidgetFinder.Object;
-	}
+	//static ConstructorHelpers::FObjectFinder<UInventoryWidget> InventoryWidgetFinder(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UI/HUD/WBP_InventoryMain.WBP_InventoryMain'"));
+	//if(InventoryWidgetFinder.Succeeded())
+	//{
+	//	InventoryWidget = InventoryWidgetFinder.Object;
+	//}
 }
 
 
@@ -49,6 +49,11 @@ void AShooterPlayerController::BeginPlay()
 
 	// Character Reference caching
 	Base_Character = Cast<ABase_Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+	
+	// Item Info Widget AddViewport
+	ItemInfoWidget->AddToViewport();
+	ItemInfoWidget->SetInstructionAtBeginPlay(FText::FromString(""), FLinearColor::White);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle_CheckPickUpItem, this, &AShooterPlayerController::CheckPickUpItemLine, 0.1f, true);
 }
 
 void AShooterPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner)
@@ -166,14 +171,26 @@ void AShooterPlayerController::InputModeGame()
 
 void AShooterPlayerController::HandlePickUpItem()
 {
-	FVector Start = PlayerCameraManager->GetCameraLocation();
+	UE_LOG(LogTemp, Warning, TEXT("HandlePickUpItem"));
+
+	if(LineTraceItem && Base_Character)
+	{
+		Base_Character->PickupItem(LineTraceItem);
+	}
+}
+
+
+void AShooterPlayerController::CheckPickUpItemLine()
+{
+	FVector Start = PlayerCameraManager->GetCameraLocation() + (PlayerCameraManager->GetActorForwardVector() * 30.0f);;
 	FVector End = PlayerCameraManager->GetCameraLocation() + (PlayerCameraManager->GetActorForwardVector() * 400.0f); // Adjust the length of the ray as needed
 
 	FHitResult HitResult;
 	FCollisionQueryParams Params;
-	// Params.AddIgnoredActor(this);
+	Params.AddIgnoredActor(this);
+	float Radius = 15.0f;
 
-	if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, Params))
+	if (GetWorld()->SweepSingleByChannel(HitResult, Start, End, FQuat::Identity, ECC_Visibility,FCollisionShape::MakeSphere(Radius), Params))
 	{
 		AActor* HitActor = HitResult.GetActor();
 		if(HitActor)
@@ -181,15 +198,17 @@ void AShooterPlayerController::HandlePickUpItem()
 			ABase_Item* Item = Cast<ABase_Item>(HitActor);
 			if(Item)
 			{
-				if(Base_Character)
-				{
-					Base_Character->PickupItem(Item);
-				}
+				ItemInfoWidget->SetInstruction(FText::FromString(Item->ItemName));
+				LineTraceItem = Item;
+				return;
 			}
 		}
 	}
+	
+	ItemInfoWidget->SetInstruction(FText::FromString(""));
+	LineTraceItem = nullptr;
 	// DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1.0f, 0, 1.0f);
-	// DrawDebugSphere(GetWorld(), End, 25.0f, 50, FColor::Red, false, 1.0f, 0, 1.0f);
+	// DrawDebugSphere(GetWorld(), End, Radius, 3, FColor::Red, false, 1.0f, 0, 1.0f);
 }
 
 void AShooterPlayerController::CheckPickUpItemSweep()
@@ -200,7 +219,7 @@ void AShooterPlayerController::CheckPickUpItemSweep()
 
 	TArray<FHitResult> HitResults;
 	FCollisionQueryParams Params;
-	float Radius = 60.0f;
+	float Radius = 140.0f;
 
 	if(GetWorld()->SweepMultiByChannel(HitResults, Start, End, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(Radius), Params))
 	{

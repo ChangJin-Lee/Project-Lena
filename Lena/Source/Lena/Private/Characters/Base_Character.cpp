@@ -241,6 +241,43 @@ bool ABase_Character::ReloadGun()
 // Inventory
 // -----------------------------
 
+// 아이템 떨어뜨리기
+void ABase_Character::DropItem(FInventoryItem ItemData)
+{
+	ABase_Item* Item = Cast<ABase_Item>(ItemData.ItemActor);
+	// ItemActor에서 ItemID를 가져옵니다. ItemActor는 아이템 정보를 제공해야 합니다.
+	if(Item)
+	{
+		float Rad = 10.0f; // 반경 설정
+		float InnerRad = 5.0f; // 제외할 범위 설정
+
+		// 랜덤한 값을 선택하는 함수
+		auto GetRandomOffset = [Rad, InnerRad]() -> float
+		{
+			float Offset;
+			do
+			{
+				Offset = FMath::RandRange(-Rad, Rad);
+			} while (Offset > -InnerRad && Offset < InnerRad);
+			return Offset;
+		};
+
+		float RandomX = GetRandomOffset();
+		float RandomY = GetRandomOffset();
+		
+		FVector Location = GetActorLocation() + (RandomX, RandomY, 0.0f);
+		FActorSpawnParameters Parameters;
+		ABase_Item* SpawnedItem =  GetWorld()->SpawnActor<ABase_Item>(Item->GetClass(), Location, GetActorRotation(), Parameters);
+		if(SpawnedItem)
+		{
+			SpawnedItem->ItemID = ItemData.ItemID;
+			SpawnedItem->ItemName = ItemData.ItemName;
+			SpawnedItem->Quantity = ItemData.Quantity;
+			SpawnedItem->ItemDescription = ItemData.ItemDescription;
+		}
+	}
+}
+
 // 아이템 줍기
 void ABase_Character::PickupItem(AActor* ItemActor)
 {
