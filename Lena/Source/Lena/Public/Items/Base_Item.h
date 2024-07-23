@@ -34,10 +34,16 @@ public:
 	FString ItemName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	UTexture2D* ItemImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	FString ItemDescription;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	int32 Quantity;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	float weight;
 	
 private:
 	UPROPERTY(EditAnywhere)
