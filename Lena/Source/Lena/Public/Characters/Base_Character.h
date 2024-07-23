@@ -102,10 +102,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category="Inventory")
 	void DropItem(FInventoryItem ItemData);
-
-	UFUNCTION(BlueprintCallable, Category="Inventory")
-	void DropItem(FInventoryItem ItemData);
-
+	
 	UFUNCTION(BlueprintCallable, Category="Inventory")
 	void CheckGroundItem(AActor* ItemActor);
 

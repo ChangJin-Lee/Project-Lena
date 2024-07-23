@@ -4,11 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "InteractableThings/InteractableActor.h"
 #include "Base_Item.generated.h"
 
 UCLASS()
-class LENA_API ABase_Item : public AInteractableActor
+class LENA_API ABase_Item : public AActor
 {
 	GENERATED_BODY()
 	
@@ -51,6 +50,9 @@ private:
 	
 	UPROPERTY(EditAnywhere)
 	USkeletalMeshComponent* SkeletalMeshComponent;
+
+	UPROPERTY(EditAnywhere)
+	USceneComponent* Root;
 
 	UPROPERTY(EditAnywhere)
 	USoundBase* PickupSound;

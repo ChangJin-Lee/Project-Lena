@@ -50,7 +50,7 @@ void AButtonLockActor::Unlock(AActor* ActorToUnlock)
 	ADoorActor* Door = Cast<ADoorActor>(ActorToUnlock);
 	if(Door)
 	{
-		Door->RequiredItemDescription = "Default";
+		Door->RequiredCondition = "Default";
 		Door->Open();
 	}
 }

@@ -33,7 +33,7 @@ private:
 
 	TMap<FString, AActor*> LockMap;
 	TMap<FString, AActor*> DoorMap;
-	TMap<FString, AActor*> ItemMap;
+	TMap<FString, TArray<AActor*>> ItemMap;
 
 	void LoadDataTableForLevel();
 };

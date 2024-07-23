@@ -69,7 +69,16 @@ void AInteractManager::SetupLockAndDoor()
 		else if (Actor->IsA<ABase_Item>())
 		{
 			ABase_Item* Item = Cast<ABase_Item>(Actor);
-			ItemMap.Add(Item->ItemDescription, Actor);
+			if(ItemMap.Contains(Item->ItemName))
+			{
+				ItemMap[Item->ItemName].Add(Item);
+			}
+			else
+			{
+				TArray<AActor*> NewArray;
+				NewArray.Add(Item);
+				ItemMap.Add(Item->ItemName, NewArray);
+			}
 		}
 	}
 	
@@ -80,7 +89,7 @@ void AInteractManager::SetupLockAndDoor()
 	for(auto k : ItemMap)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *k.Key);
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *k.Value->GetActorLabel());
+		// UE_LOG(LogTemp, Warning, TEXT("%s"), *k.Value->GetActorLabel());
 	}
 
 	// Door 기준
@@ -114,7 +123,7 @@ void AInteractManager::SetupConditionWithActor(AActor* Actor, const FConditionEn
 			{
 				// 특정 자물쇠와 문을 연결하는 로직 추가
 				// 예를 들어, 자물쇠가 풀리면 문을 여는 로직
-				DoorActor->RequiredItemDescription = "Locked";
+				DoorActor->RequiredCondition = "Locked";
 				LockActor->Password = ConditionEntry.AdditionalData;
 				LockActor->TargetDoor = DoorActor;
 			}
@@ -123,12 +132,13 @@ void AInteractManager::SetupConditionWithActor(AActor* Actor, const FConditionEn
 	else if (ConditionEntry.ConditionType == "Item")
 	{
 		ADoorActor* DoorActor = Cast<ADoorActor>(Actor);
-		DoorActor->RequiredItemDescription = ConditionEntry.AdditionalData;
+		DoorActor->RequiredCondition = "Item";
+		DoorActor->RequiredItem.Add(ConditionEntry.ConditionID);
 	}
 	else if (ConditionEntry.ConditionType == "Default")
 	{
 		ADoorActor* DoorActor = Cast<ADoorActor>(Actor);
-		DoorActor->RequiredItemDescription = "Default";
+		DoorActor->RequiredCondition = "Default";
 	}
 	else if (ConditionEntry.ConditionType == "Dialogue")
 	{
