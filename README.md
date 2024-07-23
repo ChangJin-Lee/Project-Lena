@@ -34,7 +34,8 @@
 
 ## Development Diaries
 
-- **2024.07.11**: [#13 - 아이템 관리와 월드 스폰 시스템](https://velog.io/@whoamicj/UE5-Lena-Dev-Diary-13-%EC%95%84%EC%9D%B4%ED%85%9C-%EA%B4%80%EB%A6%AC%EC%99%80-%EC%9B%94%EB%93%9C-%EC%8A%A4%ED%8F%B0-%EC%8B%9C%EC%8A%A4%ED%85%9C)
+- **2024.07.16**: [#14 - 인벤토리 위젯 구현 및 HUD 크로스헤어 변경](https://velog.io/@whoamicj/UE5-Lena-Dev-Diary-14-%EC%9D%B8%EB%B2%A4%ED%86%A0%EB%A6%AC-%EC%9C%84%EC%A0%AF-%EA%B5%AC%ED%98%84-%EB%B0%8F-HUD-%ED%81%AC%EB%A1%9C%EC%8A%A4%ED%97%A4%EC%96%B4-%EB%B3%80%EA%B2%BD-swhi1c0u)
+- **2024.07.13**: [#13 - 아이템 관리와 월드 스폰 시스템](https://velog.io/@whoamicj/UE5-Lena-Dev-Diary-13-%EC%95%84%EC%9D%B4%ED%85%9C-%EA%B4%80%EB%A6%AC%EC%99%80-%EC%9B%94%EB%93%9C-%EC%8A%A4%ED%8F%B0-%EC%8B%9C%EC%8A%A4%ED%85%9C)
 - **2024.07.11**: [#12 - 버튼 자물쇠 로직 구현 및 최적화](https://velog.io/@whoamicj/UE5-Lena-Dev-Diary-12-%EB%B2%84%ED%8A%BC-%EC%9E%90%EB%AC%BC%EC%87%A0-%EA%B5%AC%ED%98%84%EA%B3%BC-%EC%B5%9C%EC%A0%81%ED%99%94)
 - **2024.07.05**: [#11 - 방향 자물쇠 로직 구현](https://velog.io/@whoamicj/UE5-Lena-Dev-Diary-11-%EB%B0%A9%ED%96%A5-%EC%9E%90%EB%AC%BC%EC%87%A0-%EB%A1%9C%EC%A7%81-%EA%B5%AC%ED%98%84)
 - **2024.07.03**: [#10 - 조합 자물쇠 로직 구현](https://velog.io/@whoamicj/UE5-Lena-Dev-Diary-10-%EC%A1%B0%ED%95%A9-%EC%9E%90%EB%AC%BC%EC%87%A0-%EB%A1%9C%EC%A7%81-%EA%B5%AC%ED%98%84)
@@ -54,9 +55,12 @@
 ## Pull Requests
 
 ### In Progress
-- [Pull Request #13](https://github.com/ChangJin-Lee/Project-Lena/pull/13)
+
+=======
+- [Pull Request #14](https://github.com/ChangJin-Lee/Project-Lena/pull/14)
 
 ### Merged
+- [Pull Request #13](https://github.com/ChangJin-Lee/Project-Lena/pull/13)
 - [Pull Request #12](https://github.com/ChangJin-Lee/Project-Lena/pull/12)
 - [Pull Request #11](https://github.com/ChangJin-Lee/Project-Lena/pull/11)
 - [Pull Request #10](https://github.com/ChangJin-Lee/Project-Lena/pull/10)

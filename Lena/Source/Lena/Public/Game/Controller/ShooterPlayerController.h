@@ -54,7 +54,10 @@ private:
 	bool IsInWidget = false;
 
 	ABase_Character* Base_Character;
+	ABase_Item* LineTraceItem;
 
+	FTimerHandle TimerHandle_CheckPickUpItem;
+	
 public:
 	UFUNCTION(BlueprintCallable)
 	void InputModeUI();

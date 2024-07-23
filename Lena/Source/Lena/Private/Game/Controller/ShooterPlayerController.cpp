@@ -219,7 +219,8 @@ void AShooterPlayerController::CheckPickUpItemSweep()
 
 	TArray<FHitResult> HitResults;
 	FCollisionQueryParams Params;
-	float Radius = 140.0f;
+	// Params.AddIgnoredActor(Character_);
+	float Radius = 130.0f;
 
 	if(GetWorld()->SweepMultiByChannel(HitResults, Start, End, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(Radius), Params))
 	{

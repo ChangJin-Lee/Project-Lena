@@ -56,13 +56,12 @@ bool ADoorActor::CheckRequiredItem()
 	// Default door Just Open
 	if(RequiredItemDescription == "Default")
 	{
-		IsDoorOpen = true;
 		return true;
 	}
 
-	if(IsDoorOpen)
+	if(RequiredItemDescription == "Lock")
 	{
-		return true;
+		return false;
 	}
 
 	ABase_Character* Character = Cast<ABase_Character>(UGameplayStatics::GetPlayerCharacter(this, 0));

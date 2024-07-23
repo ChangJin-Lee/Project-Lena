@@ -309,6 +309,22 @@ void ABase_Character::PickupItem(AActor* ItemActor)
 	}
 }
 
+// 아이템 떨어뜨리기
+void ABase_Character::DropItem(FInventoryItem ItemData)
+{
+	ABase_Item* Item = Cast<ABase_Item>(ItemData.ItemActor);
+	if(Item)
+	{
+		// Item->ItemID = ItemData.ItemID;
+		// Item->ItemName = ItemData.ItemName;
+		// Item->Quantity = 1; // 일단은 하나만 버리는 걸로 가정.
+		// Item->ItemDescription = ItemData.ItemDescription;
+		//
+		// FActorSpawnParameters Parameters;
+		// GetWorld()->SpawnActor<ABase_Item>(Item->GetClass(), GetActorLocation(), GetActorRotation(), Parameters);
+	}
+}
+
 void ABase_Character::CheckGroundItem(AActor* ItemActor)
 {
 	if (ItemActor)
