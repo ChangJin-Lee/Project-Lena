@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "InteractableThings/InteractableActor.h"
+#include "Data/ConditionMapping.h"
 #include "DoorActor.generated.h"
 
 class UWidgetComponent;
@@ -22,10 +23,13 @@ public:
 	void OpenDoorEvent();
 
 	UFUNCTION(BlueprintCallable)
-	bool CheckRequiredItem();
+	bool CheckConditions();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Lock")
-	FString RequiredItemDescription;
+	FString RequiredCondition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door")
+	TArray<FString> RequiredItem;
 	
 	FString GetPassWord();
 
@@ -61,10 +65,7 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category="Door")
 	TSubclassOf<class UCameraShakeBase> WrongAnswerCameraShakeClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Door", meta = (AllowPrivateAccess = "true"))
-	FName RequiredItem;
-
+	
 private:
 	bool IsDoorOpen = false;
 };

@@ -51,22 +51,39 @@ void ADoorActor::BeginPlay()
 	NumpadWidgetComponent->SetVisibility(false);
 }
 
-bool ADoorActor::CheckRequiredItem()
+bool ADoorActor::CheckConditions()
 {
+	ABase_Character* Character = Cast<ABase_Character>(UGameplayStatics::GetPlayerCharacter(this, 0));
+
 	// Default door Just Open
-	if(RequiredItemDescription == "Default")
+	if(RequiredCondition == "Default")
 	{
 		return true;
 	}
-
-	if(RequiredItemDescription == "Lock")
+	else if(RequiredCondition == "Lock")
 	{
 		return false;
 	}
+	else if(RequiredCondition == "Item")
+	{
+		TMap<FString, AActor*> CheckItemMap;
+		for(const FInventoryItem& InventoryItem : Character->InventoryComponent->Items)
+		{
+			CheckItemMap[InventoryItem.ItemName] = InventoryItem.ItemActor;
+		}
 
-	ABase_Character* Character = Cast<ABase_Character>(UGameplayStatics::GetPlayerCharacter(this, 0));
+		if(CheckItemMap.Num() == RequiredItem.Num())
+		{
+			for(const TPair<FString, AActor*>& ItemPair : CheckItemMap)
+			{
+				Character->InventoryComponent->RemoveItemByName(ItemPair.Key);
+			}
+			return true;
+		}
+		return false;
+	}
 	
-	if (Character && Character->InventoryComponent->FindItemByDescription(RequiredItemDescription) != INDEX_NONE)
+	if (Character && Character->InventoryComponent->FindItemByDescription(RequiredCondition) != INDEX_NONE)
 	{
 		UUserWidget* Widget = WidgetComponent->GetWidget();
 		if(Widget)
