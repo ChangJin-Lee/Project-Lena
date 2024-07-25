@@ -69,7 +69,7 @@ bool ADoorActor::CheckConditions()
 		TMap<FString, AActor*> CheckItemMap;
 		for(const FInventoryItem& InventoryItem : Character->InventoryComponent->Items)
 		{
-			CheckItemMap[InventoryItem.ItemName] = InventoryItem.ItemActor;
+			CheckItemMap.Add(InventoryItem.ItemName, InventoryItem.ItemActor);
 		}
 
 		if(CheckItemMap.Num() == RequiredItem.Num())

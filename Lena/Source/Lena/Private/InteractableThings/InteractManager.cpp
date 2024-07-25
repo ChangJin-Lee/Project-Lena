@@ -45,10 +45,6 @@ void AInteractManager::LoadDataTableForLevel()
 	{
 		LockDoorMappingTable = LockDoorMappingData.Object;
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed to load DataTable"));
-	}
 }
 
 
@@ -114,26 +110,37 @@ void AInteractManager::SetupConditionWithActor(AActor* Actor, const FConditionEn
 	UE_LOG(LogTemp, Warning, TEXT("SetupConditionWithActor start"));
 	if(ConditionEntry.ConditionType == "Lock")
 	{
-		AActor** FoundLock = LockMap.Find(ConditionEntry.ConditionID);
-		if(FoundLock)
+		ADoorActor* DoorActor = Cast<ADoorActor>(Actor);
+		DoorActor->RequiredCondition = "Locked";
+		
+		for (int32 i = 0; i < ConditionEntry.ConditionID.Num(); ++i)
 		{
-			ALockActor* LockActor = Cast<ALockActor>(*FoundLock);
-			ADoorActor* DoorActor = Cast<ADoorActor>(Actor);
-			if(LockActor)
+			const FString& LockID = ConditionEntry.ConditionID[i];
+			AActor** FoundLock = LockMap.Find(LockID);
+			if (FoundLock)
 			{
-				// 특정 자물쇠와 문을 연결하는 로직 추가
-				// 예를 들어, 자물쇠가 풀리면 문을 여는 로직
-				DoorActor->RequiredCondition = "Locked";
-				LockActor->Password = ConditionEntry.AdditionalData;
-				LockActor->TargetDoor = DoorActor;
+				ALockActor* LockActor = Cast<ALockActor>(*FoundLock);
+				if (LockActor)
+				{
+					// 같은 인덱스의 AdditionalData 값을 사용
+					if (ConditionEntry.AdditionalData.IsValidIndex(i))
+					{
+						LockActor->Password = ConditionEntry.AdditionalData[i];
+					}
+					LockActor->TargetDoor = DoorActor;
+				}
 			}
 		}
+		
 	}
 	else if (ConditionEntry.ConditionType == "Item")
 	{
 		ADoorActor* DoorActor = Cast<ADoorActor>(Actor);
 		DoorActor->RequiredCondition = "Item";
-		DoorActor->RequiredItem.Add(ConditionEntry.ConditionID);
+		for(const FString& ItemID : ConditionEntry.ConditionID)
+		{
+			DoorActor->RequiredItem.Add(ItemID);
+		}
 	}
 	else if (ConditionEntry.ConditionType == "Default")
 	{

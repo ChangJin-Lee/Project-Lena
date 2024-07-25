@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InteractableActor.h"
+#include "InteractableThings/InteractableActor.h"
 #include "ButtonActor.generated.h"
 
 UCLASS()
