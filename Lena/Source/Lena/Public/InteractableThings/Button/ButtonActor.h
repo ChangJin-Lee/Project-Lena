@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "InteractableThings/InteractableActor.h"
+#include "InteractableThings/Door/DoorActor.h"
+#include "Items/Base_Item.h"
 #include "ButtonActor.generated.h"
 
 UCLASS()
@@ -22,4 +24,21 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, Category="Touch")
+	TArray<FString> RequiredItem;
+
+	UPROPERTY(EditAnywhere, Category="Touch")
+	ADoorActor* DoorActor;
+
+	bool CheckConditions();
+
+	UFUNCTION(BlueprintCallable)
+	void OpenDoor();
+
+private:
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* ButtonMesh;
+	
+	FTimerHandle WrongAnswerDelayHandle;
 };

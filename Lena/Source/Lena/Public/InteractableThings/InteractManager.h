@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Data/ConditionMapping.h"
 #include "GameFramework/Actor.h"
+#include "Data/ConditionMapping.h"
 #include "InteractManager.generated.h"
 
 UCLASS()
@@ -34,6 +34,7 @@ private:
 	TMap<FString, AActor*> LockMap;
 	TMap<FString, AActor*> DoorMap;
 	TMap<FString, TArray<AActor*>> ItemMap;
-
+	TMap<FString, AActor*> ButtonMap;
+	
 	void LoadDataTableForLevel();
 };

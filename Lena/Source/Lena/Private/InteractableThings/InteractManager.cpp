@@ -6,6 +6,7 @@
 #include "InteractableThings/Door/DoorActor.h"
 #include "InteractableThings/Lock/LockActor.h"
 #include "Engine/World.h"
+#include "InteractableThings/Button/ButtonActor.h"
 #include "Interface/InteractActionInterface.h"
 #include "Items/Base_Item.h"
 #include "Kismet/GameplayStatics.h"
@@ -76,15 +77,20 @@ void AInteractManager::SetupLockAndDoor()
 				ItemMap.Add(Item->ItemName, NewArray);
 			}
 		}
+		else if (Actor->IsA<AButtonActor>())
+		{
+			AButtonActor* Button = Cast<AButtonActor>(Actor);
+			ButtonMap.Add(Button->GetActorLabel(), Button);
+		}
 	}
 	
 	const FString ContextString(TEXT("LockDoorMappingTableContext"));
 	TArray<FActorEntry*> AllRows;
 	LockDoorMappingTable->GetAllRows(ContextString, AllRows);
 
-	for(auto k : ItemMap)
+	for(auto k : ButtonMap)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *k.Key);
+		UE_LOG(LogTemp, Warning, TEXT("ButtonMap :  %s"), *k.Key);
 		// UE_LOG(LogTemp, Warning, TEXT("%s"), *k.Value->GetActorLabel());
 	}
 
@@ -131,7 +137,6 @@ void AInteractManager::SetupConditionWithActor(AActor* Actor, const FConditionEn
 				}
 			}
 		}
-		
 	}
 	else if (ConditionEntry.ConditionType == "Item")
 	{
@@ -146,6 +151,22 @@ void AInteractManager::SetupConditionWithActor(AActor* Actor, const FConditionEn
 	{
 		ADoorActor* DoorActor = Cast<ADoorActor>(Actor);
 		DoorActor->RequiredCondition = "Default";
+	}
+	else if (ConditionEntry.ConditionType == "Button")
+	{
+		ADoorActor* DoorActor = Cast<ADoorActor>(Actor);
+		DoorActor->RequiredCondition = "Button";
+		for(int32 i = 0 ; i <  ConditionEntry.ConditionID.Num(); ++i)
+		{
+			const FString ButtonName = ConditionEntry.ConditionID[i];
+			AActor** FindActor = ButtonMap.Find(ButtonName);
+			if(FindActor)
+			{
+				AButtonActor* ButtonActor = Cast<AButtonActor>(*FindActor);
+				ButtonActor->RequiredItem.Add(ConditionEntry.AdditionalData[i]);
+				ButtonActor->DoorActor = DoorActor;
+			}
+		}
 	}
 	else if (ConditionEntry.ConditionType == "Dialogue")
 	{
