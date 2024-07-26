@@ -163,8 +163,11 @@ void AInteractManager::SetupConditionWithActor(AActor* Actor, const FConditionEn
 			if(FindActor)
 			{
 				AButtonActor* ButtonActor = Cast<AButtonActor>(*FindActor);
-				ButtonActor->RequiredItem.Add(ConditionEntry.AdditionalData[i]);
 				ButtonActor->DoorActor = DoorActor;
+				if(!ConditionEntry.AdditionalData.IsEmpty())
+				{
+					ButtonActor->RequiredItem.Add(ConditionEntry.AdditionalData[i]);
+				}
 			}
 		}
 	}

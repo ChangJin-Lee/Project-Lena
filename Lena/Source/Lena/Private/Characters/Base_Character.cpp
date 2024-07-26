@@ -246,6 +246,7 @@ void ABase_Character::DropItem(FInventoryItem ItemData)
 {
 	ABase_Item* Item = Cast<ABase_Item>(ItemData.ItemActor);
 	// ItemActor에서 ItemID를 가져옵니다. ItemActor는 아이템 정보를 제공해야 합니다.
+
 	if(Item)
 	{
 		float Rad = 20.0f; // 반경 설정
@@ -276,6 +277,7 @@ void ABase_Character::DropItem(FInventoryItem ItemData)
 			SpawnedItem->Quantity = ItemData.Quantity;
 			SpawnedItem->weight = ItemData.weight;
 			SpawnedItem->ItemDescription = ItemData.ItemDescription;
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), DropItemSound, GetActorLocation());
 		}
 	}
 }
@@ -301,6 +303,7 @@ void ABase_Character::PickupItem(AActor* ItemActor)
 			if (InventoryComponent)
 			{
 				InventoryComponent->AddItem(InventoryItem);
+				UGameplayStatics::PlaySoundAtLocation(GetWorld(), PickupItemSound, GetActorLocation());
 			}
 			
 			// 아이템 액터를 월드에서 제거합니다.

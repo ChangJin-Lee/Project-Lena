@@ -37,7 +37,16 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void RemoveWidget(UUserWidget* Widget_);
+	
+	UFUNCTION()  // UFUNCTION() 매크로 추가
+	void DestroyHitBoxAndWidgetDelayFunction(float DelayTime);
 
+	UFUNCTION(BlueprintCallable)
+	void DestroyInstructionWidget();
+
+	UFUNCTION(BlueprintCallable)
+	void DestroyHitBox();
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void OutSideEvent();
 
@@ -83,4 +92,5 @@ protected:
 	
 	void SetInstructionWidgetText(FText Text, FLinearColor Color);
 	void ClearInstructionWidgetTextDelay(float DelayTime);
+	void SetInstructionWidgetTextAtBeginPlay(FText Text);
 };

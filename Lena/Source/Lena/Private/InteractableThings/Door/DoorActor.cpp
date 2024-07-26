@@ -66,37 +66,47 @@ bool ADoorActor::CheckConditions()
 	}
 	else if(RequiredCondition == "Item")
 	{
-		TMap<FString, AActor*> CheckItemMap;
+		TMap<FString, bool> CheckItems;
+	
+		for(const FString Item : RequiredItem)
+		{
+			CheckItems.Add(Item, false);
+		}
+	
 		for(const FInventoryItem& InventoryItem : Character->InventoryComponent->Items)
 		{
-			CheckItemMap.Add(InventoryItem.ItemName, InventoryItem.ItemActor);
-		}
-
-		if(CheckItemMap.Num() == RequiredItem.Num())
-		{
-			for(const TPair<FString, AActor*>& ItemPair : CheckItemMap)
+			FString ItemName = InventoryItem.ItemName;
+			if(CheckItems.Find(ItemName))
 			{
-				Character->InventoryComponent->RemoveItemByName(ItemPair.Key);
+				CheckItems[ItemName] = true;
 			}
-			return true;
 		}
-		return false;
-	}
 	
-	if (Character && Character->InventoryComponent->FindItemByDescription(RequiredCondition) != INDEX_NONE)
-	{
-		UUserWidget* Widget = WidgetComponent->GetWidget();
-		if(Widget)
+		for(const TPair<FString, bool> ItemPair : CheckItems)
 		{
-			UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
-			if(InteractWidget)
+			if(!ItemPair.Value)
 			{
-				IsDoorOpen = true;
-				InteractWidget->SetInstructionAtBeginPlay(FText::FromString("Already Opened!"), FLinearColor::Green);
+				return false;
 			}
 		}
+		
 		return true;
 	}
+	
+	// if (Character && Character->InventoryComponent->FindItemByDescription(RequiredCondition) != INDEX_NONE)
+	// {
+	// 	UUserWidget* Widget = WidgetComponent->GetWidget();
+	// 	if(Widget)
+	// 	{
+	// 		UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
+	// 		if(InteractWidget)
+	// 		{
+	// 			IsDoorOpen = true;
+	// 			InteractWidget->SetInstructionAtBeginPlay(FText::FromString("Already Opened!"), FLinearColor::Green);
+	// 		}
+	// 	}
+	// 	return true;
+	// }
 	
 	return false;
 }

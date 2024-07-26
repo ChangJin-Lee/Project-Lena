@@ -5,6 +5,7 @@
 #include "Components/TimelineComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/BoxComponent.h"
 #include "InteractableThings/Door/SlidingDoorActor.h"
 #include "Kismet/GameplayStatics.h"
 #include "Rendering/RenderCommandPipes.h"
@@ -57,6 +58,7 @@ void ACombinationLockActor::BeginPlay()
 	Super::BeginPlay();
 
 	SetInstructionWidgetText(FText::FromString("Drag Mouse Wheel"), FLinearColor::White);
+	SetInstructionWidgetTextAtBeginPlay(FText::FromString("Drag Mouse Wheel"));
 	
 	if (CombinationLockCurve)
 	{
@@ -68,6 +70,7 @@ void ACombinationLockActor::BeginPlay()
 
 	WheelMeshSelectedSize = WheelMeshDefaultScaleSize * 1.1f;
 	WheelMeshArray[SelectedWheelIndex]->SetRelativeScale3D(FVector::One() * WheelMeshSelectedSize);
+	
 }
 
 // Called every frame
@@ -182,6 +185,10 @@ void ACombinationLockActor::CheckRightAnswer()
 		{
 			InMesh->SetSimulatePhysics(true);
 		}
+
+		SetInstructionWidgetText(FText::FromString(Password), FLinearColor::Blue);
+		
+		DestroyHitBoxAndWidgetDelayFunction(1.0);
+		TargetDoor->DestroyHitBoxAndWidgetDelayFunction(1.0);
 	}
-	
 }

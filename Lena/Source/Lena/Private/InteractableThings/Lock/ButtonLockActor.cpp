@@ -308,5 +308,7 @@ void AButtonLockActor::OpenLock()
 void AButtonLockActor::DestroyButtonLock()
 {
 	ZoomOutCamera();
-	HitBox->DestroyComponent();
+	
+	DestroyHitBoxAndWidgetDelayFunction(1.0);
+	TargetDoor->DestroyHitBoxAndWidgetDelayFunction(1.0);
 }

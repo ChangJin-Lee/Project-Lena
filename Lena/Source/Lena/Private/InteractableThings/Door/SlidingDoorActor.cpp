@@ -39,6 +39,7 @@ void ASlidingDoorActor::OpenSlidingDoor(FVector InTargetLocation)
 {
     InitialLocation = MeshComponent->GetRelativeLocation();
     TargetLocation = InTargetLocation;
+    UGameplayStatics::PlaySoundAtLocation(GetWorld(), DoorOpenSound, GetActorLocation());
     if (SlidingDoorTimeline)
     {
         SlidingDoorTimeline->PlayFromStart();

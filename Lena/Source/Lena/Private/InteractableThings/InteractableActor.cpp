@@ -81,6 +81,26 @@ void AInteractableActor::RemoveWidget(UUserWidget* Widget_)
 	}
 }
 
+void AInteractableActor::DestroyHitBoxAndWidgetDelayFunction(float DelayTime)
+{
+	FTimerDelegate  Timer;
+	Timer.BindUFunction(this, FName("DestroyInstructionWidget"));
+	Timer.BindUFunction(this, FName("DestroyHitBox"));
+
+	GetWorld()->GetTimerManager().SetTimer(WrongAnswerDelayHandle, Timer, DelayTime, false);
+}
+
+
+void AInteractableActor::DestroyInstructionWidget()
+{
+	WidgetComponent->DestroyComponent();
+}
+
+void AInteractableActor::DestroyHitBox()
+{
+	HitBox->DestroyComponent();
+}
+
 void AInteractableActor::ShowWidgetComponent()
 {
 	if(WidgetComponent)
@@ -127,3 +147,12 @@ void AInteractableActor::SetInstructionWidgetText(FText Text, FLinearColor Color
 	}
 }
 
+void AInteractableActor::SetInstructionWidgetTextAtBeginPlay(FText Text)
+{
+	if(WidgetComponent)
+	{
+		UUserWidget* Widget = WidgetComponent->GetWidget();
+		UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
+		InteractWidget->InstructionText = Text;
+	}
+}

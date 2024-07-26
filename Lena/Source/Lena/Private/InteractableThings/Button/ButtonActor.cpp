@@ -73,8 +73,11 @@ void AButtonActor::OpenDoor()
 	{
 		DoorActor->RequiredCondition = "Default";
 		SetInstructionWidgetText(FText::FromString("Opend!"), FLinearColor::Green);
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), RightAnswerSound, GetActorLocation());
 		DoorActor->Open();
 		
+		DestroyHitBoxAndWidgetDelayFunction(1.0);
+		DoorActor->DestroyHitBoxAndWidgetDelayFunction(1.0);
 	}
 	else
 	{

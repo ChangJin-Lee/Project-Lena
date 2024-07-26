@@ -105,7 +105,12 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category="Inventory")
 	void CheckGroundItem(AActor* ItemActor);
-
+	
+	UPROPERTY(EditAnywhere)
+	USoundBase* DropItemSound;
+	
+	UPROPERTY(EditAnywhere)
+	USoundBase* PickupItemSound;
 	
 private:
 	UPROPERTY(EditDefaultsOnly)
