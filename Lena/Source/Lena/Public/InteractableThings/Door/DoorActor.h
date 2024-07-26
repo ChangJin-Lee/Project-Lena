@@ -63,9 +63,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Sound")
 	USoundBase* DoorCloseSound;
 	
-	UPROPERTY(EditAnywhere, Category="Door")
-	TSubclassOf<class UCameraShakeBase> WrongAnswerCameraShakeClass;
-	
 private:
 	bool IsDoorOpen = false;
 };

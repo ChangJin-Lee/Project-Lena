@@ -50,12 +50,20 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	bool IsDone = false;
 	
+	UPROPERTY(EditAnywhere)
+	USoundBase* RightAnswerSound;
+	
+	UPROPERTY(EditAnywhere)
+	USoundBase* WrongAnswerSound;
+	
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	APlayerController *PlayerController;
+
+	FTimerHandle WrongAnswerDelayHandle;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
