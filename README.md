@@ -33,7 +33,8 @@
 - 2024.06.04 ~ 현재
 
 ## Development Diaries
-
+- **2024.07.26**: [#16 - 아이템 상호작용 개선 및 코드 리팩토링](https://velog.io/@whoamicj/UE5-Lena-Dev-Diary-16-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0-%EC%82%AC%EB%A1%80%EC%99%80-%EC%BD%94%EB%93%9C-%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81)
+- **2024.07.20**: [#15 - 언리얼 엔진의 오류 해결과 컴파일 에러](https://velog.io/@whoamicj/UE5-Lena-Dev-Diary-14-%EC%96%B8%EB%A6%AC%EC%96%BC-%EC%97%94%EC%A7%84%EC%9D%98-%EC%98%A4%EB%A5%98-%ED%95%B4%EA%B2%B0%EA%B3%BC-%EC%BB%B4%ED%8C%8C%EC%9D%BC-%EC%97%90%EB%9F%AC)
 - **2024.07.16**: [#14 - 인벤토리 위젯 구현 및 HUD 크로스헤어 변경](https://velog.io/@whoamicj/UE5-Lena-Dev-Diary-14-%EC%9D%B8%EB%B2%A4%ED%86%A0%EB%A6%AC-%EC%9C%84%EC%A0%AF-%EA%B5%AC%ED%98%84-%EB%B0%8F-HUD-%ED%81%AC%EB%A1%9C%EC%8A%A4%ED%97%A4%EC%96%B4-%EB%B3%80%EA%B2%BD-swhi1c0u)
 - **2024.07.13**: [#13 - 아이템 관리와 월드 스폰 시스템](https://velog.io/@whoamicj/UE5-Lena-Dev-Diary-13-%EC%95%84%EC%9D%B4%ED%85%9C-%EA%B4%80%EB%A6%AC%EC%99%80-%EC%9B%94%EB%93%9C-%EC%8A%A4%ED%8F%B0-%EC%8B%9C%EC%8A%A4%ED%85%9C)
 - **2024.07.11**: [#12 - 버튼 자물쇠 로직 구현 및 최적화](https://velog.io/@whoamicj/UE5-Lena-Dev-Diary-12-%EB%B2%84%ED%8A%BC-%EC%9E%90%EB%AC%BC%EC%87%A0-%EA%B5%AC%ED%98%84%EA%B3%BC-%EC%B5%9C%EC%A0%81%ED%99%94)
@@ -57,9 +58,10 @@
 ### In Progress
 
 =======
-- [Pull Request #14](https://github.com/ChangJin-Lee/Project-Lena/pull/14)
+- [Pull Request #15](https://github.com/ChangJin-Lee/Project-Lena/pull/15)
 
 ### Merged
+- [Pull Request #14](https://github.com/ChangJin-Lee/Project-Lena/pull/14)
 - [Pull Request #13](https://github.com/ChangJin-Lee/Project-Lena/pull/13)
 - [Pull Request #12](https://github.com/ChangJin-Lee/Project-Lena/pull/12)
 - [Pull Request #11](https://github.com/ChangJin-Lee/Project-Lena/pull/11)
