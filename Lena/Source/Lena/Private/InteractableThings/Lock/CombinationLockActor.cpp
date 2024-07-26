@@ -56,12 +56,7 @@ void ACombinationLockActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if(WidgetComponent)
-	{
-		UUserWidget* Widget = WidgetComponent->GetWidget();
-		UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
-		InteractWidget->SetInstructionAtBeginPlay(FText::FromString("Drag Mouse Wheel"), FLinearColor::White);
-	}
+	SetInstructionWidgetText(FText::FromString("Drag Mouse Wheel"), FLinearColor::White);
 	
 	if (CombinationLockCurve)
 	{

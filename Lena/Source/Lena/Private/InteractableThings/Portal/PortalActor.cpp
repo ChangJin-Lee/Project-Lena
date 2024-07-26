@@ -19,12 +19,8 @@ APortalActor::APortalActor()
 void APortalActor::BeginPlay()
 {
 	Super::BeginPlay();
-	if(WidgetComponent)
-	{
-		UUserWidget* Widget = WidgetComponent->GetWidget();
-		UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
-		InteractWidget->SetInstructionAtBeginPlay(FText::FromString("Press E To Restart!"), FLinearColor::Blue);
-	}
+
+	SetInstructionWidgetText(FText::FromString("Press E To Restart!"), FLinearColor::Blue);
 }
 
 // Called every frame

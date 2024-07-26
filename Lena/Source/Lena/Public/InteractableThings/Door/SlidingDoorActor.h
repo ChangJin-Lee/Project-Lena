@@ -52,9 +52,4 @@ private:
 	UCurveFloat* SlidingDoorCurve;
 	
 	FTimerHandle WrongAnswerDelayHandle;
-	
-	UFUNCTION()  // UFUNCTION() 매크로 추가
-	void WrongAnswerDelayFunction();
-
-	void StartWrongAnswerDelay(float DelayTime);
 };

@@ -66,4 +66,13 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	USoundBase* SoundEffect;
+
+	UPROPERTY(EditAnywhere, Category="Door")
+	TSubclassOf<class UCameraShakeBase> WrongAnswerCameraShakeClass;
+
+	UFUNCTION()  // UFUNCTION() 매크로 추가
+	void WrongAnswerDelayFunction();
+	
+	void SetInstructionWidgetText(FText Text, FLinearColor Color);
+	void ClearInstructionWidgetTextDelay(float DelayTime);
 };
