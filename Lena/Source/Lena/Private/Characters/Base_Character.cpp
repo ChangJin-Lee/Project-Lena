@@ -241,6 +241,47 @@ bool ABase_Character::ReloadGun()
 // Inventory
 // -----------------------------
 
+// 아이템 떨어뜨리기
+void ABase_Character::DropItem(FInventoryItem ItemData)
+{
+	ABase_Item* Item = Cast<ABase_Item>(ItemData.ItemActor);
+	// ItemActor에서 ItemID를 가져옵니다. ItemActor는 아이템 정보를 제공해야 합니다.
+
+	if(Item)
+	{
+		float Rad = 20.0f; // 반경 설정
+		float InnerRad = 5.0f; // 제외할 범위 설정
+
+		// 랜덤한 값을 선택하는 함수
+		auto GetRandomOffset = [Rad, InnerRad]() -> float
+		{
+			float Offset;
+			do
+			{
+				Offset = FMath::RandRange(-Rad, Rad);
+			} while (Offset > -InnerRad && Offset < InnerRad);
+			return Offset;
+		};
+
+		float RandomX = GetRandomOffset();
+		float RandomY = GetRandomOffset();
+		
+		FVector Location = GetActorLocation() + (RandomX, RandomY, 0.0f);
+		FActorSpawnParameters Parameters;
+		ABase_Item* SpawnedItem =  GetWorld()->SpawnActor<ABase_Item>(Item->GetClass(), Location, GetActorRotation(), Parameters);
+		if(SpawnedItem)
+		{
+			SpawnedItem->ItemID = ItemData.ItemID;
+			SpawnedItem->ItemName = ItemData.ItemName;
+			SpawnedItem->ItemImage = ItemData.ItemImage;
+			SpawnedItem->Quantity = ItemData.Quantity;
+			SpawnedItem->weight = ItemData.weight;
+			SpawnedItem->ItemDescription = ItemData.ItemDescription;
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), DropItemSound, GetActorLocation());
+		}
+	}
+}
+
 // 아이템 줍기
 void ABase_Character::PickupItem(AActor* ItemActor)
 {
@@ -253,34 +294,21 @@ void ABase_Character::PickupItem(AActor* ItemActor)
 			FInventoryItem InventoryItem;
 			InventoryItem.ItemID = Item->ItemID;
 			InventoryItem.ItemName = Item->ItemName;
+			InventoryItem.ItemImage = Item->ItemImage;
 			InventoryItem.Quantity = Item->Quantity;
+			InventoryItem.weight = Item->weight;
 			InventoryItem.ItemDescription = Item->ItemDescription;
 			InventoryItem.ItemActor = Item;
 			
 			if (InventoryComponent)
 			{
 				InventoryComponent->AddItem(InventoryItem);
+				UGameplayStatics::PlaySoundAtLocation(GetWorld(), PickupItemSound, GetActorLocation());
 			}
 			
 			// 아이템 액터를 월드에서 제거합니다.
 			ItemActor->Destroy();
 		}
-	}
-}
-
-// 아이템 떨어뜨리기
-void ABase_Character::DropItem(FInventoryItem ItemData)
-{
-	ABase_Item* Item = Cast<ABase_Item>(ItemData.ItemActor);
-	if(Item)
-	{
-		// Item->ItemID = ItemData.ItemID;
-		// Item->ItemName = ItemData.ItemName;
-		// Item->Quantity = 1; // 일단은 하나만 버리는 걸로 가정.
-		// Item->ItemDescription = ItemData.ItemDescription;
-		//
-		// FActorSpawnParameters Parameters;
-		// GetWorld()->SpawnActor<ABase_Item>(Item->GetClass(), GetActorLocation(), GetActorRotation(), Parameters);
 	}
 }
 
@@ -295,7 +323,9 @@ void ABase_Character::CheckGroundItem(AActor* ItemActor)
 			FInventoryItem InventoryItem;
 			InventoryItem.ItemID = Item->ItemID;
 			InventoryItem.ItemName = Item->ItemName;
+			InventoryItem.ItemImage = Item->ItemImage;
 			InventoryItem.Quantity = Item->Quantity;
+			InventoryItem.weight = Item->weight;
 			InventoryItem.ItemDescription = Item->ItemDescription;
 			InventoryItem.ItemActor = Item;
 			

@@ -49,6 +49,9 @@ SourceArt/**/*.tga
 Binaries/*
 Plugins/*/Binaries/*
 
+# Rider Plugin
+Plugins/Developer
+
 # Builds
 Build/*
 

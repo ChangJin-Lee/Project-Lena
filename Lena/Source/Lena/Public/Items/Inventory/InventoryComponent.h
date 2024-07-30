@@ -29,7 +29,10 @@ public:
 	void AddItem(const FInventoryItem& ItemData);
 
 	UFUNCTION(BlueprintCallable, Category="Inventory")
-	bool RemoveItem(const FString& ItemID);
+	bool RemoveItemById(const FString& ItemID);
+
+	UFUNCTION(BlueprintCallable, Category="Inventory")
+	bool RemoveItemByName(const FString& ItemID);
 
 	UFUNCTION(BlueprintCallable, Category="Inventory")
 	bool UpdateItemQuantity(const FString& ItemID, int32 NewQuantity);

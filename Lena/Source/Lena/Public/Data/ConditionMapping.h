@@ -13,10 +13,10 @@ struct FConditionEntry
 	FString ConditionType; // "Lock", "Item", "Dialogue", "Location", etc
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString ConditionID; // LockID, ItemID, NPCID, LocionID, etc
+	TArray<FString> ConditionID; // LockID, ItemID, NPCID, LocionID, etc
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString AdditionalData; // PassWord, DialogueLine, Location, etc
+	TArray<FString> AdditionalData; // PassWord, DialogueLine, Location, etc
 };
 
 USTRUCT(BlueprintType)

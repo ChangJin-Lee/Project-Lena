@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ShlObj.h>
+
 #include "CoreMinimal.h"
 #include "InventoryItem.generated.h"
 
@@ -15,7 +17,13 @@ struct FInventoryItem
 	FString ItemName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	UTexture2D* ItemImage; // 아이템 이미지 추가
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	int32 Quantity;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	float weight;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	FString ItemDescription; // 추가 정보
@@ -26,6 +34,6 @@ struct FInventoryItem
 	// 추가할 다른 속성들
 
 	FInventoryItem()
-		: ItemID(TEXT("")), ItemName(TEXT("")), Quantity(1), ItemDescription(TEXT("")), ItemActor(nullptr)
+		: ItemID(TEXT("")), ItemName(TEXT("")), ItemImage(nullptr), Quantity(1), weight(0), ItemDescription(TEXT("")), ItemActor(nullptr)
 	{}
 };

@@ -36,11 +36,24 @@ void UInventoryComponent::AddItem(const FInventoryItem& ItemData)
 	}
 }
 
-bool UInventoryComponent::RemoveItem(const FString& ItemID)
+bool UInventoryComponent::RemoveItemById(const FString& ItemID)
 {
 	for (int32 i = 0; i < Items.Num(); ++i)
 	{
 		if (Items[i].ItemID == ItemID)
+		{
+			Items.RemoveAt(i);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool UInventoryComponent::RemoveItemByName(const FString& ItemName)
+{
+	for (int32 i = 0; i < Items.Num(); ++i)
+	{
+		if (Items[i].ItemName == ItemName)
 		{
 			Items.RemoveAt(i);
 			return true;

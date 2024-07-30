@@ -46,12 +46,14 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"), Category="Inventory")
 	UInteractWidget* ItemInfoWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"), Category="Inventory")
+	AActor* LineTraceItem;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"), Category="Inventory")
 	bool IsInWidget = false;
 
 	ABase_Character* Base_Character;
-	ABase_Item* LineTraceItem;
 
 	FTimerHandle TimerHandle_CheckPickUpItem;
 	

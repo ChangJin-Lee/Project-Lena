@@ -51,35 +51,62 @@ void ADoorActor::BeginPlay()
 	NumpadWidgetComponent->SetVisibility(false);
 }
 
-bool ADoorActor::CheckRequiredItem()
+bool ADoorActor::CheckConditions()
 {
+	ABase_Character* Character = Cast<ABase_Character>(UGameplayStatics::GetPlayerCharacter(this, 0));
+
 	// Default door Just Open
-	if(RequiredItemDescription == "Default")
+	if(RequiredCondition == "Default")
 	{
 		return true;
 	}
-
-	if(RequiredItemDescription == "Lock")
+	else if(RequiredCondition == "Lock")
 	{
 		return false;
 	}
-
-	ABase_Character* Character = Cast<ABase_Character>(UGameplayStatics::GetPlayerCharacter(this, 0));
-	
-	if (Character && Character->InventoryComponent->FindItemByDescription(RequiredItemDescription) != INDEX_NONE)
+	else if(RequiredCondition == "Item")
 	{
-		UUserWidget* Widget = WidgetComponent->GetWidget();
-		if(Widget)
+		TMap<FString, bool> CheckItems;
+	
+		for(const FString Item : RequiredItem)
 		{
-			UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
-			if(InteractWidget)
+			CheckItems.Add(Item, false);
+		}
+	
+		for(const FInventoryItem& InventoryItem : Character->InventoryComponent->Items)
+		{
+			FString ItemName = InventoryItem.ItemName;
+			if(CheckItems.Find(ItemName))
 			{
-				IsDoorOpen = true;
-				InteractWidget->SetInstructionAtBeginPlay(FText::FromString("Already Opened!"), FLinearColor::Green);
+				CheckItems[ItemName] = true;
 			}
 		}
+	
+		for(const TPair<FString, bool> ItemPair : CheckItems)
+		{
+			if(!ItemPair.Value)
+			{
+				return false;
+			}
+		}
+		
 		return true;
 	}
+	
+	// if (Character && Character->InventoryComponent->FindItemByDescription(RequiredCondition) != INDEX_NONE)
+	// {
+	// 	UUserWidget* Widget = WidgetComponent->GetWidget();
+	// 	if(Widget)
+	// 	{
+	// 		UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
+	// 		if(InteractWidget)
+	// 		{
+	// 			IsDoorOpen = true;
+	// 			InteractWidget->SetInstructionAtBeginPlay(FText::FromString("Already Opened!"), FLinearColor::Green);
+	// 		}
+	// 	}
+	// 	return true;
+	// }
 	
 	return false;
 }
