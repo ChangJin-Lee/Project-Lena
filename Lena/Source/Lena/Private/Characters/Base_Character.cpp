@@ -37,10 +37,10 @@ void ABase_Character::BeginPlay()
 		for(TSubclassOf<AGun> GunClass : GunClassArray)
 		{
 			Gun = GetWorld()->SpawnActor<AGun>(GunClass);
-			SpecificMesh->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
-			Gun->AttachToComponent(SpecificMesh, FAttachmentTransformRules::KeepRelativeTransform, TEXT("LHS_ik_hand_r"));
-			Gun->SetOwner(this);
-			Gun->SetActorHiddenInGame(true);
+			// SpecificMesh->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
+			// Gun->AttachToComponent(SpecificMesh, FAttachmentTransformRules::KeepRelativeTransform, TEXT("LHS_ik_hand_r"));
+			// Gun->SetOwner(this);
+			// Gun->SetActorHiddenInGame(true);
 			GunArray.Add(Gun);
 			UE_LOG(LogTemp, Warning, TEXT("Spawn Guns  %s"), *Gun->GetName());
 		}

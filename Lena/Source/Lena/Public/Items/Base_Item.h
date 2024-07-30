@@ -44,7 +44,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	float weight;
 	
-private:
+protected:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* MeshComponent;
 	
@@ -56,4 +56,5 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	USoundBase* PickupSound;
+
 };
