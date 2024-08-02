@@ -64,6 +64,8 @@ void AItemSpawnManager::SpawnItemsFromTable()
 				{
 					SpawnedItem->ItemID = Row->ItemID;
 					SpawnedItem->ItemName = Row->ItemName;
+					SpawnedItem->ItemImage = Row->ItemImage;
+					SpawnedItem->Weight = Row->Weight;
 					SpawnedItem->ItemDescription = Row->ItemDescription;
 					SpawnedItem->Quantity = Row->Quantity;
 				}

@@ -101,9 +101,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Open Door", meta=(AllowPrivateAccess="true"))
 	FString InputPassWord;
 
-	UPROPERTY(EditAnywhere, Category="Door")
-	TSubclassOf<class UCameraShakeBase> WrongAnswerCameraShakeClass;
-
 	FString WidgetDisplayPassword = "";
 	
 };

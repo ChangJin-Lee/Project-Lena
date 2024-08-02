@@ -4,11 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "InteractableThings/InteractableActor.h"
 #include "Base_Item.generated.h"
 
 UCLASS()
-class LENA_API ABase_Item : public AInteractableActor
+class LENA_API ABase_Item : public AActor
 {
 	GENERATED_BODY()
 	
@@ -34,18 +33,33 @@ public:
 	FString ItemName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	UTexture2D* ItemImage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	UMaterialInterface* ItemImageMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	FString ItemDescription;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	int32 Quantity;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	float Weight;
 	
-private:
-	UPROPERTY(EditAnywhere)
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* MeshComponent;
 	
 	UPROPERTY(EditAnywhere)
 	USkeletalMeshComponent* SkeletalMeshComponent;
 
 	UPROPERTY(EditAnywhere)
+	USceneComponent* Root;
+
+	UPROPERTY(EditAnywhere)
 	USoundBase* PickupSound;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Captrue")
+	USceneCaptureComponent2D* SceneCaptureComponent2D;
 };

@@ -16,23 +16,11 @@
 
 AShooterPlayerController::AShooterPlayerController()
 {
-	if(!InventoryWidget)
-	{
-		static ConstructorHelpers::FObjectFinder<UInventoryWidget> InventoryWidgetFinder(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UI/HUD/WBP_InventoryMain.WBP_InventoryMain'"));
-		if(InventoryWidgetFinder.Succeeded())
-		{
-			InventoryWidget = InventoryWidgetFinder.Object;
-		}
-	}
-	
-	if(!ItemInfoWidget)
-	{
-		static ConstructorHelpers::FObjectFinder<UInteractWidget> InteractWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UI/Interactions/WBP_InteractWidget.WBP_InteractWidget'"));
-		if(InteractWidget.Succeeded())
-		{
-			ItemInfoWidget = InteractWidget.Object;
-		}
-	}
+	//static ConstructorHelpers::FObjectFinder<UInventoryWidget> InventoryWidgetFinder(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UI/HUD/WBP_InventoryMain.WBP_InventoryMain'"));
+	//if(InventoryWidgetFinder.Succeeded())
+	//{
+	//	InventoryWidget = InventoryWidgetFinder.Object;
+	//}
 }
 
 
@@ -57,11 +45,11 @@ void AShooterPlayerController::BeginPlay()
 	{
 		EnhancedInputComponent->BindAction(IA_MouseClick, ETriggerEvent::Triggered, this, &AShooterPlayerController::HandleMouseClick);
 		EnhancedInputComponent->BindAction(IA_PickUpItem, ETriggerEvent::Triggered, this, &AShooterPlayerController::HandlePickUpItem);
+		// EnhancedInputComponent->BindAction(IA_OpenInventory, ETriggerEvent::Triggered, this, &AShooterPlayerController::HandleOpenInventory);
 	}
 
 	// Character Reference caching
 	Base_Character = Cast<ABase_Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
-
 	
 	// Item Info Widget AddViewport
 	ItemInfoWidget->AddToViewport();
@@ -73,7 +61,7 @@ void AShooterPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner
 {
 	Super::GameHasEnded(EndGameFocus, bIsWinner);
 
-	HUD->RemoveFromViewport();
+	HUD->RemoveFromParent();
 	if (bIsWinner)
 	{
 		UUserWidget* WinScreen = CreateWidget(this, WinScreenClass);
@@ -226,6 +214,7 @@ void AShooterPlayerController::CheckPickUpItemLine()
 
 void AShooterPlayerController::CheckPickUpItemSweep()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Call CheckPickUpItemSweep"));
 	ACharacter* Character_ =  UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
 	FVector Start = Character_->GetActorLocation();
 	FVector End = Character_->GetActorLocation();
@@ -237,16 +226,19 @@ void AShooterPlayerController::CheckPickUpItemSweep()
 
 	if(GetWorld()->SweepMultiByChannel(HitResults, Start, End, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(Radius), Params))
 	{
+		TSet<AActor*> ProcessedActors;
 		Base_Character->GroundItemsComponent->Items.Empty();
 		
 		for(FHitResult HitResult : HitResults )
 		{
 			AActor* HitActor = HitResult.GetActor();
-			if(HitActor)
+			if(HitActor && !ProcessedActors.Contains(HitActor))
 			{
+				ProcessedActors.Add(HitActor);
 				ABase_Item* Item = Cast<ABase_Item>(HitActor);
 				if(Item)
 				{
+					UE_LOG(LogTemp, Warning, TEXT("HitResults.Num() : %s"), *Item->GetName());
 					if(Base_Character)
 					{
 						Base_Character->CheckGroundItem(Item);
@@ -256,4 +248,34 @@ void AShooterPlayerController::CheckPickUpItemSweep()
 		}
 	}
 	// DrawDebugSphere(GetWorld(), Start, Radius, 10, FColor::Green, false, 5.0f, 0, 1.0f);
+}
+
+// Main_Player_Controller BP 부분 업데이트 예정
+void AShooterPlayerController::HandleOpenInventory()
+{
+	CheckPickUpItemSweep();
+
+	if(bFlipFlop)
+	{
+		if(InventoryWidget)
+		{
+			if(InventoryWidget->IsInViewport())
+			{
+				InventoryWidget->SetVisibility(ESlateVisibility::Visible);
+				InputModeUI();
+			}
+		}
+		else
+		{
+			InventoryWidget->AddToViewport();
+			InputModeUI();
+		}
+	}
+	else
+	{
+		InventoryWidget->SetVisibility(ESlateVisibility::Collapsed);
+		InputModeGame();
+	}
+
+	bFlipFlop = !bFlipFlop;
 }

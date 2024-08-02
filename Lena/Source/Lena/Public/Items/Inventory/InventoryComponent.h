@@ -25,11 +25,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Inventory")
 	TArray<FInventoryItem> Items;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Inventory")
+	float CurrentWeight;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Inventory")
+	float MaxWeight;
+
 	UFUNCTION(BlueprintCallable, Category="Inventory")
 	void AddItem(const FInventoryItem& ItemData);
 
 	UFUNCTION(BlueprintCallable, Category="Inventory")
-	bool RemoveItem(const FString& ItemID);
+	bool RemoveItem(const FInventoryItem& ItemData);
+
+	UFUNCTION(BlueprintCallable, Category="Inventory")
+	bool RemoveItemByName(const FString& ItemID);
 
 	UFUNCTION(BlueprintCallable, Category="Inventory")
 	bool UpdateItemQuantity(const FString& ItemID, int32 NewQuantity);

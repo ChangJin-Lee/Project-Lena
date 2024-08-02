@@ -2,12 +2,13 @@
 
 #pragma once
 
+#include "Base_Item.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Gun.generated.h"
 
 UCLASS()
-class LENA_API AGun : public AActor
+class LENA_API AGun : public ABase_Item
 {
 	GENERATED_BODY()
 	
@@ -33,9 +34,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	UPROPERTY(VisibleAnywhere)
-	USceneComponent* Root;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* Mesh;
 
