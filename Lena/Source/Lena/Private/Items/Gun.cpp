@@ -8,6 +8,7 @@
 #include "Engine/DamageEvents.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "Components/SceneCaptureComponent2D.h"
 
 // Sets default values
 AGun::AGun()
@@ -17,6 +18,8 @@ AGun::AGun()
 	
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(Root);
+
+	SceneCaptureComponent2D->SetRelativeLocation(FVector(-50.0f, 15.0f, 0.0f));
 }
 
 void AGun::PullTrigger()

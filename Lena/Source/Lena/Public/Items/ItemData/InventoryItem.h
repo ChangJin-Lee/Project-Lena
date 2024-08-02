@@ -18,12 +18,15 @@ struct FInventoryItem
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	UTexture2D* ItemImage; // 아이템 이미지 추가
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	UMaterialInterface* ItemImageMaterial; // 아이템 이미지 Material 추가
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	int32 Quantity;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
-	float weight;
+	float Weight;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	FString ItemDescription; // 추가 정보
@@ -34,6 +37,6 @@ struct FInventoryItem
 	// 추가할 다른 속성들
 
 	FInventoryItem()
-		: ItemID(TEXT("")), ItemName(TEXT("")), ItemImage(nullptr), Quantity(1), weight(0), ItemDescription(TEXT("")), ItemActor(nullptr)
+		: ItemID(TEXT("")), ItemName(TEXT("")), ItemImage(nullptr), Quantity(1), Weight(0), ItemDescription(TEXT("")), ItemActor(nullptr)
 	{}
 };

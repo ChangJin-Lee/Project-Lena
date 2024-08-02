@@ -36,16 +36,19 @@ public:
 	UTexture2D* ItemImage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	UMaterialInterface* ItemImageMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	FString ItemDescription;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	int32 Quantity;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
-	float weight;
+	float Weight;
 	
 protected:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* MeshComponent;
 	
 	UPROPERTY(EditAnywhere)
@@ -57,4 +60,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 	USoundBase* PickupSound;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Captrue")
+	USceneCaptureComponent2D* SceneCaptureComponent2D;
 };

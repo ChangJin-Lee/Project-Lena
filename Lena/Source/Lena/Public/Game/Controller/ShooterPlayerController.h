@@ -33,6 +33,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Input")
 	UInputAction* IA_PickUpItem;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Input")
+	UInputAction* IA_OpenInventory;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Input")
 	UInputMappingContext* IMC_Interaction;
@@ -64,6 +67,7 @@ public:
 	void InputModeGame();
 	
 	void HandlePickUpItem();
+	void HandleOpenInventory();
 	void CheckPickUpItemLine();
 	UFUNCTION(BlueprintCallable)
 	void CheckPickUpItemSweep();
@@ -88,4 +92,6 @@ private:
 
 	void OnMouseClick();
 	bool bIsClickEnabled;
+
+	bool bFlipFlop = true;
 };
