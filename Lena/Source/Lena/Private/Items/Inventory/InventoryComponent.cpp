@@ -8,6 +8,13 @@ UInventoryComponent::UInventoryComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 	bWantsInitializeComponent = true;
+
+	for(FInventoryItem Item : Items)
+	{
+		CurrentWeight += Item.Quantity * Item.Weight;
+	}
+
+	MaxWeight = 20;
 }
 
 void UInventoryComponent::BeginPlay()
@@ -28,20 +35,24 @@ void UInventoryComponent::AddItem(const FInventoryItem& ItemData)
 	int32 ItemIndex = FindItemByID(ItemData.ItemID);
 	if (ItemIndex != INDEX_NONE)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Items[ItemIndex].Quantity : %d"), Items[ItemIndex].Quantity);
 		Items[ItemIndex].Quantity += ItemData.Quantity;
 	}
 	else
 	{
 		Items.Add(ItemData);
 	}
+
+	CurrentWeight += ItemData.Quantity * ItemData.Weight;
 }
 
-bool UInventoryComponent::RemoveItemById(const FString& ItemID)
+bool UInventoryComponent::RemoveItem(const FInventoryItem& ItemData)
 {
 	for (int32 i = 0; i < Items.Num(); ++i)
 	{
-		if (Items[i].ItemID == ItemID)
+		if (Items[i].ItemID == ItemData.ItemID)
 		{
+			CurrentWeight -= Items[i].Quantity * Items[i].Weight;
 			Items.RemoveAt(i);
 			return true;
 		}

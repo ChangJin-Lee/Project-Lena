@@ -37,10 +37,10 @@ void ABase_Character::BeginPlay()
 		for(TSubclassOf<AGun> GunClass : GunClassArray)
 		{
 			Gun = GetWorld()->SpawnActor<AGun>(GunClass);
-			SpecificMesh->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
-			Gun->AttachToComponent(SpecificMesh, FAttachmentTransformRules::KeepRelativeTransform, TEXT("LHS_ik_hand_r"));
-			Gun->SetOwner(this);
-			Gun->SetActorHiddenInGame(true);
+			// SpecificMesh->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
+			// Gun->AttachToComponent(SpecificMesh, FAttachmentTransformRules::KeepRelativeTransform, TEXT("LHS_ik_hand_r"));
+			// Gun->SetOwner(this);
+			// Gun->SetActorHiddenInGame(true);
 			GunArray.Add(Gun);
 			UE_LOG(LogTemp, Warning, TEXT("Spawn Guns  %s"), *Gun->GetName());
 		}
@@ -275,9 +275,14 @@ void ABase_Character::DropItem(FInventoryItem ItemData)
 			SpawnedItem->ItemName = ItemData.ItemName;
 			SpawnedItem->ItemImage = ItemData.ItemImage;
 			SpawnedItem->Quantity = ItemData.Quantity;
-			SpawnedItem->weight = ItemData.weight;
+			SpawnedItem->Weight = ItemData.Weight;
 			SpawnedItem->ItemDescription = ItemData.ItemDescription;
 			UGameplayStatics::PlaySoundAtLocation(GetWorld(), DropItemSound, GetActorLocation());
+		}
+
+		if(InventoryComponent)
+		{
+			InventoryComponent->RemoveItem(ItemData);
 		}
 	}
 }
@@ -296,7 +301,7 @@ void ABase_Character::PickupItem(AActor* ItemActor)
 			InventoryItem.ItemName = Item->ItemName;
 			InventoryItem.ItemImage = Item->ItemImage;
 			InventoryItem.Quantity = Item->Quantity;
-			InventoryItem.weight = Item->weight;
+			InventoryItem.Weight = Item->Weight;
 			InventoryItem.ItemDescription = Item->ItemDescription;
 			InventoryItem.ItemActor = Item;
 			
@@ -304,6 +309,11 @@ void ABase_Character::PickupItem(AActor* ItemActor)
 			{
 				InventoryComponent->AddItem(InventoryItem);
 				UGameplayStatics::PlaySoundAtLocation(GetWorld(), PickupItemSound, GetActorLocation());
+			}
+
+			if(GroundItemsComponent)
+			{
+				GroundItemsComponent->RemoveItem(InventoryItem);
 			}
 			
 			// 아이템 액터를 월드에서 제거합니다.
@@ -325,7 +335,7 @@ void ABase_Character::CheckGroundItem(AActor* ItemActor)
 			InventoryItem.ItemName = Item->ItemName;
 			InventoryItem.ItemImage = Item->ItemImage;
 			InventoryItem.Quantity = Item->Quantity;
-			InventoryItem.weight = Item->weight;
+			InventoryItem.Weight = Item->Weight;
 			InventoryItem.ItemDescription = Item->ItemDescription;
 			InventoryItem.ItemActor = Item;
 			

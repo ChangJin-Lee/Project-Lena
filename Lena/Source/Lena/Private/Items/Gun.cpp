@@ -8,6 +8,7 @@
 #include "Engine/DamageEvents.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "Components/SceneCaptureComponent2D.h"
 
 // Sets default values
 AGun::AGun()
@@ -15,13 +16,10 @@ AGun::AGun()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
-	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-	// SetRootComponent(Root); RootComponent = Root;의 차이에 대해서 잘 알아두자.
-	SetRootComponent(Root);
-	// RootComponent = Root;
-	
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(Root);
+
+	SceneCaptureComponent2D->SetRelativeLocation(FVector(-50.0f, 15.0f, 0.0f));
 }
 
 void AGun::PullTrigger()
