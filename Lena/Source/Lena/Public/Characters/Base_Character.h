@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 #include "InputMappingContext.h"
 #include "Lena/Public/Items/Base_Item.h"
+#include "Lena/Public/Items/Base_Weapon.h"
 #include "Lena/Public/Items/Gun.h"
 #include "GameFramework/Character.h"
 #include "Items/Inventory/InventoryComponent.h"
-#include "UI/InventoryWidget.h"
 #include "Base_Character.generated.h"
 
 UCLASS()
@@ -32,26 +32,50 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	USkeletalMeshComponent* FindMeshByName(FName MeshName);
-
+	
+	// About Gun
+	
 	void ToggleIsArmed();
-	void Shoot();
+	// void Shoot();
+	void PerformAction();
 	void ReloadAction();
 	void ReloadAIAction();
 	void ChangeWeapon1();
 	void ChangeWeapon2();
-	void HideAllWeapons();
+	// void HideAllWeapons();
 	
 	UFUNCTION(BlueprintCallable)
-	void ChangeWeapon();
+	void ChangeWeapon(int32 Index);
+	
+	UFUNCTION(BlueprintCallable)
+	void DrawWeapon(int32 WeaponIndex);
 
 	UFUNCTION(BlueprintCallable)
-	AGun* GetWeapon();
+	void PutDownWeapon();
+	
+	UFUNCTION(BlueprintCallable)
+	ABase_Weapon* GetWeapon();
 
 	UFUNCTION(BlueprintCallable)
-	int GetAmmo();
-
+	bool CheckAmmo();
+	
 	UFUNCTION(BlueprintCallable)
-	void AddAmmo_5mm();
+	int32 GetAmmoIndex(EAmmoType At);
+	
+	// UFUNCTION(BlueprintCallable)
+	// void EquipItem(const FInventoryItem& InventoryItem, int32 Index);
+	
+	// UFUNCTION(BlueprintCallable)
+	// void ChangeWeapon();
+	//
+	// UFUNCTION(BlueprintCallable)
+	// AGun* GetWeapon();
+	//
+	// UFUNCTION(BlueprintCallable)
+	// int GetAmmo();
+	//
+	// UFUNCTION(BlueprintCallable)
+	// void AddAmmo_5mm();
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
@@ -62,7 +86,7 @@ public:
 	bool ReloadGun();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Reload")
-	void ReloadAIEvent();
+	void ReloadEvent();
 
 	UFUNCTION(BlueprintPure)
 	float GetHealthPercent() const;
@@ -79,10 +103,10 @@ public:
 	bool GetIsAICharacter();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "OverLay Slot")
-	void DrawAIWeapon();
+	void DrawWeaponEvent();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "OverLay Slot")
-	void PutDownAIWeapon();
+	void PutDownWeaponEvent();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Animation Slot")
 	void OnDead();
@@ -90,18 +114,27 @@ public:
 	// -----------------------------
 	// Inventory
 	// -----------------------------
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
+	ABase_Weapon* CurrentWeapon;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapons")
+	UInventoryComponent* WeaponSlotsComponent;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Inventory")
 	UInventoryComponent* InventoryComponent;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Inventory")
 	UInventoryComponent* GroundItemsComponent;
-
-	UFUNCTION(BlueprintCallable, Category="Inventory")
-	void PickupItem(AActor* ItemActor);
 	
 	UFUNCTION(BlueprintCallable, Category="Inventory")
-	void DropItem(FInventoryItem ItemData);
+	void PickupItem(AActor* ItemActor, EInventorySlotType InventorySlot);
+	
+	UFUNCTION(BlueprintCallable, Category="Inventory")
+	void DropItem(FInventoryItem ItemData, EInventorySlotType InventorySlot);
+
+	UFUNCTION(BlueprintCallable, Category="Inventory")
+	void EquipItem(FInventoryItem ItemData, EInventorySlotType InventorySlot, int32 SlotIndex);
 	
 	UFUNCTION(BlueprintCallable, Category="Inventory")
 	void CheckGroundItem(AActor* ItemActor);
@@ -119,14 +152,14 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	float Health;
 
-	UPROPERTY()
-	AGun* Gun;
-
-	UPROPERTY(EditDefaultsOnly, Category="Weapon")
-	TArray<TSubclassOf<AGun>> GunClassArray;
-
-	UPROPERTY(BlueprintReadWrite, Category="Weapon", meta=(AllowPrivateAccess="true"))
-	TArray<AGun*> GunArray;
+	// UPROPERTY()
+	// AGun* Gun;
+	
+	// UPROPERTY(EditDefaultsOnly, Category="Weapon")
+	// TArray<TSubclassOf<AGun>> GunClassArray;
+	//
+	// UPROPERTY(BlueprintReadWrite, Category="Weapon", meta=(AllowPrivateAccess="true"))
+	// TArray<AGun*> GunArray;
 
 	UPROPERTY(BlueprintReadWrite, Category="Weapon", meta=(AllowPrivateAccess="true"))
 	int WeaponActiveIndex = 0;

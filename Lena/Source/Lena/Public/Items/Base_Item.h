@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "ItemData/InventoryItem.h"
 #include "Base_Item.generated.h"
 
 UCLASS()
@@ -33,6 +34,9 @@ public:
 	FString ItemName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	TSubclassOf<AActor> ItemClass; // 아이템 클래스 추가
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	UTexture2D* ItemImage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
@@ -46,6 +50,18 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	float Weight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	EItemType ItemType;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	EGunType GunType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	EEquipmentType EquipmentType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	EAmmoType AmmoType;
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

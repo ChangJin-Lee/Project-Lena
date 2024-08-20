@@ -53,7 +53,22 @@ bool UInventoryComponent::RemoveItem(const FInventoryItem& ItemData)
 		if (Items[i].ItemID == ItemData.ItemID)
 		{
 			CurrentWeight -= Items[i].Quantity * Items[i].Weight;
+			UE_LOG(LogTemp, Warning, TEXT("Remove %s "), *Items[i].ItemName);
 			Items.RemoveAt(i);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool UInventoryComponent::ResetItem(const FInventoryItem& ItemData)
+{
+	for (int32 i = 0; i < Items.Num(); ++i)
+	{
+		if (Items[i].ItemID == ItemData.ItemID)
+		{
+			CurrentWeight -= Items[i].Quantity * Items[i].Weight;
+			Items[i].Empty();
 			return true;
 		}
 	}

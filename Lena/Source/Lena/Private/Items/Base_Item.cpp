@@ -52,7 +52,7 @@ void ABase_Item::PickUp()
 	ABase_Character* Character = Cast<ABase_Character>(UGameplayStatics::GetPlayerCharacter(this, 0));
 	if (Character)
 	{
-		Character->PickupItem(this);
+		Character->PickupItem(this, EInventorySlotType::ISt_Ground);
 		// UE_LOG(LogTemp, Warning, TEXT("Pick up item %s"), *ItemDetails->GetName());
 		
 		// 아이템을 비활성화하거나 제거
