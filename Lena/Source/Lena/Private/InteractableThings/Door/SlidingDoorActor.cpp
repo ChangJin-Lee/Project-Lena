@@ -2,10 +2,11 @@
 
 
 #include "Lena/Public/InteractableThings/Door/SlidingDoorActor.h"
+
+#include "CanvasTypes.h"
 #include "Components/TimelineComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Serialization/ArchiveReplaceObjectRef.h"
 #include "UI/InteractWidget.h"
 
 ASlidingDoorActor::ASlidingDoorActor()
@@ -38,6 +39,7 @@ void ASlidingDoorActor::OpenSlidingDoor(FVector InTargetLocation)
 {
     InitialLocation = MeshComponent->GetRelativeLocation();
     TargetLocation = InTargetLocation;
+    UGameplayStatics::PlaySoundAtLocation(GetWorld(), DoorOpenSound, GetActorLocation());
     if (SlidingDoorTimeline)
     {
         SlidingDoorTimeline->PlayFromStart();
@@ -55,43 +57,21 @@ void ASlidingDoorActor::RightAnswer(FVector InTargetLocation)
     OpenSlidingDoor(InTargetLocation);
     IsDone = true;
     RemoveWidget(WidgetComponent->GetWidget());
-
-    if(WidgetComponent)
-    {
-        UUserWidget* Widget = WidgetComponent->GetWidget();
-        UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
-        InteractWidget->SetInstruction(FText::FromString("Open!"));
-    }
+    SetInstructionWidgetText(FText::FromString("Open!"),FLinearColor::Green);
+    
+    UGameplayStatics::PlaySoundAtLocation(GetWorld(), RightAnswerSound, GetActorLocation(),1.0f, 2.0f);
 }
 
 
 void ASlidingDoorActor::WrongAnswer()
 {
-    if(WidgetComponent)
+    SetInstructionWidgetText(FText::FromString("Locked!"),FLinearColor::Red);
+    ClearInstructionWidgetTextDelay(0.5);
+    
+    if(WrongAnswerCameraShakeClass)
     {
-        UGameplayStatics::PlaySoundAtLocation(GetWorld(), SoundEffect, GetActorLocation());
-        UUserWidget* Widget = WidgetComponent->GetWidget();
-        UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
-        InteractWidget->SetInstruction(FText::FromString("Need Key"));
-        InteractWidget->SetColorAndOpacity(FLinearColor::Red);
-        StartWrongAnswerDelay(0.5f);
+        GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(WrongAnswerCameraShakeClass);
     }
-}
 
-void ASlidingDoorActor::StartWrongAnswerDelay(float DelayTime)
-{
-    FTimerDelegate  Timer;
-    Timer.BindUFunction(this, FName("WrongAnswerDelayFunction"));
-
-    GetWorld()->GetTimerManager().SetTimer(WrongAnswerDelayHandle, Timer, DelayTime, false);
-}
-
-void ASlidingDoorActor::WrongAnswerDelayFunction()
-{
-    if(WidgetComponent)
-    {
-        UUserWidget* Widget = WidgetComponent->GetWidget();
-        UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
-        InteractWidget->SetColorAndOpacity(FLinearColor::White);
-    }
+    UGameplayStatics::PlaySoundAtLocation(GetWorld(), WrongAnswerSound, GetActorLocation(),1.0f, 2.0f);
 }

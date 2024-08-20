@@ -7,6 +7,7 @@
 #include "Components/TextRenderComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Internationalization/Text.h"
+#include "UI/InteractWidget.h"
 
 // Sets default values
 AInteractableActor::AInteractableActor()
@@ -80,6 +81,26 @@ void AInteractableActor::RemoveWidget(UUserWidget* Widget_)
 	}
 }
 
+void AInteractableActor::DestroyHitBoxAndWidgetDelayFunction(float DelayTime)
+{
+	FTimerDelegate  Timer;
+	Timer.BindUFunction(this, FName("DestroyInstructionWidget"));
+	Timer.BindUFunction(this, FName("DestroyHitBox"));
+
+	GetWorld()->GetTimerManager().SetTimer(WrongAnswerDelayHandle, Timer, DelayTime, false);
+}
+
+
+void AInteractableActor::DestroyInstructionWidget()
+{
+	WidgetComponent->DestroyComponent();
+}
+
+void AInteractableActor::DestroyHitBox()
+{
+	HitBox->DestroyComponent();
+}
+
 void AInteractableActor::ShowWidgetComponent()
 {
 	if(WidgetComponent)
@@ -93,5 +114,45 @@ void AInteractableActor::HideWidgetComponent()
 	if(WidgetComponent)
 	{
 		WidgetComponent->SetVisibility(false);
+	}
+}
+
+void AInteractableActor::ClearInstructionWidgetTextDelay(float DelayTime)
+{
+	FTimerDelegate  Timer;
+	Timer.BindUFunction(this, FName("WrongAnswerDelayFunction"));
+
+	GetWorld()->GetTimerManager().SetTimer(WrongAnswerDelayHandle, Timer, DelayTime, false);
+}
+
+void AInteractableActor::WrongAnswerDelayFunction()
+{
+	if(WidgetComponent)
+	{
+		UUserWidget* Widget = WidgetComponent->GetWidget();
+		UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
+		InteractWidget->SetInstruction(FText::FromString("Press E"));
+		InteractWidget->SetColorAndOpacity(FLinearColor::White);
+	}
+}
+
+void AInteractableActor::SetInstructionWidgetText(FText Text, FLinearColor Color)
+{
+	if(WidgetComponent)
+	{
+		UUserWidget* Widget = WidgetComponent->GetWidget();
+		UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
+		InteractWidget->SetInstruction(Text);
+		InteractWidget->SetColorAndOpacity(Color);
+	}
+}
+
+void AInteractableActor::SetInstructionWidgetTextAtBeginPlay(FText Text)
+{
+	if(WidgetComponent)
+	{
+		UUserWidget* Widget = WidgetComponent->GetWidget();
+		UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
+		InteractWidget->InstructionText = Text;
 	}
 }

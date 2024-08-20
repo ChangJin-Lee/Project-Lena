@@ -65,10 +65,14 @@ void ADirectionalLockActor::Tick(float DeltaTime)
 void ADirectionalLockActor::Unlock(AActor* ActorToUnlock)
 {
 	Super::Unlock(ActorToUnlock);
+	SetInstructionWidgetText(FText::FromString(WidgetDisplayPassword), FColor::Blue);
+	SetInstructionWidgetTextAtBeginPlay(FText::FromString(WidgetDisplayPassword));
 	ADoorActor* Door = Cast<ADoorActor>(ActorToUnlock);
 	if(Door)
 	{
 		Door->Open();
+		DestroyHitBoxAndWidgetDelayFunction(1.0f);
+		Door->DestroyHitBoxAndWidgetDelayFunction(1.0);
 	}
 }
 
@@ -102,19 +106,11 @@ void ADirectionalLockActor::MoveFromStart(FVector InputVector, FString direction
 
 	InputPassWord += direction;
 
-	// WidgetDisplayPassword += FindObject<UEnum>(ANY_PACKAGE, TEXT("DirectionEnum"), true)->GetDisplayNameTextByValue(FCString::Atoi(*direction)).ToString();
-	
 	DirectionEnum DirectionEnumClass = static_cast<DirectionEnum>(FCString::Atoi(*direction));
 	WidgetDisplayPassword += EnumToString(DirectionEnumClass);
-	
-	if(WidgetComponent)
-	{
-		UUserWidget* Widget = WidgetComponent->GetWidget();
-		UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
-		InteractWidget->SetInstructionColor(FColor::Yellow);
-		InteractWidget->SetInstruction(FText::FromString(WidgetDisplayPassword));
-		InteractWidget->InstructionText = FText::FromString(WidgetDisplayPassword);
-	}
+
+	SetInstructionWidgetText(FText::FromString(WidgetDisplayPassword), FColor::Yellow);
+	SetInstructionWidgetTextAtBeginPlay(FText::FromString(WidgetDisplayPassword));
 
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), SoundEffect, GetActorLocation(),1.0f, 2.0f);
 }
@@ -139,29 +135,13 @@ void ADirectionalLockActor::CheckRightAnswer()
 		DirectionalLockBodyMeshComponent->SetSimulatePhysics(true);
 		DirectionalLockshackleMeshComponent->SetSimulatePhysics(true);
 		DirectionalLockBallMeshComponent->SetSimulatePhysics(true);
-		
-		if(WidgetComponent)
-		{
-			UUserWidget* Widget = WidgetComponent->GetWidget();
-			UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
-			InteractWidget->SetInstructionColor(FColor::Blue);
-			InteractWidget->SetInstruction(FText::FromString(WidgetDisplayPassword));
-			InteractWidget->InstructionText = FText::FromString("Congratulations! You solved the puzzle!");
-			InteractWidget->SetInstructionColor(FColor::Green);
-		}
+
 	}
 	else
 	{
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), WrongAnswerSound, GetActorLocation());
-		if(WidgetComponent)
-		{
-			UUserWidget* Widget = WidgetComponent->GetWidget();
-			UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
-			InteractWidget->SetInstructionColor(FColor::Red);
-			InteractWidget->SetInstruction(FText::FromString(WidgetDisplayPassword));
-			InteractWidget->SetInstruction(FText::FromString("Try Again!"));
-			InteractWidget->InstructionText = FText::FromString("Try Again!");
-		}
+
+		SetInstructionWidgetText(FText::FromString("Try Again!"), FLinearColor::Red);
 
 		if(WrongAnswerCameraShakeClass)
 		{

@@ -50,7 +50,7 @@ void AButtonLockActor::Unlock(AActor* ActorToUnlock)
 	ADoorActor* Door = Cast<ADoorActor>(ActorToUnlock);
 	if(Door)
 	{
-		Door->RequiredItemDescription = "Default";
+		Door->RequiredCondition = "Default";
 		Door->Open();
 	}
 }
@@ -308,5 +308,7 @@ void AButtonLockActor::OpenLock()
 void AButtonLockActor::DestroyButtonLock()
 {
 	ZoomOutCamera();
-	HitBox->DestroyComponent();
+	
+	DestroyHitBoxAndWidgetDelayFunction(1.0);
+	TargetDoor->DestroyHitBoxAndWidgetDelayFunction(1.0);
 }

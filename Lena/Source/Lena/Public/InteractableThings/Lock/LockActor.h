@@ -34,14 +34,4 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 	
-// protected:
-	// UPROPERTY(VisibleAnywhere)
-	// UStaticMeshComponent* BaseStaticMeshComponent;
-	
-	UPROPERTY(EditAnywhere)
-	USoundBase* RightAnswerSound;
-	
-	UPROPERTY(EditAnywhere)
-	USoundBase* WrongAnswerSound;
-	
 };

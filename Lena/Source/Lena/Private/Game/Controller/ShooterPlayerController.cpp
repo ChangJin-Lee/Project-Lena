@@ -16,23 +16,11 @@
 
 AShooterPlayerController::AShooterPlayerController()
 {
-	if(!InventoryWidget)
-	{
-		static ConstructorHelpers::FObjectFinder<UInventoryWidget> InventoryWidgetFinder(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UI/HUD/WBP_InventoryMain.WBP_InventoryMain'"));
-		if(InventoryWidgetFinder.Succeeded())
-		{
-			InventoryWidget = InventoryWidgetFinder.Object;
-		}
-	}
-	
-	if(!ItemInfoWidget)
-	{
-		static ConstructorHelpers::FObjectFinder<UInteractWidget> InteractWidget(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UI/Interactions/WBP_InteractWidget.WBP_InteractWidget'"));
-		if(InteractWidget.Succeeded())
-		{
-			ItemInfoWidget = InteractWidget.Object;
-		}
-	}
+	//static ConstructorHelpers::FObjectFinder<UInventoryWidget> InventoryWidgetFinder(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UI/HUD/WBP_InventoryMain.WBP_InventoryMain'"));
+	//if(InventoryWidgetFinder.Succeeded())
+	//{
+	//	InventoryWidget = InventoryWidgetFinder.Object;
+	//}
 }
 
 
@@ -61,7 +49,6 @@ void AShooterPlayerController::BeginPlay()
 
 	// Character Reference caching
 	Base_Character = Cast<ABase_Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
-
 	
 	// Item Info Widget AddViewport
 	ItemInfoWidget->AddToViewport();
@@ -73,7 +60,7 @@ void AShooterPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner
 {
 	Super::GameHasEnded(EndGameFocus, bIsWinner);
 
-	HUD->RemoveFromViewport();
+	HUD->RemoveFromParent();
 	if (bIsWinner)
 	{
 		UUserWidget* WinScreen = CreateWidget(this, WinScreenClass);

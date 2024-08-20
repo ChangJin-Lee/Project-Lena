@@ -37,7 +37,16 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void RemoveWidget(UUserWidget* Widget_);
+	
+	UFUNCTION()  // UFUNCTION() 매크로 추가
+	void DestroyHitBoxAndWidgetDelayFunction(float DelayTime);
 
+	UFUNCTION(BlueprintCallable)
+	void DestroyInstructionWidget();
+
+	UFUNCTION(BlueprintCallable)
+	void DestroyHitBox();
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void OutSideEvent();
 
@@ -50,12 +59,20 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	bool IsDone = false;
 	
+	UPROPERTY(EditAnywhere)
+	USoundBase* RightAnswerSound;
+	
+	UPROPERTY(EditAnywhere)
+	USoundBase* WrongAnswerSound;
+	
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	APlayerController *PlayerController;
+
+	FTimerHandle WrongAnswerDelayHandle;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -66,4 +83,14 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	USoundBase* SoundEffect;
+
+	UPROPERTY(EditAnywhere, Category="Door")
+	TSubclassOf<class UCameraShakeBase> WrongAnswerCameraShakeClass;
+
+	UFUNCTION()  // UFUNCTION() 매크로 추가
+	void WrongAnswerDelayFunction();
+	
+	void SetInstructionWidgetText(FText Text, FLinearColor Color);
+	void ClearInstructionWidgetTextDelay(float DelayTime);
+	void SetInstructionWidgetTextAtBeginPlay(FText Text);
 };

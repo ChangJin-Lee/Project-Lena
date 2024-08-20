@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Lena/Public/Game/Controller/ShooterPlayerController.h"
 #include "InteractableThings/Portal/PortalActor.h"
+#include "Lena/Public/Game/Controller/ShooterPlayerController.h"
 #include "TimerManager.h"
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
@@ -19,12 +19,8 @@ APortalActor::APortalActor()
 void APortalActor::BeginPlay()
 {
 	Super::BeginPlay();
-	if(WidgetComponent)
-	{
-		UUserWidget* Widget = WidgetComponent->GetWidget();
-		UInteractWidget* InteractWidget = Cast<UInteractWidget>(Widget);
-		InteractWidget->SetInstructionAtBeginPlay(FText::FromString("Press E To Restart!"), FLinearColor::Blue);
-	}
+
+	SetInstructionWidgetText(FText::FromString("Press E To Restart!"), FLinearColor::Blue);
 }
 
 // Called every frame

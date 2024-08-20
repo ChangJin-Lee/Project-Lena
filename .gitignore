@@ -76,3 +76,7 @@ DerivedDataCache/*
 
 # Asset Pack
 Content/AssetPacks/*
+
+
+# JsonData
+JsonData
