@@ -38,6 +38,9 @@ public:
 	bool RemoveItem(const FInventoryItem& ItemData);
 
 	UFUNCTION(BlueprintCallable, Category="Inventory")
+	bool ResetItem(const FInventoryItem& ItemData);
+
+	UFUNCTION(BlueprintCallable, Category="Inventory")
 	bool RemoveItemByName(const FString& ItemID);
 
 	UFUNCTION(BlueprintCallable, Category="Inventory")

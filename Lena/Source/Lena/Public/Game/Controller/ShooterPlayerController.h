@@ -93,5 +93,5 @@ private:
 	void OnMouseClick();
 	bool bIsClickEnabled;
 
-	bool bFlipFlop = true;
+	bool bFlipFlop;
 };

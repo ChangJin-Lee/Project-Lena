@@ -2,13 +2,13 @@
 
 #pragma once
 
-#include "Base_Item.h"
 #include "CoreMinimal.h"
+#include "Base_Weapon.h"
 #include "GameFramework/Actor.h"
 #include "Gun.generated.h"
 
 UCLASS()
-class LENA_API AGun : public ABase_Item
+class LENA_API AGun : public ABase_Weapon
 {
 	GENERATED_BODY()
 	

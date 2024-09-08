@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InventoryItem.h"
 #include "Engine/DataTable.h"
 #include "ItemSpawnData.generated.h"
 
@@ -42,4 +43,16 @@ struct FItemSpawnData : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	float DefensePower;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	EItemType ItemType;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	EGunType GunType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	EEquipmentType EquipmentType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	EAmmoType AmmoType;
 };

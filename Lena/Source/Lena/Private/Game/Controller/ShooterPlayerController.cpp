@@ -21,6 +21,7 @@ AShooterPlayerController::AShooterPlayerController()
 	//{
 	//	InventoryWidget = InventoryWidgetFinder.Object;
 	//}
+	bFlipFlop = true;
 }
 
 
@@ -45,7 +46,7 @@ void AShooterPlayerController::BeginPlay()
 	{
 		EnhancedInputComponent->BindAction(IA_MouseClick, ETriggerEvent::Triggered, this, &AShooterPlayerController::HandleMouseClick);
 		EnhancedInputComponent->BindAction(IA_PickUpItem, ETriggerEvent::Triggered, this, &AShooterPlayerController::HandlePickUpItem);
-		// EnhancedInputComponent->BindAction(IA_OpenInventory, ETriggerEvent::Triggered, this, &AShooterPlayerController::HandleOpenInventory);
+		EnhancedInputComponent->BindAction(IA_OpenInventory, ETriggerEvent::Triggered, this, &AShooterPlayerController::HandleOpenInventory);
 	}
 
 	// Character Reference caching
@@ -172,11 +173,9 @@ void AShooterPlayerController::InputModeGame()
 
 void AShooterPlayerController::HandlePickUpItem()
 {
-	UE_LOG(LogTemp, Warning, TEXT("HandlePickUpItem"));
-
 	if(LineTraceItem && Base_Character)
 	{
-		Base_Character->PickupItem(LineTraceItem);
+		Base_Character->PickupItem(LineTraceItem, EInventorySlotType::ISt_Ground);
 	}
 }
 
@@ -235,10 +234,10 @@ void AShooterPlayerController::CheckPickUpItemSweep()
 			if(HitActor && !ProcessedActors.Contains(HitActor))
 			{
 				ProcessedActors.Add(HitActor);
+				UE_LOG(LogTemp, Warning, TEXT("HitActor : %s "), *HitActor->GetName());
 				ABase_Item* Item = Cast<ABase_Item>(HitActor);
 				if(Item)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("HitResults.Num() : %s"), *Item->GetName());
 					if(Base_Character)
 					{
 						Base_Character->CheckGroundItem(Item);
@@ -250,10 +249,12 @@ void AShooterPlayerController::CheckPickUpItemSweep()
 	// DrawDebugSphere(GetWorld(), Start, Radius, 10, FColor::Green, false, 5.0f, 0, 1.0f);
 }
 
-// Main_Player_Controller BP 부분 업데이트 예정
+// Tab To Open Inventory
 void AShooterPlayerController::HandleOpenInventory()
 {
 	CheckPickUpItemSweep();
+
+	UE_LOG(LogTemp, Warning, TEXT("HandleOpenInventory()"));
 
 	if(bFlipFlop)
 	{
@@ -263,12 +264,16 @@ void AShooterPlayerController::HandleOpenInventory()
 			{
 				InventoryWidget->SetVisibility(ESlateVisibility::Visible);
 				InputModeUI();
+				InventoryWidget->BuildInventorySlot();
+				InventoryWidget->BuildGroundSlot();
 			}
-		}
-		else
-		{
-			InventoryWidget->AddToViewport();
-			InputModeUI();
+			else
+			{
+				InventoryWidget->AddToViewport();
+				InputModeUI();
+				InventoryWidget->BuildInventorySlot();
+				InventoryWidget->BuildGroundSlot();
+			}
 		}
 	}
 	else

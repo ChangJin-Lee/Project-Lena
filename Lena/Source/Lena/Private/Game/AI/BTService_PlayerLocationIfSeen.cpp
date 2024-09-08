@@ -37,13 +37,13 @@ void UBTService_PlayerLocationIfSeen::TickNode(UBehaviorTreeComponent& OwnerComp
 	if(AIController->LineOfSightTo(PlayerPawn))
 	{
 		ShooterCharacter->ToggleIsArmed();
-		ShooterCharacter->DrawAIWeapon();
+		ShooterCharacter->DrawWeaponEvent();
 		AIController->GetBlackboardComponent()->SetValueAsObject(GetSelectedBlackboardKey(), PlayerPawn);
 	}
 	else
 	{
 		ShooterCharacter->ToggleIsArmed();
-		ShooterCharacter->PutDownAIWeapon();
+		ShooterCharacter->PutDownWeaponEvent();
 		AIController->GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
 	}
 

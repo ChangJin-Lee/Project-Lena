@@ -22,28 +22,48 @@ EBTNodeResult::Type UBTTask_Shoot::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 	{
 		return EBTNodeResult::Failed;
 	}
-
+	
 	APawn *AIPawn = AIController->GetPawn();
-
+	
 	ABase_Character *ShooterCharacter = Cast<ABase_Character>(AIPawn);
-
-	if(ShooterCharacter == nullptr)
+	
+	ABase_Weapon* Weapon = ShooterCharacter->CurrentWeapon;
+	
+	if(!ShooterCharacter)
 	{
 		return EBTNodeResult::Failed;
 	}
-
+	
 	ShooterCharacter->ToggleIsArmed();
-
-	UE_LOG(LogTemp, Warning, TEXT("Health Left : %d"), ShooterCharacter->GetAmmo());
-
-	if(!ShooterCharacter->GetAmmo())
+	
+	UE_LOG(LogTemp, Warning, TEXT("AIShooterCharacter->GetAmmo() : %d"), ShooterCharacter->GetAmmoIndex(Weapon->AmmoType));
+	
+	if(ShooterCharacter->GetAmmoIndex(Weapon->AmmoType) > 0)
 	{
 		ShooterCharacter->ReloadAIAction();
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("Health Left : %d"), ShooterCharacter->GetAmmo());
 	
-	ShooterCharacter->Shoot();
+	UE_LOG(LogTemp, Warning, TEXT("AIShooterCharacter->GetAmmo() : %d"), ShooterCharacter->GetAmmoIndex(Weapon->AmmoType));
+	
+	ShooterCharacter->PerformAction();
+
+	// if(ShooterCharacter == nullptr)
+	// {
+	// 	return EBTNodeResult::Failed;
+	// }
+	//
+	// ShooterCharacter->ToggleIsArmed();
+	//
+	// UE_LOG(LogTemp, Warning, TEXT("Health Left : %d"), ShooterCharacter->GetAmmo());
+	//
+	// if(!ShooterCharacter->GetAmmo())
+	// {
+	// 	ShooterCharacter->ReloadAIAction();
+	// }
+	//
+	// UE_LOG(LogTemp, Warning, TEXT("Health Left : %d"), ShooterCharacter->GetAmmo());
+	//
+	// ShooterCharacter->Shoot();
 	
 	return EBTNodeResult::Succeeded;
 }

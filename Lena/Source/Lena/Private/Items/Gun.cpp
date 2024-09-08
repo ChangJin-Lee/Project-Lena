@@ -20,6 +20,18 @@ AGun::AGun()
 	Mesh->SetupAttachment(Root);
 
 	SceneCaptureComponent2D->SetRelativeLocation(FVector(-50.0f, 15.0f, 0.0f));
+
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> MuzzleFlasEffectFind(TEXT("/Script/Niagara.NiagaraSystem'/Game/AssetPacks/MuzzleFlash3D/FX/Modern/NS_MuzzleFlash_6.NS_MuzzleFlash_6'"));
+	if(MuzzleFlashNS && MuzzleFlasEffectFind.Succeeded())
+	{
+		MuzzleFlashNS = MuzzleFlasEffectFind.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> ImpactEffectFind(TEXT("/Script/Engine.ParticleSystem'/Game/AssetPacks/ShooterGame/Effects/ParticleSystems/Weapons/AssaultRifle/Impacts/P_AssaultRifle_IH.P_AssaultRifle_IH'"));
+	if(ImpactEffect && ImpactEffectFind.Succeeded())
+	{
+		ImpactEffect = ImpactEffectFind.Object;
+	}
 }
 
 void AGun::PullTrigger()
@@ -61,7 +73,7 @@ void AGun::PullTrigger()
 			FPointDamageEvent DamageEvent(Damage, HitResult, ShotDirection, nullptr);
 			AController *OwnerController = GetOwnerController(); // 두번 계산하더라도, 코드의 가독성이 좋아지고 동기화가 어긋날 수 있는 변수나 상태를 저장하지 않아도 된다
 			DamagedActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
-			Ammo--;
+			Ammo = FMath::Max(0, Ammo-1);
 		}
 	}
 	// UE_LOG(LogTemp, Warning, TEXT("You Pull the Trigger!"));
@@ -71,6 +83,8 @@ void AGun::PullTrigger()
 void AGun::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Mesh->SetSimulatePhysics(true);
 }
 
 // Called every frame
@@ -108,7 +122,7 @@ AController* AGun::GetOwnerController() const
 
 void AGun::SetAmmo(int AmmoCount)
 {
-	Ammo=AmmoCount;
+	Ammo = AmmoCount;
 }
 
 int AGun::GetAmmo()
